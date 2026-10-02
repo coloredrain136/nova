@@ -407,7 +407,7 @@ button.row{text-align:left}
 
 <script>
 'use strict';
-/* ═════════ Nova 3 ═════════
+/* ═════════ Nova 4 ═════════
    Local-first: everything draws from localStorage. All writes go through save(),
    which is the single place background sync will hook into later. */
 
@@ -1239,6 +1239,12 @@ function paintMonth(ctx, W) {
   }
   return y + P;
 }
+function shareName() {            // "Work - Sept 27 - Oct 3" or "Work - October" (a file name can't hold a colon)
+  const M = i => (i === 8 ? 'Sept' : MON[i]);
+  if (ui.view === 'month') return 'Work - ' + MON_LONG[pd(ui.anchor).getMonth()];
+  const s = weekStartOf(ui.anchor), a = pd(s), b = pd(addDays(s, 6));
+  return `Work - ${M(a.getMonth())} ${a.getDate()} - ${M(b.getMonth())} ${b.getDate()}`;
+}
 function shareImage() {
   const W = 390, paint = ui.view === 'week' ? paintWeek : paintMonth;
   const H = Math.ceil(paint(document.createElement('canvas').getContext('2d'), W));
@@ -1249,7 +1255,7 @@ function shareImage() {
   const url = c.toDataURL('image/png'), bin = atob(url.split(',')[1]), bytes = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
   let file = null;
-  try { file = new File([bytes], ui.view === 'week' ? 'nova-week.png' : 'nova-month.png', { type: 'image/png' }); } catch (e) {}
+  try { file = new File([bytes], shareName() + '.png', { type: 'image/png' }); } catch (e) {}
   if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
     navigator.share({ files: [file] }).catch(e => { if (e && e.name !== 'AbortError') sharePreview(url); });
   } else sharePreview(url);
