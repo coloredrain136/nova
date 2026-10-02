@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="color-scheme" content="only light">
+<meta name="theme-color" content="#fdeff4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Nova">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="apple-touch-icon" sizes="120x120" href="icons/icon-120.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="167x167" href="icons/icon-167.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<title>Nova</title>
+<style>
+/* ───────── Design tokens ───────── */
+:root{
+  color-scheme: only light;
+
+  /* The one accent token. Change this and the whole app follows. */
+  --accent:#ff4d8d;
+  --accent-ink:color-mix(in srgb,var(--accent) 70%,#3a0a22);
+  --accent-wash:color-mix(in srgb,var(--accent) 12%,#fff);
+  --accent-soft:color-mix(in srgb,var(--accent) 24%,#fff);
+
+  --ink:#2b1f27;
+  --ink-2:#7d6b76;
+  --ink-3:#b5a6af;
+  --danger:#e5484d;
+
+  /* spacing scale */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:28px; --s7:40px;
+  /* radius scale */
+  --r-s:10px; --r-m:16px; --r-l:22px; --r-xl:30px; --r-pill:999px;
+  /* glass */
+  --blur:22px;
+  --glass:rgba(255,255,255,.56);
+  --glass-strong:rgba(255,255,255,.8);
+  --glass-clear:rgba(255,255,255,.34);
+  --edge:rgba(255,255,255,.95);
+  --hair:rgba(120,50,85,.10);
+  /* shadows, tinted so they sit on the pink background */
+  --shadow-s:0 1px 1px rgba(125,45,85,.05),0 4px 14px rgba(125,45,85,.07);
+  --shadow-m:0 2px 4px rgba(125,45,85,.06),0 10px 28px rgba(125,45,85,.12);
+  --shadow-l:0 4px 10px rgba(125,45,85,.08),0 24px 60px rgba(125,45,85,.22);
+
+  --font:system-ui,-apple-system,"SF Pro Text","Helvetica Neue",sans-serif;
+  --round:ui-rounded,"SF Pro Rounded",system-ui,-apple-system,sans-serif;
+
+  --safe-t:env(safe-area-inset-top,0px);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{height:100%;-webkit-text-size-adjust:100%;background:#fdeff4}
+body{
+  min-height:100%;font-family:var(--font);color:var(--ink);font-size:16px;line-height:1.35;
+  -webkit-font-smoothing:antialiased;-webkit-user-select:none;user-select:none;
+  overscroll-behavior-y:none;
+}
+body.locked{overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-action:manipulation}
+input,select,textarea{font:inherit;color:inherit;-webkit-user-select:text;user-select:text}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+
+/* background the glass sits on */
+.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(120% 60% at 0% 0%,color-mix(in srgb,var(--accent) 26%,#fff) 0%,transparent 60%),
+    radial-gradient(90% 55% at 100% 18%,#ffe1cf 0%,transparent 62%),
+    radial-gradient(110% 60% at 85% 100%,#e9defF 0%,transparent 60%),
+    radial-gradient(90% 50% at 0% 90%,color-mix(in srgb,var(--accent) 14%,#fff) 0%,transparent 65%),
+    #fdf3f6;
+}
+
+.glass{
+  background:var(--glass);
+  -webkit-backdrop-filter:blur(var(--blur)) saturate(1.7);
+  backdrop-filter:blur(var(--blur)) saturate(1.7);
+  border:1px solid var(--edge);
+  box-shadow:var(--shadow-m),inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+/* ───────── Header ───────── */
+.head{
+  position:sticky;top:0;z-index:5;
+  padding:calc(var(--safe-t) + var(--s3)) var(--s4) var(--s3);
+  background:linear-gradient(rgba(253,239,244,.86),rgba(253,239,244,.62));
+  -webkit-backdrop-filter:blur(var(--blur)) saturate(1.7);
+  backdrop-filter:blur(var(--blur)) saturate(1.7);
+  border-bottom:1px solid rgba(255,255,255,.7);
+}
+.head-top{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--s3);min-height:40px}
+.title{font-family:var(--round);font-weight:700;font-size:28px;letter-spacing:-.02em;line-height:1.1}
+.title small{font-size:15px;font-weight:600;color:var(--ink-2);letter-spacing:0;margin-left:6px}
+.today-btn{
+  font-weight:600;font-size:14px;color:var(--accent-ink);
+  padding:7px 14px;border-radius:var(--r-pill);background:var(--glass-strong);
+  border:1px solid var(--edge);box-shadow:var(--shadow-s);flex:none;
+}
+.head-row{display:flex;align-items:center;justify-content:space-between;margin-top:var(--s3)}
+
+.seg{display:inline-flex;padding:3px;border-radius:var(--r-pill);background:rgba(120,50,85,.08)}
+.seg button{
+  font-weight:600;font-size:14px;color:var(--ink-2);
+  padding:7px 20px;border-radius:var(--r-pill);min-width:84px;
+  transition:background .18s,color .18s,box-shadow .18s;
+}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(125,45,85,.12),0 3px 8px rgba(125,45,85,.10)}
+
+.arrows{display:flex;gap:var(--s2)}
+.arrows button{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  background:var(--glass-strong);border:1px solid var(--edge);box-shadow:var(--shadow-s);color:var(--ink);
+}
+.arrows button:active,.today-btn:active{transform:scale(.94)}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ───────── Main ───────── */
+main{padding:var(--s4) var(--s4) calc(var(--safe-b) + 150px)}
+#view.go-next{animation:goNext .2s ease-out}
+#view.go-prev{animation:goPrev .2s ease-out}
+@keyframes goNext{from{opacity:.2;transform:translateX(18px)}to{opacity:1;transform:none}}
+@keyframes goPrev{from{opacity:.2;transform:translateX(-18px)}to{opacity:1;transform:none}}
+
+/* ───────── Week view ───────── */
+.week{display:flex;flex-direction:column;gap:var(--s2)}
+.day{
+  display:grid;grid-template-columns:52px 1fr;gap:var(--s3);align-items:start;
+  padding:var(--s3) var(--s3) var(--s3) var(--s2);
+  border-radius:var(--r-l);position:relative;overflow:hidden;
+  border:1px solid var(--edge);
+  transition:transform .12s;
+}
+.day:active{transform:scale(.985)}
+/* off day: clear, airy glass so anything on it stands out */
+.day.off{background:var(--glass-clear);box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+/* work day: solid glass, washed with the shift colour, colour rail on the edge */
+.day.work{
+  background:linear-gradient(90deg,color-mix(in srgb,var(--c) 15%,#fff) 0%,rgba(255,255,255,.74) 62%);
+  box-shadow:var(--shadow-s),inset 0 1px 0 rgba(255,255,255,.9);
+}
+.day.work::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--c)}
+
+.day-date{display:flex;flex-direction:column;align-items:center;gap:2px;padding-top:1px}
+.dow{font-size:12px;font-weight:600;color:var(--ink-2)}
+.num{
+  font-family:var(--round);font-weight:700;font-size:22px;line-height:1;
+  width:36px;height:36px;border-radius:50%;display:grid;place-items:center;
+}
+.day.today .num{background:var(--accent);color:#fff;box-shadow:0 4px 12px color-mix(in srgb,var(--accent) 45%,transparent)}
+.day.today .dow{color:var(--accent-ink)}
+
+.day-body{display:flex;flex-direction:column;gap:var(--s2);min-width:0;padding-top:3px}
+.shift{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px var(--s2)}
+.shift-name{font-family:var(--round);font-weight:700;font-size:17px;color:color-mix(in srgb,var(--c) 62%,#2b1f27)}
+.shift-time{font-size:14px;font-weight:500;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.off-label{font-size:15px;font-weight:500;color:var(--ink-3);padding-top:6px}
+
+.ev{display:grid;grid-template-columns:8px 1fr;gap:0 var(--s2);align-items:start;border-radius:var(--r-s)}
+.ev::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:7px}
+.ev-title{font-weight:600;font-size:16px;overflow-wrap:anywhere}
+.ev-meta{grid-column:2;font-size:13.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.ev-notes{grid-column:2;font-size:13.5px;color:var(--ink-2);white-space:pre-wrap;overflow-wrap:anywhere;margin-top:1px}
+.rep{display:inline-block;width:12px;height:12px;vertical-align:-1px;margin-left:5px;color:var(--ink-3)}
+.rep svg{width:12px;height:12px;stroke-width:2.6}
+
+.day.off .ev-title{color:var(--ink)}
+.day.off:has(.ev){background:var(--glass);box-shadow:var(--shadow-s),inset 0 1px 0 rgba(255,255,255,.9)}
+
+/* paint feedback */
+.pop{animation:pop .22s ease-out}
+@keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.015)}100%{transform:none}}
+body.painting .day,body.painting .cell{cursor:copy}
+
+/* coming up */
+.next{margin-top:var(--s6);padding:0 var(--s1)}
+.next h2{font-family:var(--round);font-size:15px;font-weight:700;color:var(--ink-2);margin-bottom:var(--s2)}
+.next-row{display:grid;grid-template-columns:92px 1fr;gap:var(--s3);padding:9px 0;border-top:1px solid var(--hair);font-size:14.5px}
+.next-row span:first-child{color:var(--ink-2);font-variant-numeric:tabular-nums}
+.next-row b{font-weight:600;overflow-wrap:anywhere}
+.next-row i{font-style:normal;color:var(--ink-2);font-weight:400}
+
+/* first-run card */
+.hello{border-radius:var(--r-l);padding:var(--s5);margin-bottom:var(--s4)}
+.hello h2{font-family:var(--round);font-size:20px;font-weight:700;margin-bottom:4px}
+.hello p{color:var(--ink-2);font-size:15px;margin-bottom:var(--s4)}
+
+/* ───────── Month view ───────── */
+.mhead{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}
+.mhead span{text-align:center;font-size:12px;font-weight:600;color:var(--ink-2)}
+.mgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cell{
+  min-height:72px;border-radius:14px;padding:5px 3px 6px;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  background:var(--glass-clear);border:1px solid rgba(255,255,255,.8);
+}
+.cell.work{background:var(--glass-strong);box-shadow:var(--shadow-s)}
+.cell.out{opacity:.36}
+.cell:active{transform:scale(.94)}
+.cell .n{font-family:var(--round);font-weight:600;font-size:14px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center}
+.cell.today .n{background:var(--accent);color:#fff;font-weight:700}
+.chip-s{
+  width:calc(100% - 2px);text-align:center;border-radius:7px;padding:2px 0;
+  font-family:var(--round);font-weight:700;font-size:11.5px;line-height:1.3;
+  background:color-mix(in srgb,var(--c) 24%,#fff);color:color-mix(in srgb,var(--c) 58%,#2b1f27);
+}
+.chip-s.none{background:none;color:transparent}
+.dots{display:flex;gap:3px;align-items:center;height:7px}
+.dots i{width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.dots em{font-style:normal;font-size:9px;font-weight:700;color:var(--accent-ink);line-height:1}
+
+/* ───────── Dock ───────── */
+.dock-wrap{position:fixed;left:0;right:0;bottom:0;z-index:6;padding:0 var(--s4) calc(var(--safe-b) + var(--s3));pointer-events:none}
+.dock,.tray{background:rgba(255,255,255,.74)}
+.dock{
+  pointer-events:auto;margin:0 auto;max-width:360px;border-radius:var(--r-xl);
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:8px 10px;
+  box-shadow:var(--shadow-l),inset 0 1px 0 rgba(255,255,255,.9);
+}
+.dock-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;font-size:11.5px;font-weight:600;color:var(--ink-2);border-radius:var(--r-m)}
+.dock-btn svg{width:23px;height:23px;color:var(--ink)}
+.dock-btn:active{background:rgba(120,50,85,.07)}
+.add-btn{
+  width:58px;height:58px;border-radius:50%;display:grid;place-items:center;color:#fff;margin:0 var(--s2);
+  background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 78%,#fff),var(--accent));
+  box-shadow:0 8px 20px color-mix(in srgb,var(--accent) 45%,transparent),inset 0 1px 0 rgba(255,255,255,.5);
+}
+.add-btn svg{width:26px;height:26px;stroke-width:2.6}
+.add-btn:active{transform:scale(.93)}
+
+/* paint tray */
+.tray{pointer-events:auto;margin:0 auto;max-width:420px;border-radius:var(--r-xl);padding:var(--s3) var(--s3) var(--s3);box-shadow:var(--shadow-l),inset 0 1px 0 rgba(255,255,255,.9)}
+.tray-top{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);padding:0 var(--s1) var(--s3) var(--s2)}
+.tray-top span{font-family:var(--round);font-weight:700;font-size:16px}
+.tray-chips{display:flex;gap:var(--s2);overflow-x:auto;padding:3px;margin:-3px;scrollbar-width:none}
+.tray-chips::-webkit-scrollbar{display:none}
+
+.chip{
+  flex:none;display:inline-flex;align-items:center;gap:7px;
+  padding:9px 14px 9px 10px;border-radius:var(--r-pill);font-weight:600;font-size:15px;
+  background:rgba(255,255,255,.8);border:1px solid var(--edge);box-shadow:var(--shadow-s);
+}
+.chip i{width:14px;height:14px;border-radius:50%;background:var(--c);flex:none}
+.chip.clear i{background:none;border:2px dashed var(--ink-3)}
+.chip[aria-pressed="true"]{background:color-mix(in srgb,var(--c,var(--ink-3)) 20%,#fff);box-shadow:0 0 0 2px var(--c,var(--ink-2)),var(--shadow-s)}
+
+/* ───────── Buttons ───────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);
+  padding:11px 18px;border-radius:var(--r-pill);font-weight:600;font-size:16px;
+}
+.btn:active{transform:scale(.97)}
+.btn.primary{color:#fff;background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 80%,#fff),var(--accent));box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 38%,transparent),inset 0 1px 0 rgba(255,255,255,.45)}
+.btn.quiet{color:var(--accent-ink);background:var(--accent-wash)}
+.btn.danger{color:var(--danger);background:rgba(229,72,77,.09)}
+.btn.small{padding:8px 16px;font-size:15px}
+.btn.wide{width:100%}
+
+/* ───────── Sheets ───────── */
+.scrim{position:fixed;inset:0;z-index:10;background:rgba(60,20,40,.22);opacity:0;transition:opacity .22s}
+.scrim.open{opacity:1}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:11;
+  max-height:calc(100dvh - var(--safe-t) - 28px);overflow-y:auto;overscroll-behavior:contain;
+  border-radius:var(--r-xl) var(--r-xl) 0 0;
+  background:rgba(255,246,250,.9);
+  -webkit-backdrop-filter:blur(30px) saturate(1.8);backdrop-filter:blur(30px) saturate(1.8);
+  border-top:1px solid #fff;box-shadow:var(--shadow-l);
+  padding:var(--s2) var(--s4) calc(var(--safe-b) + var(--s5));
+  transform:translateY(102%);transition:transform .28s cubic-bezier(.2,.85,.25,1);
+}
+.sheet.open{transform:none}
+.grab{width:38px;height:5px;border-radius:3px;background:rgba(120,50,85,.18);margin:0 auto var(--s3)}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);margin-bottom:var(--s4)}
+.sheet-head h2{font-family:var(--round);font-weight:700;font-size:22px;letter-spacing:-.01em}
+.link{color:var(--accent-ink);font-weight:600;font-size:16px;padding:6px 2px}
+.sub{font-size:13.5px;font-weight:600;color:var(--ink-2);margin:var(--s5) var(--s1) var(--s2)}
+.sub:first-of-type{margin-top:0}
+.chips-wrap{display:flex;flex-wrap:wrap;gap:var(--s2)}
+.empty{color:var(--ink-2);font-size:15px;padding:var(--s2) var(--s1)}
+
+.group{background:rgba(255,255,255,.82);border:1px solid #fff;border-radius:var(--r-m);box-shadow:var(--shadow-s);overflow:hidden}
+.group + .group{margin-top:var(--s3)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:50px;padding:6px var(--s4);border-top:1px solid var(--hair)}
+.row:first-child{border-top:0}
+.row > label,.row > .lbl{font-size:16px;flex:none}
+.row input[type=text],.row select{border:0;background:none;text-align:right;flex:1;min-width:0;outline:none;height:38px;font-size:16px}
+.row input[type=date],.row input[type=time]{border:0;background:rgba(120,50,85,.07);border-radius:9px;padding:6px 10px;font-size:16px;min-height:36px;outline:none}
+.row select{-webkit-appearance:none;appearance:none;color:var(--accent-ink);font-weight:600;direction:rtl}
+.row.title-row input{text-align:left;font-size:19px;font-weight:600;font-family:var(--round)}
+.row.title-row input::placeholder,textarea::placeholder{color:var(--ink-3)}
+.row.bad{background:rgba(229,72,77,.08)}
+textarea{display:block;width:100%;min-height:76px;border:0;background:none;resize:none;outline:none;padding:var(--s3) var(--s4);font-size:16px}
+.hint{font-size:13px;color:var(--ink-2);margin:var(--s2) var(--s1) 0}
+.actions{display:flex;flex-direction:column;gap:var(--s2);margin-top:var(--s5)}
+
+.switch{position:relative;width:51px;height:31px;flex:none}
+.switch input{position:absolute;inset:0;opacity:0;width:100%;height:100%;margin:0}
+.switch span{position:absolute;inset:0;border-radius:var(--r-pill);background:rgba(120,50,85,.16);transition:background .18s;pointer-events:none}
+.switch span::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.2);transition:transform .18s}
+.switch input:checked + span{background:var(--accent)}
+.switch input:checked + span::after{transform:translateX(20px)}
+
+/* day sheet event list */
+.list-ev{display:grid;grid-template-columns:8px 1fr auto;gap:0 var(--s3);align-items:start;width:100%;text-align:left;padding:var(--s3) var(--s4);border-top:1px solid var(--hair)}
+.list-ev:first-child{border-top:0}
+.list-ev::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:7px}
+.list-ev svg{color:var(--ink-3);margin-top:2px;width:16px;height:16px}
+
+/* my shifts */
+.preset{display:grid;grid-template-columns:44px 1fr auto;gap:var(--s3);align-items:center;padding:10px var(--s3) 10px var(--s3);border-top:1px solid var(--hair)}
+.preset:first-child{border-top:0}
+.badge{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-family:var(--round);font-weight:700;font-size:15px;background:color-mix(in srgb,var(--c) 24%,#fff);color:color-mix(in srgb,var(--c) 58%,#2b1f27)}
+.preset-main{text-align:left;min-width:0}
+.preset-main b{display:block;font-weight:600;font-size:16px;overflow-wrap:anywhere}
+.preset-main span{font-size:13.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.move{display:flex;gap:2px}
+.move button{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--ink-2)}
+.move button:disabled{opacity:.25}
+.move button:active{background:rgba(120,50,85,.08)}
+.swatches{display:flex;flex-wrap:wrap;gap:10px;padding:var(--s3) var(--s4)}
+.swatch{width:34px;height:34px;border-radius:50%;background:var(--c);border:3px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.swatch[aria-pressed="true"]{box-shadow:0 0 0 2.5px var(--c)}
+.seg.sm button{padding:6px 14px;min-width:0;font-size:14px}
+
+/* chooser */
+.ask{position:fixed;inset:0;z-index:20;display:flex;align-items:flex-end;background:rgba(60,20,40,.28);padding:var(--s3) var(--s3) calc(var(--safe-b) + var(--s3))}
+.ask-card{width:100%;max-width:420px;margin:0 auto;border-radius:var(--r-l);background:#fffafc;box-shadow:var(--shadow-l);overflow:hidden;animation:rise .2s ease-out}
+@keyframes rise{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+.ask-card p{padding:var(--s4) var(--s4) var(--s3);text-align:center;font-size:14px;color:var(--ink-2)}
+.ask-card button{display:block;width:100%;padding:15px;font-size:17px;font-weight:600;color:var(--accent-ink);border-top:1px solid var(--hair)}
+.ask-card button.danger{color:var(--danger)}
+.ask-card button.cancel{color:var(--ink-2);font-weight:500}
+.ask-card button:active{background:rgba(120,50,85,.06)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<header class="head">
+  <div class="head-top">
+    <h1 class="title" id="title"></h1>
+    <button class="today-btn" id="todayBtn" data-act="today" hidden>Today</button>
+  </div>
+  <div class="head-row">
+    <div class="seg" role="group" aria-label="View">
+      <button data-act="view" data-v="week">Week</button>
+      <button data-act="view" data-v="month">Month</button>
+    </div>
+    <div class="arrows">
+      <button data-act="prev" aria-label="Previous"><svg class="i" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button data-act="next" aria-label="Next"><svg class="i" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main><div id="view"></div></main>
+
+<div class="dock-wrap" id="dock"></div>
+
+<div class="scrim" id="scrim" hidden></div>
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" hidden></section>
+<div class="ask" id="ask" hidden></div>
+
+<script>
+'use strict';
+/* ═════════ Nova 1 ═════════
+   Local-first: everything draws from localStorage. All writes go through save(),
+   which is the single place background sync will hook into later. */
+
+/* ───────── Storage ───────── */
+const KEY = 'nova:v1';
+const blank = () => ({
+  shiftTypes: [],            // {id,name,label,start_time,end_time,color,position,created_at}
+  shifts: {},                // { 'YYYY-MM-DD': shiftTypeId }  (one shift per day)
+  events: [],                // {id,title,date,start_time,end_time,all_day,notes,repeat,repeat_until,created_at}
+  skips: [],                 // {event_id,date}
+  settings: { view: 'week', weekStart: 0 }
+});
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return blank();
+    const d = JSON.parse(raw), b = blank();
+    return { ...b, ...d, settings: { ...b.settings, ...(d.settings || {}) } };
+  } catch (e) { return blank(); }
+}
+let db = load();
+let skipSet = new Set();
+function reindex() { skipSet = new Set(db.skips.map(s => s.event_id + '|' + s.date)); }
+function save() {
+  reindex();
+  try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) { console.warn('Nova: could not save', e); }
+}
+reindex();
+
+/* ───────── Dates ───────── */
+const pad = n => String(n).padStart(2, '0');
+const ds = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const pd = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (s, n) => { const d = pd(s); d.setDate(d.getDate() + n); return ds(d); };
+const utc = s => { const [y, m, d] = s.split('-').map(Number); return Date.UTC(y, m - 1, d); };
+const dayDiff = (a, b) => Math.round((utc(b) - utc(a)) / 864e5);
+const todayStr = () => ds(new Date());
+const weekStartOf = s => addDays(s, -((pd(s).getDay() - db.settings.weekStart + 7) % 7));
+const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const DOW_LONG = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MON_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+function fmtTime(t, withMer = true) {
+  if (!t) return '';
+  let [h, m] = t.split(':').map(Number);
+  const mer = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  return h + ':' + pad(m) + (withMer ? ' ' + mer : '');
+}
+const isPM = t => Number(t.split(':')[0]) >= 12;
+function fmtRange(a, b) {
+  if (!a) return '';
+  if (!b) return fmtTime(a);
+  const sameHalf = isPM(a) === isPM(b) && b > a;
+  return fmtTime(a, !sameHalf) + ' – ' + fmtTime(b);
+}
+const overnight = t => t.start_time && t.end_time && t.end_time <= t.start_time;
+const shiftRange = t => fmtRange(t.start_time, t.end_time) + (overnight(t) ? ' next day' : '');
+
+/* ───────── Helpers ───────── */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
+const typeById = id => db.shiftTypes.find(t => t.id === id);
+const shiftOn = date => { const id = db.shifts[date]; return id ? typeById(id) : null; };
+const sortedTypes = () => [...db.shiftTypes].sort((a, b) => a.position - b.position);
+
+const ICON = {
+  repeat: '<svg class="i" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 013-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 01-3 3H3"/></svg>',
+  brush: '<svg class="i" viewBox="0 0 24 24"><path d="M20.5 3.5a2.1 2.1 0 00-3 0l-7.6 8 2.6 2.6 8-7.6a2.1 2.1 0 000-3z"/><path d="M8.6 13.2c-2.2.1-3.6 1.5-3.8 3.5-.1 1.3-.8 2.2-1.8 2.6 3.3 1.3 7.4.3 7.9-3.3"/></svg>',
+  list: '<svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/></svg>',
+  plus: '<svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+  chev: '<svg class="i" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>',
+  up: '<svg class="i" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>',
+  down: '<svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>'
+};
+const COLORS = ['#ff5c8a', '#ff7a59', '#f5a524', '#34c38f', '#22b8cf', '#4c8dff', '#8b6cff', '#c05cff', '#7a8194'];
+
+/* ───────── Events ───────── */
+function occursOn(ev, date) {
+  if (date < ev.date) return false;
+  if (!ev.repeat || ev.repeat === 'none') return date === ev.date;
+  if (ev.repeat_until && date > ev.repeat_until) return false;
+  if (skipSet.has(ev.id + '|' + date)) return false;
+  const n = dayDiff(ev.date, date);
+  if (ev.repeat === 'weekly') return n % 7 === 0;
+  if (ev.repeat === 'biweekly') return n % 14 === 0;
+  if (ev.repeat === 'monthly') return pd(date).getDate() === pd(ev.date).getDate();
+  return false;
+}
+const evKey = e => (e.all_day ? '' : (e.start_time || ''));
+function eventsOn(date) {
+  return db.events.filter(e => occursOn(e, date)).sort((a, b) => evKey(a).localeCompare(evKey(b)) || a.title.localeCompare(b.title));
+}
+const evTime = e => (e.all_day ? 'All day' : fmtRange(e.start_time, e.end_time));
+const isRepeat = e => e.repeat && e.repeat !== 'none';
+
+/* ───────── UI state ───────── */
+const ui = { view: db.settings.view === 'month' ? 'month' : 'week', anchor: todayStr(), paint: null, lastPaint: null };
+
+/* ───────── Render ───────── */
+function render(dir) {
+  renderHead();
+  const v = $('#view');
+  v.innerHTML = ui.view === 'week' ? weekHTML() : monthHTML();
+  if (dir) { v.classList.remove('go-next', 'go-prev'); void v.offsetWidth; v.classList.add(dir > 0 ? 'go-next' : 'go-prev'); }
+  renderDock();
+  document.body.classList.toggle('painting', !!ui.paint);
+}
+
+function renderHead() {
+  const today = todayStr(), nowY = new Date().getFullYear();
+  let title, showToday;
+  if (ui.view === 'week') {
+    const s = weekStartOf(ui.anchor), e = addDays(s, 6), a = pd(s), b = pd(e);
+    title = a.getMonth() === b.getMonth()
+      ? `${MON[a.getMonth()]} ${a.getDate()} – ${b.getDate()}`
+      : `${MON[a.getMonth()]} ${a.getDate()} – ${MON[b.getMonth()]} ${b.getDate()}`;
+    if (b.getFullYear() !== nowY) title += `<small>${b.getFullYear()}</small>`;
+    showToday = today < s || today > e;
+  } else {
+    const a = pd(ui.anchor);
+    title = MON_LONG[a.getMonth()] + (a.getFullYear() !== nowY ? `<small>${a.getFullYear()}</small>` : '');
+    showToday = today.slice(0, 7) !== ui.anchor.slice(0, 7);
+  }
+  $('#title').innerHTML = title;
+  $('#todayBtn').hidden = !showToday;
+  document.querySelectorAll('.seg [data-act="view"]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === ui.view)));
+}
+
+function evHTML(e, date) {
+  return `<div class="ev" data-ev="${e.id}" data-occ="${date}">
+    <span class="ev-title">${esc(e.title)}${isRepeat(e) ? `<span class="rep" aria-label="Repeats">${ICON.repeat}</span>` : ''}</span>
+    <span class="ev-meta">${evTime(e)}</span>
+    ${e.notes ? `<span class="ev-notes">${esc(e.notes)}</span>` : ''}
+  </div>`;
+}
+
+function weekHTML() {
+  const today = todayStr(), start = weekStartOf(ui.anchor), hasTypes = db.shiftTypes.length > 0;
+  let h = '';
+  if (!hasTypes && !db.events.length) {
+    h += `<div class="hello glass"><h2>Set up your shifts</h2>
+      <p>Make each of your usual shifts once. After that, adding your schedule is just tapping the days you work.</p>
+      <button class="btn primary" data-act="shifts">Make a shift</button></div>`;
+  }
+  h += '<div class="week">';
+  for (let i = 0; i < 7; i++) {
+    const date = addDays(start, i), d = pd(date), t = shiftOn(date), evs = eventsOn(date);
+    h += `<div class="day ${t ? 'work' : 'off'}${date === today ? ' today' : ''}" data-date="${date}" role="button" tabindex="0"${t ? ` style="--c:${t.color}"` : ''}
+      aria-label="${DOW_LONG[d.getDay()]} ${MON_LONG[d.getMonth()]} ${d.getDate()}">
+      <div class="day-date"><span class="dow">${DOW[d.getDay()]}</span><span class="num">${d.getDate()}</span></div>
+      <div class="day-body">
+        ${t ? `<div class="shift"><span class="shift-name">${esc(t.name)}</span><span class="shift-time">${shiftRange(t)}</span></div>`
+            : (evs.length ? '' : `<div class="off-label">${hasTypes ? 'Off' : ''}</div>`)}
+        ${evs.map(e => evHTML(e, date)).join('')}
+      </div></div>`;
+  }
+  h += '</div>';
+
+  // Coming up: the next few events after this week (only while looking at the current week)
+  const end = addDays(start, 6);
+  if (today >= start && today <= end && db.events.length) {
+    const up = [], seen = new Set();   // a repeating event is listed once, at its next date
+    for (let i = 1; i <= 60 && up.length < 4; i++) {
+      const date = addDays(end, i);
+      for (const e of eventsOn(date)) { if (up.length < 4 && !seen.has(e.id)) { seen.add(e.id); up.push([date, e]); } }
+    }
+    if (up.length) {
+      h += '<section class="next"><h2>Coming up</h2>' + up.map(([date, e]) => {
+        const d = pd(date);
+        return `<div class="next-row" data-ev="${e.id}" data-occ="${date}"><span>${DOW[d.getDay()]}, ${MON[d.getMonth()]} ${d.getDate()}</span><b>${esc(e.title)} <i>${e.all_day ? '' : fmtTime(e.start_time)}</i></b></div>`;
+      }).join('') + '</section>';
+    }
+  }
+  return h;
+}
+
+function monthHTML() {
+  const today = todayStr(), a = pd(ui.anchor), y = a.getFullYear(), m = a.getMonth();
+  const first = ds(new Date(y, m, 1)), last = ds(new Date(y, m + 1, 0));
+  const gridStart = weekStartOf(first);
+  const weeks = Math.ceil((dayDiff(gridStart, last) + 1) / 7);
+  let h = '<div class="mhead">';
+  for (let i = 0; i < 7; i++) h += `<span>${DOW[(db.settings.weekStart + i) % 7]}</span>`;
+  h += '</div><div class="mgrid">';
+  for (let i = 0; i < weeks * 7; i++) {
+    const date = addDays(gridStart, i), d = pd(date), t = shiftOn(date), n = eventsOn(date).length;
+    const out = d.getMonth() !== m;
+    h += `<button class="cell${t ? ' work' : ''}${out ? ' out' : ''}${date === today ? ' today' : ''}" data-date="${date}"${t ? ` style="--c:${t.color}"` : ''}
+      aria-label="${MON_LONG[d.getMonth()]} ${d.getDate()}${t ? ', ' + esc(t.name) : ''}${n ? ', ' + n + ' event' + (n > 1 ? 's' : '') : ''}">
+      <span class="n">${d.getDate()}</span>
+      <span class="chip-s${t ? '' : ' none'}">${t ? esc(t.label || t.name.slice(0, 1)) : '·'}</span>
+      <span class="dots">${'<i></i>'.repeat(Math.min(n, 3))}${n > 3 ? '<em>+</em>' : ''}</span>
+    </button>`;
+  }
+  return h + '</div>';
+}
+
+function renderDock() {
+  const el = $('#dock');
+  if (ui.paint) {
+    const cur = ui.paint.id;
+    el.innerHTML = `<div class="tray glass">
+      <div class="tray-top"><span>Tap the days to paint</span><button class="btn primary small" data-act="paint-done">Done</button></div>
+      <div class="tray-chips">
+        ${sortedTypes().map(t => `<button class="chip" style="--c:${t.color}" data-act="paint-pick" data-id="${t.id}" aria-pressed="${cur === t.id}"><i></i>${esc(t.name)}</button>`).join('')}
+        <button class="chip clear" data-act="paint-pick" data-id="clear" aria-pressed="${cur === 'clear'}"><i></i>Clear day</button>
+      </div></div>`;
+  } else {
+    el.innerHTML = `<nav class="dock glass">
+      <button class="dock-btn" data-act="paint">${ICON.brush}Paint shifts</button>
+      <button class="add-btn" data-act="add-event" aria-label="Add event">${ICON.plus}</button>
+      <button class="dock-btn" data-act="shifts">${ICON.list}My shifts</button>
+    </nav>`;
+  }
+}
+
+/* ───────── Paint mode ───────── */
+function startPaint() {
+  if (!db.shiftTypes.length) { openShifts(); return; }
+  const id = ui.lastPaint && (ui.lastPaint === 'clear' || typeById(ui.lastPaint)) ? ui.lastPaint : sortedTypes()[0].id;
+  ui.paint = { id };
+  render();
+}
+function paintDay(date) {
+  const id = ui.paint.id;
+  if (id === 'clear' || db.shifts[date] === id) delete db.shifts[date];
+  else db.shifts[date] = id;
+  save();
+  render();
+  const el = $(`#view [data-date="${date}"]`);
+  if (el) el.classList.add('pop');
+}
+
+/* ───────── Sheets ───────── */
+const sheet = $('#sheet'), scrim = $('#scrim');
+let sheetOpen = false;
+function openSheet(html) {
+  sheet.innerHTML = '<div class="grab"></div>' + html;
+  sheet.scrollTop = 0;
+  if (!sheetOpen) {
+    sheetOpen = true;
+    sheet.hidden = false; scrim.hidden = false;
+    document.body.classList.add('locked');
+    requestAnimationFrame(() => requestAnimationFrame(() => { sheet.classList.add('open'); scrim.classList.add('open'); }));
+  }
+}
+function closeSheet() {
+  if (!sheetOpen) return;
+  sheetOpen = false;
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  sheet.classList.remove('open'); scrim.classList.remove('open');
+  document.body.classList.remove('locked');
+  setTimeout(() => { if (!sheetOpen) { sheet.hidden = true; scrim.hidden = true; sheet.innerHTML = ''; } }, 280);
+}
+function ask(text, opts) {
+  return new Promise(res => {
+    const el = $('#ask');
+    el.innerHTML = `<div class="ask-card"><p>${esc(text)}</p>${opts.map((o, i) => `<button data-i="${i}" class="${o.danger ? 'danger' : ''}">${esc(o.label)}</button>`).join('')}<button data-i="-1" class="cancel">Cancel</button></div>`;
+    el.hidden = false;
+    el.onclick = e => {
+      const b = e.target.closest('button');
+      if (!b && e.target !== el) return;
+      el.hidden = true; el.onclick = null;
+      res(b && opts[b.dataset.i] ? opts[b.dataset.i].value : null);
+    };
+  });
+}
+
+/* Day sheet */
+let ctx = {};
+function openDay(date) {
+  ctx = { kind: 'day', date };
+  const d = pd(date), cur = db.shifts[date], evs = eventsOn(date);
+  openSheet(`
+    <div class="sheet-head"><h2>${DOW_LONG[d.getDay()]}, ${MON_LONG[d.getMonth()]} ${d.getDate()}</h2><button class="link" data-act="close">Done</button></div>
+    <div class="sub">Shift</div>
+    ${db.shiftTypes.length ? `<div class="chips-wrap">
+      ${sortedTypes().map(t => `<button class="chip" style="--c:${t.color}" data-act="day-shift" data-id="${t.id}" aria-pressed="${cur === t.id}"><i></i>${esc(t.name)}</button>`).join('')}
+      <button class="chip clear" data-act="day-shift" data-id="" aria-pressed="${!cur}"><i></i>Off</button>
+    </div>${cur && typeById(cur) ? `<p class="hint">${shiftRange(typeById(cur))}</p>` : ''}`
+    : `<p class="empty">No shifts made yet.</p><button class="btn quiet small" data-act="shifts">Make a shift</button>`}
+    <div class="sub">Events</div>
+    ${evs.length ? `<div class="group">${evs.map(e => `<button class="list-ev" data-ev="${e.id}" data-occ="${date}">
+        <span><span class="ev-title">${esc(e.title)}${isRepeat(e) ? `<span class="rep">${ICON.repeat}</span>` : ''}</span><br><span class="ev-meta">${evTime(e)}</span>${e.notes ? `<span class="ev-notes" style="display:block">${esc(e.notes)}</span>` : ''}</span>${ICON.chev}</button>`).join('')}</div>`
+      : `<p class="empty">Nothing planned.</p>`}
+    <div class="actions"><button class="btn primary wide" data-act="add-event" data-date="${date}">Add event</button></div>`);
+}
+
+/* Event form */
+function openEvent(id, occ, presetDate) {
+  const ev = id ? db.events.find(e => e.id === id) : null;
+  if (id && !ev) return;
+  const back = ctx.kind === 'day' ? ctx.date : null;
+  ctx = { kind: 'event', id: ev ? ev.id : null, occ: occ || null, back };
+  const v = ev ? { ...ev, date: (isRepeat(ev) && occ) ? occ : ev.date }
+               : { title: '', date: presetDate || defaultNewDate(), all_day: false, start_time: '17:00', end_time: '18:00', notes: '', repeat: 'none', repeat_until: '' };
+  openSheet(`
+    <div class="sheet-head"><h2>${ev ? 'Edit event' : 'New event'}</h2><button class="link" data-act="cancel-form">Cancel</button></div>
+    <div class="group">
+      <div class="row title-row" id="r-title"><input id="f-title" type="text" placeholder="What is it?" value="${esc(v.title)}" autocomplete="off" autocapitalize="sentences" enterkeyhint="done"></div>
+    </div>
+    <div class="group">
+      <div class="row"><label for="f-date">Date</label><input id="f-date" type="date" value="${v.date}"></div>
+      <div class="row"><span class="lbl">All day</span><label class="switch"><input id="f-all" type="checkbox" ${v.all_day ? 'checked' : ''} aria-label="All day"><span></span></label></div>
+      <div class="row" id="r-start"><label for="f-start">Starts</label><input id="f-start" type="time" value="${v.start_time || '17:00'}"></div>
+      <div class="row" id="r-end"><label for="f-end">Ends</label><input id="f-end" type="time" value="${v.end_time || ''}"></div>
+    </div>
+    <div class="group">
+      <div class="row"><label for="f-rep">Repeats</label><select id="f-rep">
+        ${[['none', 'Never'], ['weekly', 'Every week'], ['biweekly', 'Every 2 weeks'], ['monthly', 'Every month']].map(([k, l]) => `<option value="${k}"${(v.repeat || 'none') === k ? ' selected' : ''}>${l}</option>`).join('')}
+      </select></div>
+      <div class="row" id="r-until"><label for="f-until">Stops after</label><input id="f-until" type="date" value="${v.repeat_until || ''}"></div>
+    </div>
+    <div class="group"><textarea id="f-notes" placeholder="Notes">${esc(v.notes || '')}</textarea></div>
+    <div class="actions">
+      <button class="btn primary wide" data-act="save-event">Save event</button>
+      ${ev ? '<button class="btn danger wide" data-act="delete-event">Delete event</button>' : ''}
+    </div>`);
+  syncEventForm();
+}
+function defaultNewDate() {
+  const t = todayStr();
+  if (ui.view === 'week') { const s = weekStartOf(ui.anchor); return (t >= s && t <= addDays(s, 6)) ? t : s; }
+  return t.slice(0, 7) === ui.anchor.slice(0, 7) ? t : ui.anchor.slice(0, 8) + '01';
+}
+function syncEventForm() {
+  if (!$('#f-all')) return;
+  const all = $('#f-all').checked, rep = $('#f-rep').value !== 'none';
+  $('#r-start').hidden = all; $('#r-end').hidden = all; $('#r-until').hidden = !rep;
+}
+function afterForm() {
+  render();
+  if (ctx.back) openDay(ctx.back); else closeSheet();
+}
+async function saveEvent() {
+  const f = {
+    title: $('#f-title').value.trim(), date: $('#f-date').value, all_day: $('#f-all').checked,
+    start_time: $('#f-start').value || null, end_time: $('#f-end').value || null,
+    repeat: $('#f-rep').value, repeat_until: $('#f-until').value || null, notes: $('#f-notes').value.trim()
+  };
+  if (!f.title) { $('#r-title').classList.add('bad'); $('#f-title').focus(); return; }
+  if (!f.date) return;
+  if (f.all_day) { f.start_time = null; f.end_time = null; }
+  if (f.repeat === 'none') f.repeat_until = null;
+  if (f.repeat_until && f.repeat_until < f.date) f.repeat_until = null;
+
+  const ev = ctx.id ? db.events.find(e => e.id === ctx.id) : null;
+  if (!ev) {
+    db.events.push({ id: uid(), ...f, created_at: new Date().toISOString() });
+  } else if (isRepeat(ev) && ctx.occ) {
+    const which = await ask('This event repeats.', [{ label: 'Change just this one', value: 'one' }, { label: 'Change every one', value: 'all' }]);
+    if (!which) return;
+    if (which === 'one') {
+      db.skips.push({ event_id: ev.id, date: ctx.occ });
+      db.events.push({ id: uid(), ...f, repeat: 'none', repeat_until: null, created_at: new Date().toISOString() });
+    } else {
+      // moving the date moves the whole series by the same number of days
+      const shifted = f.repeat === 'none' ? f.date : addDays(ev.date, dayDiff(ctx.occ, f.date));
+      Object.assign(ev, f, { date: shifted });
+    }
+  } else {
+    Object.assign(ev, f);
+  }
+  save(); afterForm();
+}
+async function deleteEvent() {
+  const ev = db.events.find(e => e.id === ctx.id);
+  if (!ev) return;
+  if (isRepeat(ev) && ctx.occ) {
+    const which = await ask('This event repeats.', [{ label: 'Delete just this one', value: 'one', danger: true }, { label: 'Delete every one', value: 'all', danger: true }]);
+    if (!which) return;
+    if (which === 'one') { db.skips.push({ event_id: ev.id, date: ctx.occ }); save(); afterForm(); return; }
+  } else {
+    const ok = await ask(`Delete “${ev.title}”?`, [{ label: 'Delete event', value: true, danger: true }]);
+    if (!ok) return;
+  }
+  db.events = db.events.filter(e => e.id !== ev.id);
+  db.skips = db.skips.filter(s => s.event_id !== ev.id);
+  save(); afterForm();
+}
+
+/* My shifts */
+function openShifts() {
+  ctx = { kind: 'shifts' };
+  const types = sortedTypes();
+  openSheet(`
+    <div class="sheet-head"><h2>My shifts</h2><button class="link" data-act="close">Done</button></div>
+    ${types.length ? `<div class="group">${types.map((t, i) => `<div class="preset" style="--c:${t.color}">
+        <button class="badge" data-act="edit-shift" data-id="${t.id}" aria-label="Edit ${esc(t.name)}">${esc(t.label || t.name.slice(0, 1))}</button>
+        <button class="preset-main" data-act="edit-shift" data-id="${t.id}"><b>${esc(t.name)}</b><span>${shiftRange(t)}</span></button>
+        <div class="move">
+          <button data-act="move-shift" data-id="${t.id}" data-dir="-1" aria-label="Move up" ${i === 0 ? 'disabled' : ''}>${ICON.up}</button>
+          <button data-act="move-shift" data-id="${t.id}" data-dir="1" aria-label="Move down" ${i === types.length - 1 ? 'disabled' : ''}>${ICON.down}</button>
+        </div></div>`).join('')}</div>`
+      : `<p class="empty">Make a shift for each kind you work, like Days or Nights. You only do this once.</p>`}
+    <div class="actions"><button class="btn primary wide" data-act="edit-shift" data-id="">New shift</button></div>
+    <div class="sub">Calendar</div>
+    <div class="group"><div class="row"><span class="lbl">Week starts on</span>
+      <div class="seg sm"><button data-act="week-start" data-v="0" aria-pressed="${db.settings.weekStart === 0}">Sunday</button><button data-act="week-start" data-v="1" aria-pressed="${db.settings.weekStart === 1}">Monday</button></div>
+    </div></div>`);
+}
+function openShiftForm(id) {
+  const t = id ? typeById(id) : null;
+  const used = new Set(db.shiftTypes.map(x => x.color));
+  const v = t || { name: '', label: '', start_time: '07:30', end_time: '19:30', color: COLORS.find(c => !used.has(c)) || COLORS[0] };
+  ctx = { kind: 'shift', id: t ? t.id : null, color: v.color };
+  openSheet(`
+    <div class="sheet-head"><h2>${t ? 'Edit shift' : 'New shift'}</h2><button class="link" data-act="shifts">Cancel</button></div>
+    <div class="group">
+      <div class="row title-row" id="r-name"><input id="s-name" type="text" placeholder="Name, like Days" value="${esc(v.name)}" autocomplete="off" autocapitalize="words" enterkeyhint="done"></div>
+      <div class="row"><label for="s-label">Short label</label><input id="s-label" type="text" maxlength="3" placeholder="1–3 letters" value="${esc(v.label)}" autocomplete="off" autocapitalize="characters"></div>
+    </div>
+    <p class="hint">The short label is what shows on the month view.</p>
+    <div class="group" style="margin-top:12px">
+      <div class="row"><label for="s-start">Starts</label><input id="s-start" type="time" value="${v.start_time}"></div>
+      <div class="row"><label for="s-end">Ends</label><input id="s-end" type="time" value="${v.end_time}"></div>
+    </div>
+    <p class="hint" id="s-night" hidden>Ends the next day.</p>
+    <div class="group" style="margin-top:12px"><div class="swatches">
+      ${COLORS.map(c => `<button class="swatch" style="--c:${c}" data-act="pick-color" data-c="${c}" aria-pressed="${c === v.color}" aria-label="Colour"></button>`).join('')}
+    </div></div>
+    <div class="actions">
+      <button class="btn primary wide" data-act="save-shift">Save shift</button>
+      ${t ? '<button class="btn danger wide" data-act="delete-shift">Delete shift</button>' : ''}
+    </div>`);
+  syncShiftForm();
+}
+function syncShiftForm() {
+  if (!$('#s-start')) return;
+  const a = $('#s-start').value, b = $('#s-end').value;
+  $('#s-night').hidden = !(a && b && b <= a);
+}
+function saveShift() {
+  const name = $('#s-name').value.trim();
+  if (!name) { $('#r-name').classList.add('bad'); $('#s-name').focus(); return; }
+  const f = {
+    name, label: ($('#s-label').value.trim() || name.slice(0, 1)).slice(0, 3).toUpperCase(),
+    start_time: $('#s-start').value || '07:30', end_time: $('#s-end').value || '19:30', color: ctx.color
+  };
+  const t = ctx.id ? typeById(ctx.id) : null;
+  if (t) Object.assign(t, f);
+  else db.shiftTypes.push({ id: uid(), ...f, position: db.shiftTypes.reduce((m, x) => Math.max(m, x.position), -1) + 1, created_at: new Date().toISOString() });
+  save(); render(); openShifts();
+}
+async function deleteShift() {
+  const t = typeById(ctx.id);
+  if (!t) return;
+  const n = Object.values(db.shifts).filter(x => x === t.id).length;
+  const ok = await ask(n ? `“${t.name}” is on ${n} day${n > 1 ? 's' : ''}. Deleting it clears those days.` : `Delete “${t.name}”?`, [{ label: 'Delete shift', value: true, danger: true }]);
+  if (!ok) return;
+  db.shiftTypes = db.shiftTypes.filter(x => x.id !== t.id);
+  for (const k of Object.keys(db.shifts)) if (db.shifts[k] === t.id) delete db.shifts[k];
+  if (ui.lastPaint === t.id) ui.lastPaint = null;
+  save(); render(); openShifts();
+}
+function moveShift(id, dir) {
+  const types = sortedTypes(), i = types.findIndex(t => t.id === id), j = i + dir;
+  if (i < 0 || j < 0 || j >= types.length) return;
+  [types[i], types[j]] = [types[j], types[i]];
+  types.forEach((t, k) => { t.position = k; });
+  save(); openShifts();
+}
+
+/* ───────── Navigation ───────── */
+function step(dir) {
+  if (ui.view === 'week') ui.anchor = addDays(ui.anchor, 7 * dir);
+  else { const a = pd(ui.anchor); ui.anchor = ds(new Date(a.getFullYear(), a.getMonth() + dir, 1)); }
+  render(dir);
+  window.scrollTo(0, 0);
+}
+function goToday() {
+  const t = todayStr(), dir = t > ui.anchor ? 1 : -1;
+  ui.anchor = t; render(dir); window.scrollTo(0, 0);
+}
+function setView(v) {
+  if (v === ui.view) return;
+  // coming back from a month you browsed to: land on today if it's in that month, else its first week
+  if (v === 'week' && ui.anchor.slice(0, 7) === todayStr().slice(0, 7)) ui.anchor = todayStr();
+  ui.view = v; db.settings.view = v; save(); render(); window.scrollTo(0, 0);
+}
+
+/* ───────── Input wiring ───────── */
+document.addEventListener('click', e => {
+  const actEl = e.target.closest('[data-act]');
+  if (actEl) {
+    const d = actEl.dataset;
+    switch (d.act) {
+      case 'view': setView(d.v); break;
+      case 'prev': step(-1); break;
+      case 'next': step(1); break;
+      case 'today': goToday(); break;
+      case 'paint': startPaint(); break;
+      case 'paint-pick': ui.paint = { id: d.id }; ui.lastPaint = d.id; renderDock(); break;
+      case 'paint-done': ui.paint = null; render(); break;
+      case 'add-event': openEvent(null, null, d.date || null); break;
+      case 'shifts': ui.paint = null; render(); openShifts(); break;
+      case 'close': closeSheet(); break;
+      case 'cancel-form': if (ctx.back) openDay(ctx.back); else closeSheet(); break;
+      case 'save-event': saveEvent(); break;
+      case 'delete-event': deleteEvent(); break;
+      case 'day-shift': if (d.id) db.shifts[ctx.date] = d.id; else delete db.shifts[ctx.date]; save(); render(); openDay(ctx.date); break;
+      case 'edit-shift': openShiftForm(d.id || null); break;
+      case 'save-shift': saveShift(); break;
+      case 'delete-shift': deleteShift(); break;
+      case 'move-shift': moveShift(d.id, Number(d.dir)); break;
+      case 'pick-color': ctx.color = d.c; sheet.querySelectorAll('.swatch').forEach(s => s.setAttribute('aria-pressed', String(s.dataset.c === d.c))); break;
+      case 'week-start': db.settings.weekStart = Number(d.v); save(); render(); openShifts(); break;
+    }
+    return;
+  }
+  const dayEl = e.target.closest('#view [data-date]');
+  if (dayEl && ui.paint) { paintDay(dayEl.dataset.date); return; }
+  const evEl = e.target.closest('[data-ev]');
+  if (evEl) { openEvent(evEl.dataset.ev, evEl.dataset.occ); return; }
+  if (dayEl) { openDay(dayEl.dataset.date); return; }
+});
+scrim.addEventListener('click', closeSheet);
+sheet.addEventListener('change', () => { syncEventForm(); syncShiftForm(); });
+sheet.addEventListener('input', e => { const r = e.target.closest('.row.bad'); if (r) r.classList.remove('bad'); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.matches && e.target.matches('input[type=text]')) e.target.blur();
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.day')) { e.preventDefault(); e.target.click(); }
+});
+
+/* swipe left / right to change week or month */
+(() => {
+  let x0 = 0, y0 = 0, on = false;
+  const m = $('main');
+  m.addEventListener('touchstart', e => { if (e.touches.length !== 1) { on = false; return; } on = true; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  m.addEventListener('touchend', e => {
+    if (!on) return; on = false;
+    const t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.8) step(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+
+/* roll over to the new day if the app was left open overnight */
+let lastDay = todayStr();
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  const t = todayStr();
+  if (t !== lastDay) { lastDay = t; if (!sheetOpen) { ui.anchor = t; } render(); }
+});
+
+/* ───────── Boot ───────── */
+render();
+if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+</script>
+</body>
+</html>
