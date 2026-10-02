@@ -58,11 +58,11 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{height:100%;-webkit-text-size-adjust:100%;background:#fdeff4}
+html{height:100%;overflow:hidden;-webkit-text-size-adjust:100%;background:#fdeff4;overscroll-behavior:none}
 body{
   min-height:100%;font-family:var(--font);color:var(--ink);font-size:16px;line-height:1.35;
   -webkit-font-smoothing:antialiased;-webkit-user-select:none;user-select:none;
-  overscroll-behavior-y:none;
+  overscroll-behavior:none;overflow:hidden;height:100%;
 }
 body.locked{overflow:hidden}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-action:manipulation}
@@ -90,7 +90,7 @@ input,select,textarea{font:inherit;color:inherit;-webkit-user-select:text;user-s
 
 /* ───────── Header ───────── */
 .head{
-  position:sticky;top:0;z-index:5;
+  position:fixed;top:0;left:0;right:0;z-index:5;
   padding:calc(var(--safe-t) + var(--s3)) var(--s4) var(--s3);
   background:linear-gradient(rgba(253,239,244,.86),rgba(253,239,244,.62));
   -webkit-backdrop-filter:blur(var(--blur)) saturate(1.7);
@@ -105,6 +105,9 @@ input,select,textarea{font:inherit;color:inherit;-webkit-user-select:text;user-s
   padding:7px 14px;border-radius:var(--r-pill);background:var(--glass-strong);
   border:1px solid var(--edge);box-shadow:var(--shadow-s);flex:none;
 }
+.head-acts{display:flex;align-items:center;gap:var(--s2);flex:none}
+.icon-btn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--glass-strong);border:1px solid var(--edge);box-shadow:var(--shadow-s);color:var(--accent-ink)}
+.icon-btn:active{transform:scale(.94)}
 .head-row{display:flex;align-items:center;justify-content:space-between;margin-top:var(--s3)}
 
 .seg{display:inline-flex;padding:3px;border-radius:var(--r-pill);background:rgba(120,50,85,.08)}
@@ -124,7 +127,8 @@ input,select,textarea{font:inherit;color:inherit;-webkit-user-select:text;user-s
 svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
 /* ───────── Main ───────── */
-main{padding:var(--s4) var(--s4) calc(var(--safe-b) + 150px)}
+main{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  padding:calc(var(--head-h,calc(var(--safe-t) + 118px)) + var(--s4)) var(--s4) calc(var(--safe-b) + 150px)}
 #view.go-next{animation:goNext .2s ease-out}
 #view.go-prev{animation:goPrev .2s ease-out}
 @keyframes goNext{from{opacity:.2;transform:translateX(18px)}to{opacity:1;transform:none}}
@@ -165,7 +169,7 @@ main{padding:var(--s4) var(--s4) calc(var(--safe-b) + 150px)}
 .off-label{font-size:15px;font-weight:500;color:var(--ink-3);padding-top:6px}
 
 .ev{display:grid;grid-template-columns:8px 1fr;gap:0 var(--s2);align-items:start;border-radius:var(--r-s)}
-.ev::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:7px}
+.ev::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:7px;grid-row:1}
 .ev-title{font-weight:600;font-size:16px;overflow-wrap:anywhere}
 .ev-meta{grid-column:2;font-size:13.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
 .ev-notes{grid-column:2;font-size:13.5px;color:var(--ink-2);white-space:pre-wrap;overflow-wrap:anywhere;margin-top:1px}
@@ -239,7 +243,7 @@ body.painting .day,body.painting .cell{cursor:copy}
 /* paint tray */
 .tray{pointer-events:auto;margin:0 auto;max-width:420px;border-radius:var(--r-xl);padding:var(--s3) var(--s3) var(--s3);box-shadow:var(--shadow-l),inset 0 1px 0 rgba(255,255,255,.9)}
 .tray-top{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);padding:0 var(--s1) var(--s3) var(--s2)}
-.tray-top span{font-family:var(--round);font-weight:700;font-size:16px}
+.tray-top span{font-family:var(--round);font-weight:700;font-size:16px;white-space:nowrap}
 .tray-chips{display:flex;gap:var(--s2);overflow-x:auto;padding:3px;margin:-3px;scrollbar-width:none}
 .tray-chips::-webkit-scrollbar{display:none}
 
@@ -316,10 +320,15 @@ textarea{display:block;width:100%;min-height:76px;border:0;background:none;resiz
 .list-ev svg{color:var(--ink-3);margin-top:2px;width:16px;height:16px}
 
 /* my shifts */
-.preset{display:grid;grid-template-columns:44px 1fr auto;gap:var(--s3);align-items:center;padding:10px var(--s3) 10px var(--s3);border-top:1px solid var(--hair)}
+.preset{display:grid;grid-template-columns:30px 44px 1fr auto;gap:var(--s2) 10px;align-items:center;padding:10px var(--s3) 10px 6px;border-top:1px solid var(--hair);background:rgba(255,255,255,.01);transition:transform .16s}
+.preset.dragging{transition:none;position:relative;z-index:2;background:#fff;box-shadow:var(--shadow-m);border-radius:var(--r-m);border-top-color:transparent}
+.grip{display:grid;place-items:center;height:44px;color:var(--ink-3);touch-action:none;cursor:grab}
+.intro{font-size:15px;color:var(--ink-2);margin:calc(var(--s2) * -1) var(--s1) var(--s4)}
+.intro b{color:var(--ink);font-weight:600}
 .preset:first-child{border-top:0}
 .badge{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-family:var(--round);font-weight:700;font-size:15px;background:color-mix(in srgb,var(--c) 24%,#fff);color:color-mix(in srgb,var(--c) 58%,#2b1f27)}
 .preset-main{text-align:left;min-width:0}
+.preset-main{display:block}
 .preset-main b{display:block;font-weight:600;font-size:16px;overflow-wrap:anywhere}
 .preset-main span{font-size:13.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
 .move{display:flex;gap:2px}
@@ -333,6 +342,24 @@ textarea{display:block;width:100%;min-height:76px;border:0;background:none;resiz
 .row-val svg{width:15px;height:15px;color:var(--ink-3)}
 button.row{text-align:left}
 .seg.sm button{padding:6px 14px;min-width:0;font-size:14px}
+
+/* paint review */
+.tray-acts{display:flex;gap:var(--s2)}
+.btn:disabled{opacity:.4}
+.review{position:fixed;inset:0;z-index:15;display:grid;place-items:center;background:rgba(60,20,40,.28);padding:calc(var(--safe-t) + var(--s5)) var(--s5) calc(var(--safe-b) + var(--s5))}
+.review-card{width:100%;max-width:380px;max-height:100%;display:flex;flex-direction:column;border-radius:var(--r-xl);background:#fffafc;box-shadow:var(--shadow-l);padding:var(--s5);animation:rise .2s ease-out}
+.review-card h2{font-family:var(--round);font-weight:700;font-size:22px;letter-spacing:-.01em}
+.review-sum{color:var(--ink-2);font-size:14.5px;margin:2px 0 var(--s3)}
+.review-list{overflow-y:auto;overscroll-behavior:contain;margin:0 calc(var(--s2) * -1);padding:0 var(--s2)}
+.review-row{display:grid;grid-template-columns:96px 1fr;gap:var(--s3);padding:10px 0;border-top:1px solid var(--hair);font-size:15px;align-items:baseline}
+.review-row span{color:var(--ink-2);font-variant-numeric:tabular-nums}
+.review-row b{font-weight:600;overflow-wrap:anywhere}
+.review-row b i{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c);margin-right:7px}
+.review-row b.gone{color:var(--ink-2);font-weight:500}
+.review-row em{display:block;font-style:normal;font-weight:400;font-size:13px;color:var(--ink-3)}
+.review-acts{display:grid;grid-template-columns:1fr 1fr;gap:var(--s2);margin-top:var(--s4)}
+
+.share-img{display:block;width:100%;border-radius:var(--r-l);box-shadow:var(--shadow-m);-webkit-user-select:auto;user-select:auto;-webkit-touch-callout:default}
 
 /* chooser */
 .ask{position:fixed;inset:0;z-index:20;display:flex;align-items:flex-end;background:rgba(60,20,40,.28);padding:var(--s3) var(--s3) calc(var(--safe-b) + var(--s3))}
@@ -355,7 +382,7 @@ button.row{text-align:left}
 <header class="head">
   <div class="head-top">
     <h1 class="title" id="title"></h1>
-    <button class="today-btn" id="todayBtn" data-act="today" hidden>Today</button>
+    <div class="head-acts"><button class="today-btn" id="todayBtn" data-act="today" hidden>Today</button><button class="icon-btn" data-act="share" aria-label="Share a picture of this"><svg class="i" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M7.5 7.5L12 3l4.5 4.5"/><path d="M5 12v6.5A2.5 2.5 0 007.5 21h9a2.5 2.5 0 002.5-2.5V12"/></svg></button></div>
   </div>
   <div class="head-row">
     <div class="seg" role="group" aria-label="View">
@@ -375,11 +402,12 @@ button.row{text-align:left}
 
 <div class="scrim" id="scrim" hidden></div>
 <section class="sheet" id="sheet" role="dialog" aria-modal="true" hidden></section>
+<div class="review" id="review" hidden></div>
 <div class="ask" id="ask" hidden></div>
 
 <script>
 'use strict';
-/* ═════════ Nova 2 ═════════
+/* ═════════ Nova 3 ═════════
    Local-first: everything draws from localStorage. All writes go through save(),
    which is the single place background sync will hook into later. */
 
@@ -460,6 +488,7 @@ const ICON = {
   plus: '<svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
   chev: '<svg class="i" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>',
   up: '<svg class="i" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>',
+  grip: '<svg class="i" viewBox="0 0 24 24"><path d="M5 9h14M5 15h14"/></svg>',
   down: '<svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>'
 };
 const COLORS = ['#ff5c8a', '#ff7a59', '#f5a524', '#34c38f', '#22b8cf', '#4c8dff', '#8b6cff', '#c05cff', '#7a8194'];
@@ -480,7 +509,7 @@ const evKey = e => (e.all_day ? '' : (e.start_time || ''));
 function eventsOn(date) {
   return db.events.filter(e => occursOn(e, date)).sort((a, b) => evKey(a).localeCompare(evKey(b)) || a.title.localeCompare(b.title));
 }
-const evTime = e => (e.all_day ? 'All day' : fmtRange(e.start_time, e.end_time));
+const evTime = e => (e.all_day ? '' : fmtRange(e.start_time, e.end_time));
 const isRepeat = e => e.repeat && e.repeat !== 'none';
 
 /* ───────── Backup sync ─────────
@@ -557,6 +586,7 @@ function queueSync(ms = 700) {
 }
 async function syncNow() {
   if (!sync.code || syncing) return;
+  if (ui.paint) return;          // nothing is sent until she confirms the painted shifts
   syncing = true; setSyncState('busy');
   let again = false;
   try {
@@ -573,6 +603,7 @@ async function syncNow() {
     const serverHasData = server.shift_types.length || server.events.length || server.shifts.length;
     if (first && !serverHasData) again = true;                 // empty backup: send up what's on the phone
     else if (seq !== dirtySeq) again = true;                   // she kept editing while it was sending
+    else if (ui.paint) again = false;                          // mid-paint: leave the phone's copy alone
     else { db = fromRows(server); persist(); render(); }
     setSyncState('ok');
   } catch (e) {
@@ -619,7 +650,7 @@ function renderHead() {
 function evHTML(e, date) {
   return `<div class="ev" data-ev="${e.id}" data-occ="${date}">
     <span class="ev-title">${esc(e.title)}${isRepeat(e) ? `<span class="rep" aria-label="Repeats">${ICON.repeat}</span>` : ''}</span>
-    <span class="ev-meta">${evTime(e)}</span>
+    ${evTime(e) ? `<span class="ev-meta">${evTime(e)}</span>` : ''}
     ${e.notes ? `<span class="ev-notes">${esc(e.notes)}</span>` : ''}
   </div>`;
 }
@@ -691,7 +722,8 @@ function renderDock() {
   if (ui.paint) {
     const cur = ui.paint.id;
     el.innerHTML = `<div class="tray glass">
-      <div class="tray-top"><span>Tap the days to paint</span><button class="btn primary small" data-act="paint-done">Done</button></div>
+      <div class="tray-top"><span>Tap days to paint</span>
+        <div class="tray-acts"><button class="btn quiet small" data-act="paint-undo" ${ui.paint.hist.length ? '' : 'disabled'}>Undo</button><button class="btn primary small" data-act="paint-done">Done</button></div></div>
       <div class="tray-chips">
         ${sortedTypes().map(t => `<button class="chip" style="--c:${t.color}" data-act="paint-pick" data-id="${t.id}" aria-pressed="${cur === t.id}"><i></i>${esc(t.name)}</button>`).join('')}
         <button class="chip clear" data-act="paint-pick" data-id="clear" aria-pressed="${cur === 'clear'}"><i></i>Clear day</button>
@@ -709,17 +741,59 @@ function renderDock() {
 function startPaint() {
   if (!db.shiftTypes.length) { openShifts(); return; }
   const id = ui.lastPaint && (ui.lastPaint === 'clear' || typeById(ui.lastPaint)) ? ui.lastPaint : sortedTypes()[0].id;
-  ui.paint = { id };
+  ui.paint = { id, before: {}, hist: [] };   // before: what each touched day had when painting started
   render();
 }
 function paintDay(date) {
-  const id = ui.paint.id;
-  if (id === 'clear' || db.shifts[date] === id) delete db.shifts[date];
+  const id = ui.paint.id, prev = db.shifts[date] || null;
+  if (!(date in ui.paint.before)) ui.paint.before[date] = prev;
+  ui.paint.hist.push({ date, prev });
+  if (id === 'clear' || prev === id) delete db.shifts[date];
   else db.shifts[date] = id;
-  save();
+  persist();                    // kept on the phone straight away; backed up once she confirms
   render();
   const el = $(`#view [data-date="${date}"]`);
   if (el) el.classList.add('pop');
+}
+function undoPaint() {
+  const last = ui.paint && ui.paint.hist.pop();
+  if (!last) return;
+  if (last.prev) db.shifts[last.date] = last.prev; else delete db.shifts[last.date];
+  persist(); render();
+  const el = $(`#view [data-date="${last.date}"]`);
+  if (el) el.classList.add('pop');
+}
+function paintChanges() {
+  return Object.keys(ui.paint.before).sort()
+    .map(date => ({ date, was: ui.paint.before[date], now: db.shifts[date] || null }))
+    .filter(c => c.was !== c.now);
+}
+function finishPaint() {
+  const ch = paintChanges();
+  if (!ch.length) { ui.paint = null; render(); return; }
+  const added = ch.filter(c => c.now && !c.was).length, changed = ch.filter(c => c.now && c.was).length, cleared = ch.filter(c => !c.now).length;
+  const parts = [];
+  if (added) parts.push(added + ' added');
+  if (changed) parts.push(changed + ' changed');
+  if (cleared) parts.push(cleared + ' cleared');
+  const onlyAdds = !changed && !cleared;
+  const el = $('#review');
+  el.innerHTML = `<div class="review-card">
+    <h2>${onlyAdds ? 'Shifts you added' : 'Check your changes'}</h2>
+    <p class="review-sum">${parts.join(', ')}</p>
+    <div class="review-list">${ch.map(c => {
+      const d = pd(c.date), t = c.now ? typeById(c.now) : null, w = c.was ? typeById(c.was) : null;
+      return `<div class="review-row"><span>${DOW[d.getDay()]}, ${MON[d.getMonth()]} ${d.getDate()}</span>
+        <b${t ? ` style="--c:${t.color}"` : ' class="gone"'}>${t ? `<i></i>${esc(t.name)}` : 'Cleared'}${w ? `<em>was ${esc(w.name)}</em>` : ''}</b></div>`;
+    }).join('')}</div>
+    <div class="review-acts"><button class="btn quiet" data-act="paint-back">Go back</button><button class="btn primary" data-act="paint-confirm">Confirm</button></div>
+  </div>`;
+  el.hidden = false;
+}
+function confirmPaint() {
+  $('#review').hidden = true;
+  ui.lastPaint = ui.paint.id; ui.paint = null;
+  save(); render();
 }
 
 /* ───────── Sheets ───────── */
@@ -772,7 +846,7 @@ function openDay(date) {
     : `<p class="empty">No shifts made yet.</p><button class="btn quiet small" data-act="shifts">Make a shift</button>`}
     <div class="sub">Events</div>
     ${evs.length ? `<div class="group">${evs.map(e => `<button class="list-ev" data-ev="${e.id}" data-occ="${date}">
-        <span><span class="ev-title">${esc(e.title)}${isRepeat(e) ? `<span class="rep">${ICON.repeat}</span>` : ''}</span><br><span class="ev-meta">${evTime(e)}</span>${e.notes ? `<span class="ev-notes" style="display:block">${esc(e.notes)}</span>` : ''}</span>${ICON.chev}</button>`).join('')}</div>`
+        <span><span class="ev-title">${esc(e.title)}${isRepeat(e) ? `<span class="rep">${ICON.repeat}</span>` : ''}</span>${evTime(e) ? `<br><span class="ev-meta">${evTime(e)}</span>` : ''}${e.notes ? `<span class="ev-notes" style="display:block">${esc(e.notes)}</span>` : ''}</span>${ICON.chev}</button>`).join('')}</div>`
       : `<p class="empty">Nothing planned.</p>`}
     <div class="actions"><button class="btn primary wide" data-act="add-event" data-date="${date}">Add event</button></div>`);
 }
@@ -792,7 +866,7 @@ function openEvent(id, occ, presetDate) {
     </div>
     <div class="group">
       <div class="row"><label for="f-date">Date</label><input id="f-date" type="date" value="${v.date}"></div>
-      <div class="row"><span class="lbl">All day</span><label class="switch"><input id="f-all" type="checkbox" ${v.all_day ? 'checked' : ''} aria-label="All day"><span></span></label></div>
+      <div class="row"><span class="lbl">No set time</span><label class="switch"><input id="f-all" type="checkbox" ${v.all_day ? 'checked' : ''} aria-label="No set time"><span></span></label></div>
       <div class="row" id="r-start"><label for="f-start">Starts</label><input id="f-start" type="time" value="${v.start_time || '17:00'}"></div>
       <div class="row" id="r-end"><label for="f-end">Ends</label><input id="f-end" type="time" value="${v.end_time || ''}"></div>
     </div>
@@ -876,13 +950,13 @@ function openShifts() {
   const types = sortedTypes();
   openSheet(`
     <div class="sheet-head"><h2>My shifts</h2><button class="link" data-act="close">Done</button></div>
-    ${types.length ? `<div class="group">${types.map((t, i) => `<div class="preset" style="--c:${t.color}">
-        <button class="badge" data-act="edit-shift" data-id="${t.id}" aria-label="Edit ${esc(t.name)}">${esc(t.label || t.name.slice(0, 1))}</button>
-        <button class="preset-main" data-act="edit-shift" data-id="${t.id}"><b>${esc(t.name)}</b><span>${shiftRange(t) || 'No set time'}</span></button>
-        <div class="move">
-          <button data-act="move-shift" data-id="${t.id}" data-dir="-1" aria-label="Move up" ${i === 0 ? 'disabled' : ''}>${ICON.up}</button>
-          <button data-act="move-shift" data-id="${t.id}" data-dir="1" aria-label="Move down" ${i === types.length - 1 ? 'disabled' : ''}>${ICON.down}</button>
-        </div></div>`).join('')}</div>`
+    <p class="intro">These are the kinds of shifts you work. Set each one up once here, then use <b>Paint shifts</b> to put them on your days.</p>
+    ${types.length ? `<div class="group" id="presetList">${types.map(t => `<div class="preset" style="--c:${t.color}">
+        <span class="grip" aria-label="Drag to reorder">${ICON.grip}</span>
+        <span class="badge">${esc(t.label || t.name.slice(0, 1))}</span>
+        <span class="preset-main"><b>${esc(t.name)}</b><span>${fmtRange(t.start_time, t.end_time) || 'No set time'}</span></span>
+        <button class="btn quiet small" data-act="edit-shift" data-id="${t.id}" aria-label="Edit ${esc(t.name)}">Edit</button>
+        </div>`).join('')}</div>${types.length > 1 ? '<p class="hint">Drag the handle to change the order.</p>' : ''}`
       : `<p class="empty">Make a shift for each kind you work, like Days or Nights. You only do this once.</p>`}
     <div class="actions"><button class="btn primary wide" data-act="edit-shift" data-id="">New shift</button></div>
     <div class="sub">Calendar</div>
@@ -891,6 +965,40 @@ function openShifts() {
     </div>
     <button class="row" data-act="backup" style="width:100%"><span class="lbl">Backup</span><span class="row-val"><span id="backupStatus">${backupLabel()}</span>${ICON.chev}</span></button>
     </div>`);
+  initPresetDrag();
+}
+function initPresetDrag() {
+  const list = $('#presetList');
+  if (!list) return;
+  list.addEventListener('pointerdown', e => {
+    const grip = e.target.closest('.grip');
+    if (!grip) return;
+    e.preventDefault();
+    const row = grip.closest('.preset'), rows = [...list.children], from = rows.indexOf(row), h = row.offsetHeight, y0 = e.clientY;
+    let to = from;
+    try { grip.setPointerCapture(e.pointerId); } catch (err) {}
+    row.classList.add('dragging');
+    const move = ev => {
+      const dy = Math.max(-from * h, Math.min((rows.length - 1 - from) * h, ev.clientY - y0));
+      row.style.transform = `translateY(${dy}px)`;
+      to = Math.round((from * h + dy) / h);
+      rows.forEach((r, i) => {
+        if (r === row) return;
+        r.style.transform = (i > from && i <= to) ? `translateY(${-h}px)` : (i < from && i >= to) ? `translateY(${h}px)` : '';
+      });
+    };
+    const up = () => {
+      grip.removeEventListener('pointermove', move); grip.removeEventListener('pointerup', up); grip.removeEventListener('pointercancel', up);
+      if (to !== from) {
+        const types = sortedTypes(), [m] = types.splice(from, 1);
+        types.splice(to, 0, m);
+        types.forEach((t, k) => { t.position = k; });
+        save(); render();
+      }
+      openShifts();
+    };
+    grip.addEventListener('pointermove', move); grip.addEventListener('pointerup', up); grip.addEventListener('pointercancel', up);
+  });
 }
 
 /* Backup */
@@ -992,22 +1100,183 @@ function moveShift(id, dir) {
   save(); openShifts();
 }
 
+/* ───────── Share image ─────────
+   Drawn straight onto a canvas (no waiting), as tall as the content needs, then handed to
+   the iPhone share sheet in the same tap. */
+const INK = '#2b1f27', INK2 = '#7d6b76', INK3 = '#b5a6af';
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const hexRGB = h => { h = h.replace('#', ''); if (h.length === 3) h = [...h].map(c => c + c).join(''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); };
+function mix(hex, amt, base = '#ffffff') { const a = hexRGB(hex), b = hexRGB(base); return `rgb(${a.map((v, i) => Math.round(v * amt + b[i] * (1 - amt))).join(',')})`; }
+const rgba = (hex, al) => `rgba(${hexRGB(hex).join(',')},${al})`;
+const FONT = (w, s, round) => `${w} ${s}px ${round ? 'ui-rounded, "SF Pro Rounded", ' : ''}system-ui, -apple-system, "Helvetica Neue", sans-serif`;
+function rr(ctx, x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+function wrapText(ctx, text, maxW) {
+  const lines = []; let line = '';
+  for (let word of String(text).split(/\s+/)) {
+    while (ctx.measureText(word).width > maxW && word.length > 1) {      // a single very long word
+      let n = word.length; while (n > 1 && ctx.measureText((line ? line + ' ' : '') + word.slice(0, n)).width > maxW) n--;
+      lines.push((line ? line + ' ' : '') + word.slice(0, n)); line = ''; word = word.slice(n);
+    }
+    const tryLine = line ? line + ' ' + word : word;
+    if (ctx.measureText(tryLine).width > maxW && line) { lines.push(line); line = word; } else line = tryLine;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+function paintBg(ctx, W, H) {
+  const accent = cssVar('--accent') || '#ff4d8d';
+  ctx.fillStyle = '#fdf3f6'; ctx.fillRect(0, 0, W, H);
+  const blob = (x, y, r, col) => { const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, col); g.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); };
+  blob(0, 0, W * 1.1, rgba(accent, .22));
+  blob(W, Math.min(H * .2, 300), W * .9, 'rgba(255,225,207,.9)');
+  blob(W * .9, H, W * 1.1, 'rgba(233,222,255,.9)');
+  blob(0, H * .9, W * .8, rgba(accent, .10));
+}
+function paintEvents(ctx, evs, x, y, w) {          // returns the new y
+  for (const e of evs) {
+    ctx.font = FONT(600, 15.5);
+    const lines = wrapText(ctx, e.title, w - 16);
+    ctx.fillStyle = cssVar('--accent') || '#ff4d8d';
+    ctx.beginPath(); ctx.arc(x + 4, y + 10, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = INK;
+    for (const l of lines) { ctx.fillText(l, x + 16, y + 15); y += 20; }
+    if (evTime(e)) { ctx.font = FONT(400, 13); ctx.fillStyle = INK2; ctx.fillText(evTime(e), x + 16, y + 13); y += 18; }
+    y += 7;
+  }
+  return y;
+}
+function paintWeek(ctx, W) {
+  const P = 16, today = todayStr(), start = weekStartOf(ui.anchor), end = addDays(start, 6), a = pd(start), b = pd(end);
+  const accent = cssVar('--accent') || '#ff4d8d', hasTypes = db.shiftTypes.length > 0;
+  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+  ctx.font = FONT(700, 27, 1); ctx.fillStyle = INK;
+  ctx.fillText(`${MON[a.getMonth()]} ${a.getDate()} – ${a.getMonth() === b.getMonth() ? '' : MON[b.getMonth()] + ' '}${b.getDate()}`, P + 4, 46);
+  let y = 66;
+  for (let i = 0; i < 7; i++) {
+    const date = addDays(start, i), d = pd(date), t = shiftOn(date), evs = eventsOn(date);
+    const x = P, w = W - P * 2, cx = x + 66, cw = x + w - 14 - cx;
+    // measure
+    let twoLine = false, time = t ? shiftRange(t) : '';
+    if (t) { ctx.font = FONT(700, 17, 1); const nw = ctx.measureText(t.name).width; ctx.font = FONT(500, 13.5); twoLine = !!time && nw + 8 + ctx.measureText(time).width > cw; }
+    const top = y + 14;
+    let inner = t ? (twoLine ? 42 : 24) : (evs.length ? 0 : 24);
+    if (evs.length) inner += (t ? 6 : 2);
+    let evH = 0;
+    { const m = document.createElement('canvas').getContext('2d'); evH = paintEvents(m, evs, 0, 0, cw) - (evs.length ? 7 : 0); }
+    const h = Math.max(64, 14 + inner + evH + 14);
+    // card
+    ctx.save();
+    if (t || evs.length) { ctx.shadowColor = 'rgba(125,45,85,.10)'; ctx.shadowBlur = 14; ctx.shadowOffsetY = 4; }
+    rr(ctx, x, y, w, h, 20);
+    if (t) { const g = ctx.createLinearGradient(x, 0, x + w * .62, 0); g.addColorStop(0, mix(t.color, .17)); g.addColorStop(1, 'rgba(255,255,255,.9)'); ctx.fillStyle = g; }
+    else ctx.fillStyle = evs.length ? 'rgba(255,255,255,.78)' : 'rgba(255,255,255,.42)';
+    ctx.fill(); ctx.restore();
+    rr(ctx, x + .5, y + .5, w - 1, h - 1, 20); ctx.strokeStyle = 'rgba(255,255,255,.95)'; ctx.lineWidth = 1; ctx.stroke();
+    if (t) { ctx.save(); rr(ctx, x, y, w, h, 20); ctx.clip(); ctx.fillStyle = t.color; ctx.fillRect(x, y, 5, h); ctx.restore(); }
+    // date
+    const dx = x + 8 + 26; ctx.textAlign = 'center';
+    ctx.font = FONT(600, 12); ctx.fillStyle = date === today ? mix(accent, .7, '#3a0a22') : INK2; ctx.fillText(DOW[d.getDay()], dx, y + 24);
+    if (date === today) { ctx.fillStyle = accent; ctx.beginPath(); ctx.arc(dx, y + 43, 16, 0, Math.PI * 2); ctx.fill(); }
+    ctx.font = FONT(700, 20, 1); ctx.fillStyle = date === today ? '#fff' : INK; ctx.fillText(String(d.getDate()), dx, y + 50);
+    ctx.textAlign = 'left';
+    // content
+    let cy = top;
+    if (t) {
+      ctx.font = FONT(700, 17, 1); ctx.fillStyle = mix(t.color, .62, INK); ctx.fillText(t.name, cx, cy + 17);
+      const nw = ctx.measureText(t.name).width;
+      ctx.font = FONT(500, 13.5); ctx.fillStyle = INK2;
+      if (twoLine) ctx.fillText(time, cx, cy + 36); else if (time) ctx.fillText(time, cx + nw + 8, cy + 17);
+      cy += (twoLine ? 42 : 24) + (evs.length ? 6 : 0);
+    } else if (!evs.length) {
+      if (hasTypes) { ctx.font = FONT(500, 15); ctx.fillStyle = INK3; ctx.fillText('Off', cx, cy + 19); }
+    } else cy += 2;
+    paintEvents(ctx, evs, cx, cy, cw);
+    y += h + 8;
+  }
+  return y + P - 8 + 6;
+}
+function paintMonth(ctx, W) {
+  const P = 16, today = todayStr(), a = pd(ui.anchor), yr = a.getFullYear(), m = a.getMonth(), accent = cssVar('--accent') || '#ff4d8d';
+  const first = ds(new Date(yr, m, 1)), last = ds(new Date(yr, m + 1, 0)), gridStart = weekStartOf(first);
+  const weeks = Math.ceil((dayDiff(gridStart, last) + 1) / 7), gap = 4, cw = (W - P * 2 - gap * 6) / 7, ch = 62;
+  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+  ctx.font = FONT(700, 27, 1); ctx.fillStyle = INK; ctx.fillText(`${MON_LONG[m]} ${yr}`, P + 4, 46);
+  let y = 66;
+  ctx.textAlign = 'center'; ctx.font = FONT(600, 12); ctx.fillStyle = INK2;
+  for (let i = 0; i < 7; i++) ctx.fillText(DOW[(db.settings.weekStart + i) % 7], P + i * (cw + gap) + cw / 2, y + 10);
+  y += 20;
+  for (let i = 0; i < weeks * 7; i++) {
+    const date = addDays(gridStart, i), d = pd(date), t = shiftOn(date), n = eventsOn(date).length;
+    const x = P + (i % 7) * (cw + gap), cy = y + Math.floor(i / 7) * (ch + gap), mid = x + cw / 2;
+    ctx.globalAlpha = d.getMonth() !== m ? .34 : 1;
+    rr(ctx, x, cy, cw, ch, 13); ctx.fillStyle = t ? 'rgba(255,255,255,.86)' : 'rgba(255,255,255,.4)'; ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.lineWidth = 1; ctx.stroke();
+    if (date === today) { ctx.fillStyle = accent; ctx.beginPath(); ctx.arc(mid, cy + 16, 11, 0, Math.PI * 2); ctx.fill(); }
+    ctx.font = FONT(date === today ? 700 : 600, 13, 1); ctx.fillStyle = date === today ? '#fff' : INK; ctx.fillText(String(d.getDate()), mid, cy + 20.5);
+    if (t) {
+      rr(ctx, x + 3, cy + 31, cw - 6, 16, 6); ctx.fillStyle = mix(t.color, .26); ctx.fill();
+      ctx.font = FONT(700, 11, 1); ctx.fillStyle = mix(t.color, .58, INK); ctx.fillText(t.label || t.name.slice(0, 1), mid, cy + 43);
+    }
+    const dots = Math.min(n, 3), dw = dots * 5 + (dots - 1) * 3;
+    ctx.fillStyle = accent;
+    for (let k = 0; k < dots; k++) { ctx.beginPath(); ctx.arc(mid - dw / 2 + 2.5 + k * 8, cy + 54, 2.5, 0, Math.PI * 2); ctx.fill(); }
+  }
+  ctx.globalAlpha = 1; ctx.textAlign = 'left';
+  y += weeks * (ch + gap) + 14;
+  // everything that's happening this month, in full
+  const days = [];
+  for (let date = first; date <= last; date = addDays(date, 1)) { const evs = eventsOn(date); if (evs.length) days.push([date, evs]); }
+  for (const [date, evs] of days) {
+    const d = pd(date);
+    ctx.fillStyle = 'rgba(120,50,85,.10)'; ctx.fillRect(P + 4, y, W - P * 2 - 8, 1);
+    y += 10;
+    ctx.font = FONT(500, 13.5); ctx.fillStyle = INK2; ctx.fillText(`${DOW[d.getDay()]}, ${MON[d.getMonth()]} ${d.getDate()}`, P + 4, y + 15);
+    y = paintEvents(ctx, evs, P + 96, y, W - P - 4 - (P + 96)) + 3;
+  }
+  return y + P;
+}
+function shareImage() {
+  const W = 390, paint = ui.view === 'week' ? paintWeek : paintMonth;
+  const H = Math.ceil(paint(document.createElement('canvas').getContext('2d'), W));
+  const scale = W * 3 * H * 3 > 15e6 ? 2 : 3;
+  const c = document.createElement('canvas'); c.width = W * scale; c.height = H * scale;
+  const ctx = c.getContext('2d'); ctx.scale(scale, scale);
+  paintBg(ctx, W, H); paint(ctx, W);
+  const url = c.toDataURL('image/png'), bin = atob(url.split(',')[1]), bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  let file = null;
+  try { file = new File([bytes], ui.view === 'week' ? 'nova-week.png' : 'nova-month.png', { type: 'image/png' }); } catch (e) {}
+  if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file] }).catch(e => { if (e && e.name !== 'AbortError') sharePreview(url); });
+  } else sharePreview(url);
+}
+function sharePreview(url) {
+  ctx = { kind: 'share' };
+  openSheet(`<div class="sheet-head"><h2>Your ${ui.view}</h2><button class="link" data-act="close">Done</button></div>
+    <p class="intro">Press and hold the picture to save or share it.</p>
+    <img class="share-img" src="${url}" alt="Picture of your ${ui.view}">`);
+}
+
 /* ───────── Navigation ───────── */
 function step(dir) {
   if (ui.view === 'week') ui.anchor = addDays(ui.anchor, 7 * dir);
   else { const a = pd(ui.anchor); ui.anchor = ds(new Date(a.getFullYear(), a.getMonth() + dir, 1)); }
   render(dir);
-  window.scrollTo(0, 0);
+  $('main').scrollTop = 0;
 }
 function goToday() {
   const t = todayStr(), dir = t > ui.anchor ? 1 : -1;
-  ui.anchor = t; render(dir); window.scrollTo(0, 0);
+  ui.anchor = t; render(dir); $('main').scrollTop = 0;
 }
 function setView(v) {
   if (v === ui.view) return;
   // coming back from a month you browsed to: land on today if it's in that month, else its first week
   if (v === 'week' && ui.anchor.slice(0, 7) === todayStr().slice(0, 7)) ui.anchor = todayStr();
-  ui.view = v; db.settings.view = v; save(); render(); window.scrollTo(0, 0);
+  ui.view = v; db.settings.view = v; save(); render(); $('main').scrollTop = 0;
 }
 
 /* ───────── Input wiring ───────── */
@@ -1021,8 +1290,12 @@ document.addEventListener('click', e => {
       case 'next': step(1); break;
       case 'today': goToday(); break;
       case 'paint': startPaint(); break;
-      case 'paint-pick': ui.paint = { id: d.id }; ui.lastPaint = d.id; renderDock(); break;
-      case 'paint-done': ui.paint = null; render(); break;
+      case 'paint-pick': ui.paint.id = d.id; ui.lastPaint = d.id; renderDock(); break;
+      case 'paint-undo': undoPaint(); break;
+      case 'paint-done': finishPaint(); break;
+      case 'paint-back': $('#review').hidden = true; break;
+      case 'paint-confirm': confirmPaint(); break;
+      case 'share': shareImage(); break;
       case 'add-event': openEvent(null, null, d.date || null); break;
       case 'shifts': ui.paint = null; render(); openShifts(); break;
       case 'close': closeSheet(); break;
@@ -1033,7 +1306,6 @@ document.addEventListener('click', e => {
       case 'edit-shift': openShiftForm(d.id || null); break;
       case 'save-shift': saveShift(); break;
       case 'delete-shift': deleteShift(); break;
-      case 'move-shift': moveShift(d.id, Number(d.dir)); break;
       case 'pick-color': ctx.color = d.c; sheet.querySelectorAll('.swatch').forEach(s => s.setAttribute('aria-pressed', String(s.dataset.c === d.c))); break;
       case 'backup': openBackup(); break;
       case 'backup-close': if (ctx.backToShifts) openShifts(); else closeSheet(); break;
@@ -1080,6 +1352,8 @@ document.addEventListener('visibilitychange', () => {
 
 /* ───────── Boot ───────── */
 render();
+const setHeadH = () => document.documentElement.style.setProperty('--head-h', $('.head').offsetHeight + 'px');
+setHeadH(); window.addEventListener('resize', setHeadH);
 if (sync.code) queueSync(300);
 window.addEventListener('online', () => queueSync(200));
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
