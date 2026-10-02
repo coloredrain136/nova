@@ -329,6 +329,9 @@ textarea{display:block;width:100%;min-height:76px;border:0;background:none;resiz
 .swatches{display:flex;flex-wrap:wrap;gap:10px;padding:var(--s3) var(--s4)}
 .swatch{width:34px;height:34px;border-radius:50%;background:var(--c);border:3px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.14)}
 .swatch[aria-pressed="true"]{box-shadow:0 0 0 2.5px var(--c)}
+.row-val{display:flex;align-items:center;gap:6px;color:var(--ink-2);font-size:15px}
+.row-val svg{width:15px;height:15px;color:var(--ink-3)}
+button.row{text-align:left}
 .seg.sm button{padding:6px 14px;min-width:0;font-size:14px}
 
 /* chooser */
@@ -376,7 +379,7 @@ textarea{display:block;width:100%;min-height:76px;border:0;background:none;resiz
 
 <script>
 'use strict';
-/* ═════════ Nova 1 ═════════
+/* ═════════ Nova 2 ═════════
    Local-first: everything draws from localStorage. All writes go through save(),
    which is the single place background sync will hook into later. */
 
@@ -400,9 +403,14 @@ function load() {
 let db = load();
 let skipSet = new Set();
 function reindex() { skipSet = new Set(db.skips.map(s => s.event_id + '|' + s.date)); }
-function save() {
+function persist() {
   reindex();
   try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) { console.warn('Nova: could not save', e); }
+}
+function save() {
+  persist();
+  dirtySeq++;
+  queueSync();
 }
 reindex();
 
@@ -475,6 +483,106 @@ function eventsOn(date) {
 const evTime = e => (e.all_day ? 'All day' : fmtRange(e.start_time, e.end_time));
 const isRepeat = e => e.repeat && e.repeat !== 'none';
 
+/* ───────── Backup sync ─────────
+   The phone is the source of truth while she's using it. Every save() is compared with
+   the last copy the server confirmed (sync.snap) and only the differences are sent.
+   The first time a phone connects, the server's copy wins if it has anything in it,
+   which is how a reinstall (or starter data) gets restored. */
+const SYNC_KEY = 'nova:sync';
+let sync = (() => { try { return JSON.parse(localStorage.getItem(SYNC_KEY)) || {}; } catch (e) { return {}; } })();
+sync = { code: sync.code || '', snap: sync.snap || null, at: sync.at || null, state: sync.code ? 'wait' : 'off' };
+function saveSync() { try { localStorage.setItem(SYNC_KEY, JSON.stringify({ code: sync.code, snap: sync.snap, at: sync.at })); } catch (e) {} }
+let dirtySeq = 0, syncing = false, syncTimer = null;
+
+const SYNC_TABLES = ['shift_types', 'events', 'shifts', 'skips', 'settings'];
+const NORM = {
+  shift_types: r => ({ id: r.id, name: r.name, label: r.label || '', start_time: r.start_time, end_time: r.end_time, color: r.color, position: r.position || 0 }),
+  events: r => ({ id: r.id, title: r.title, date: r.date, start_time: r.start_time || null, end_time: r.end_time || null, all_day: !!r.all_day, notes: r.notes || '', repeat: r.repeat || 'none', repeat_until: r.repeat_until || null }),
+  shifts: r => ({ date: r.date, shift_type_id: r.shift_type_id }),
+  skips: r => ({ event_id: r.event_id, date: r.date }),
+  settings: r => ({ id: r.id, view: r.view || 'week', week_start: r.week_start || 0 })
+};
+const ROWKEY = { shift_types: r => r.id, events: r => r.id, shifts: r => r.date, skips: r => r.event_id + '|' + r.date, settings: r => r.id };
+function toRows(d) {
+  const typeIds = new Set(d.shiftTypes.map(t => t.id)), evIds = new Set(d.events.map(e => e.id));
+  return {
+    shift_types: d.shiftTypes.map(NORM.shift_types),
+    events: d.events.map(NORM.events),
+    shifts: Object.entries(d.shifts).filter(([, id]) => typeIds.has(id)).map(([date, id]) => ({ date, shift_type_id: id })),
+    skips: d.skips.filter(s => evIds.has(s.event_id)).map(NORM.skips),
+    settings: [{ id: 'main', view: d.settings.view, week_start: d.settings.weekStart }]
+  };
+}
+function fromRows(r) {
+  const st = r.settings.find(x => x.id === 'main');
+  return {
+    shiftTypes: r.shift_types.map(x => ({ ...x })),
+    shifts: Object.fromEntries(r.shifts.map(x => [x.date, x.shift_type_id])),
+    events: r.events.map(x => ({ ...x })),
+    skips: r.skips.map(x => ({ ...x })),
+    settings: st ? { view: st.view, weekStart: st.week_start } : { ...db.settings }
+  };
+}
+function normAll(data) {
+  const out = {};
+  for (const t of SYNC_TABLES) out[t] = ((data && data[t]) || []).map(NORM[t]);
+  return out;
+}
+function diffRows(local, snap) {
+  const upserts = {}, deletes = {};
+  let n = 0;
+  for (const t of SYNC_TABLES) {
+    const old = new Map(snap[t].map(r => [ROWKEY[t](r), JSON.stringify(r)])), seen = new Set();
+    const up = [], del = [];
+    for (const r of local[t]) { const k = ROWKEY[t](r); seen.add(k); if (old.get(k) !== JSON.stringify(r)) up.push(r); }
+    for (const r of snap[t]) { if (!seen.has(ROWKEY[t](r))) del.push(t === 'skips' ? r : ROWKEY[t](r)); }
+    if (up.length) upserts[t] = up;
+    if (del.length) deletes[t] = del;
+    n += up.length + del.length;
+  }
+  return { upserts, deletes, n };
+}
+function setSyncState(st) {
+  sync.state = st;
+  const el = document.getElementById('backupStatus');
+  if (el) el.textContent = backupLabel();
+}
+function backupLabel() {
+  return { off: 'Off', busy: 'Backing up…', ok: 'On', wait: 'Will back up when online', bad: 'Wrong passcode' }[sync.state] || 'Off';
+}
+function queueSync(ms = 700) {
+  if (!sync.code) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(syncNow, ms);
+}
+async function syncNow() {
+  if (!sync.code || syncing) return;
+  syncing = true; setSyncState('busy');
+  let again = false;
+  try {
+    const first = !sync.snap, seq = dirtySeq;
+    const d = first ? { upserts: {}, deletes: {} } : diffRows(toRows(db), sync.snap);
+    const res = await fetch('/api/db', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'x-nova-passcode': sync.code },
+      body: JSON.stringify({ action: 'sync', upserts: d.upserts, deletes: d.deletes })
+    });
+    if (res.status === 401) { setSyncState('bad'); return; }
+    if (!res.ok) throw new Error('sync ' + res.status);
+    const server = normAll((await res.json()).data);
+    sync.snap = server; sync.at = Date.now(); saveSync();
+    const serverHasData = server.shift_types.length || server.events.length || server.shifts.length;
+    if (first && !serverHasData) again = true;                 // empty backup: send up what's on the phone
+    else if (seq !== dirtySeq) again = true;                   // she kept editing while it was sending
+    else { db = fromRows(server); persist(); render(); }
+    setSyncState('ok');
+  } catch (e) {
+    setSyncState('wait');
+  } finally {
+    syncing = false;
+    if (again) queueSync(50);
+  }
+}
+
 /* ───────── UI state ───────── */
 const ui = { view: db.settings.view === 'month' ? 'month' : 'week', anchor: todayStr(), paint: null, lastPaint: null };
 
@@ -522,7 +630,8 @@ function weekHTML() {
   if (!hasTypes && !db.events.length) {
     h += `<div class="hello glass"><h2>Set up your shifts</h2>
       <p>Make each of your usual shifts once. After that, adding your schedule is just tapping the days you work.</p>
-      <button class="btn primary" data-act="shifts">Make a shift</button></div>`;
+      <button class="btn primary" data-act="shifts">Make a shift</button>
+      ${sync.code ? '' : '<button class="btn quiet" data-act="backup" style="margin-left:8px">I have a passcode</button>'}</div>`;
   }
   h += '<div class="week">';
   for (let i = 0; i < 7; i++) {
@@ -628,7 +737,7 @@ function openSheet(html) {
 }
 function closeSheet() {
   if (!sheetOpen) return;
-  sheetOpen = false;
+  sheetOpen = false; ctx = {};
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
   sheet.classList.remove('open'); scrim.classList.remove('open');
   document.body.classList.remove('locked');
@@ -659,7 +768,7 @@ function openDay(date) {
     ${db.shiftTypes.length ? `<div class="chips-wrap">
       ${sortedTypes().map(t => `<button class="chip" style="--c:${t.color}" data-act="day-shift" data-id="${t.id}" aria-pressed="${cur === t.id}"><i></i>${esc(t.name)}</button>`).join('')}
       <button class="chip clear" data-act="day-shift" data-id="" aria-pressed="${!cur}"><i></i>Off</button>
-    </div>${cur && typeById(cur) ? `<p class="hint">${shiftRange(typeById(cur))}</p>` : ''}`
+    </div>${cur && typeById(cur) && shiftRange(typeById(cur)) ? `<p class="hint">${shiftRange(typeById(cur))}</p>` : ''}`
     : `<p class="empty">No shifts made yet.</p><button class="btn quiet small" data-act="shifts">Make a shift</button>`}
     <div class="sub">Events</div>
     ${evs.length ? `<div class="group">${evs.map(e => `<button class="list-ev" data-ev="${e.id}" data-occ="${date}">
@@ -672,7 +781,7 @@ function openDay(date) {
 function openEvent(id, occ, presetDate) {
   const ev = id ? db.events.find(e => e.id === id) : null;
   if (id && !ev) return;
-  const back = ctx.kind === 'day' ? ctx.date : null;
+  const back = sheetOpen && ctx.kind === 'day' ? ctx.date : null;
   ctx = { kind: 'event', id: ev ? ev.id : null, occ: occ || null, back };
   const v = ev ? { ...ev, date: (isRepeat(ev) && occ) ? occ : ev.date }
                : { title: '', date: presetDate || defaultNewDate(), all_day: false, start_time: '17:00', end_time: '18:00', notes: '', repeat: 'none', repeat_until: '' };
@@ -769,7 +878,7 @@ function openShifts() {
     <div class="sheet-head"><h2>My shifts</h2><button class="link" data-act="close">Done</button></div>
     ${types.length ? `<div class="group">${types.map((t, i) => `<div class="preset" style="--c:${t.color}">
         <button class="badge" data-act="edit-shift" data-id="${t.id}" aria-label="Edit ${esc(t.name)}">${esc(t.label || t.name.slice(0, 1))}</button>
-        <button class="preset-main" data-act="edit-shift" data-id="${t.id}"><b>${esc(t.name)}</b><span>${shiftRange(t)}</span></button>
+        <button class="preset-main" data-act="edit-shift" data-id="${t.id}"><b>${esc(t.name)}</b><span>${shiftRange(t) || 'No set time'}</span></button>
         <div class="move">
           <button data-act="move-shift" data-id="${t.id}" data-dir="-1" aria-label="Move up" ${i === 0 ? 'disabled' : ''}>${ICON.up}</button>
           <button data-act="move-shift" data-id="${t.id}" data-dir="1" aria-label="Move down" ${i === types.length - 1 ? 'disabled' : ''}>${ICON.down}</button>
@@ -779,12 +888,51 @@ function openShifts() {
     <div class="sub">Calendar</div>
     <div class="group"><div class="row"><span class="lbl">Week starts on</span>
       <div class="seg sm"><button data-act="week-start" data-v="0" aria-pressed="${db.settings.weekStart === 0}">Sunday</button><button data-act="week-start" data-v="1" aria-pressed="${db.settings.weekStart === 1}">Monday</button></div>
-    </div></div>`);
+    </div>
+    <button class="row" data-act="backup" style="width:100%"><span class="lbl">Backup</span><span class="row-val"><span id="backupStatus">${backupLabel()}</span>${ICON.chev}</span></button>
+    </div>`);
+}
+
+/* Backup */
+function openBackup() {
+  const back = sheetOpen && ctx.kind === 'shifts';
+  ctx = { kind: 'backup', backToShifts: back };
+  openSheet(`
+    <div class="sheet-head"><h2>Backup</h2><button class="link" data-act="backup-close">${sync.code ? 'Done' : 'Cancel'}</button></div>
+    <p class="empty" style="padding-top:0">Backup keeps a copy of the calendar safe, so it comes back if the app is ever removed from this phone.</p>
+    <div class="group" style="margin-top:12px">
+      <div class="row" id="r-code"><label for="b-code">Passcode</label><input id="b-code" type="text" value="${esc(sync.code)}" placeholder="Enter passcode" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done"></div>
+    </div>
+    <p class="hint" id="b-msg">${sync.code ? backupLabel() : ''}</p>
+    <div class="actions">
+      <button class="btn primary wide" data-act="backup-save">${sync.code ? 'Save passcode' : 'Turn on backup'}</button>
+      ${sync.code ? '<button class="btn danger wide" data-act="backup-off">Turn off backup on this phone</button>' : ''}
+    </div>`);
+}
+async function saveBackup() {
+  const code = $('#b-code').value.trim();
+  if (!code) { $('#r-code').classList.add('bad'); return; }
+  if (code !== sync.code) { sync.code = code; sync.snap = null; saveSync(); }
+  const msg = $('#b-msg');
+  msg.textContent = 'Checking…';
+  clearTimeout(syncTimer);
+  await syncNow();
+  if (sync.state === 'ok' && ctx.kind === 'backup') { if (ctx.backToShifts) openShifts(); else closeSheet(); }
+  else if (document.getElementById('b-msg')) {
+    $('#b-msg').textContent = sync.state === 'bad' ? 'That passcode is not right.' : 'Could not reach the backup. Check the connection and try again.';
+    if (sync.state === 'bad') $('#r-code').classList.add('bad');
+  }
+}
+async function backupOff() {
+  const ok = await ask('The calendar stays on this phone. It just stops being backed up.', [{ label: 'Turn off backup', value: true, danger: true }]);
+  if (!ok) return;
+  sync.code = ''; sync.snap = null; sync.at = null; saveSync(); setSyncState('off');
+  render(); if (ctx.backToShifts) openShifts(); else closeSheet();
 }
 function openShiftForm(id) {
   const t = id ? typeById(id) : null;
   const used = new Set(db.shiftTypes.map(x => x.color));
-  const v = t || { name: '', label: '', start_time: '07:30', end_time: '19:30', color: COLORS.find(c => !used.has(c)) || COLORS[0] };
+  const v = t || { name: '', label: '', start_time: '07:00', end_time: '19:30', color: COLORS.find(c => !used.has(c)) || COLORS[0] };
   ctx = { kind: 'shift', id: t ? t.id : null, color: v.color };
   openSheet(`
     <div class="sheet-head"><h2>${t ? 'Edit shift' : 'New shift'}</h2><button class="link" data-act="shifts">Cancel</button></div>
@@ -794,9 +942,10 @@ function openShiftForm(id) {
     </div>
     <p class="hint">The short label is what shows on the month view.</p>
     <div class="group" style="margin-top:12px">
-      <div class="row"><label for="s-start">Starts</label><input id="s-start" type="time" value="${v.start_time}"></div>
-      <div class="row"><label for="s-end">Ends</label><input id="s-end" type="time" value="${v.end_time}"></div>
+      <div class="row"><label for="s-start">Starts</label><input id="s-start" type="time" value="${v.start_time || ''}"></div>
+      <div class="row"><label for="s-end">Ends</label><input id="s-end" type="time" value="${v.end_time || ''}"></div>
     </div>
+    <p class="hint">Leave the times empty if this shift changes from day to day.</p>
     <p class="hint" id="s-night" hidden>Ends the next day.</p>
     <div class="group" style="margin-top:12px"><div class="swatches">
       ${COLORS.map(c => `<button class="swatch" style="--c:${c}" data-act="pick-color" data-c="${c}" aria-pressed="${c === v.color}" aria-label="Colour"></button>`).join('')}
@@ -817,7 +966,7 @@ function saveShift() {
   if (!name) { $('#r-name').classList.add('bad'); $('#s-name').focus(); return; }
   const f = {
     name, label: ($('#s-label').value.trim() || name.slice(0, 1)).slice(0, 3).toUpperCase(),
-    start_time: $('#s-start').value || '07:30', end_time: $('#s-end').value || '19:30', color: ctx.color
+    start_time: $('#s-start').value || null, end_time: $('#s-end').value || null, color: ctx.color
   };
   const t = ctx.id ? typeById(ctx.id) : null;
   if (t) Object.assign(t, f);
@@ -886,6 +1035,10 @@ document.addEventListener('click', e => {
       case 'delete-shift': deleteShift(); break;
       case 'move-shift': moveShift(d.id, Number(d.dir)); break;
       case 'pick-color': ctx.color = d.c; sheet.querySelectorAll('.swatch').forEach(s => s.setAttribute('aria-pressed', String(s.dataset.c === d.c))); break;
+      case 'backup': openBackup(); break;
+      case 'backup-close': if (ctx.backToShifts) openShifts(); else closeSheet(); break;
+      case 'backup-save': saveBackup(); break;
+      case 'backup-off': backupOff(); break;
       case 'week-start': db.settings.weekStart = Number(d.v); save(); render(); openShifts(); break;
     }
     return;
@@ -922,10 +1075,13 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState !== 'visible') return;
   const t = todayStr();
   if (t !== lastDay) { lastDay = t; if (!sheetOpen) { ui.anchor = t; } render(); }
+  queueSync(200);
 });
 
 /* ───────── Boot ───────── */
 render();
+if (sync.code) queueSync(300);
+window.addEventListener('online', () => queueSync(200));
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
