@@ -100,6 +100,18 @@ input,select,textarea{font:inherit;color:inherit;-webkit-user-select:text;user-s
 .head-top{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--s3);min-height:40px}
 .title{font-family:var(--round);font-weight:700;font-size:28px;letter-spacing:-.02em;line-height:1.1}
 .title small{font-size:15px;font-weight:600;color:var(--ink-2);letter-spacing:0;margin-left:6px}
+.title-btn{display:flex;align-items:center;gap:6px;text-align:left;min-width:0;border-radius:var(--r-s)}
+.title-btn svg{width:18px;height:18px;color:var(--ink-3);flex:none;margin-top:4px;stroke-width:2.6}
+.title-btn:active{opacity:.6}
+.jump-year{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--s4)}
+.jump-year b{font-family:var(--round);font-weight:700;font-size:24px;font-variant-numeric:tabular-nums}
+.jump-year button{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.85);border:1px solid #fff;box-shadow:var(--shadow-s)}
+.jump-year button:active{transform:scale(.94)}
+.jump-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2)}
+.jump-grid button{padding:16px 0;border-radius:var(--r-m);font-weight:600;font-size:16px;background:rgba(255,255,255,.82);border:1px solid #fff;box-shadow:var(--shadow-s)}
+.jump-grid button:active{transform:scale(.96)}
+.jump-grid button.now{color:var(--accent-ink);box-shadow:inset 0 0 0 2px var(--accent-soft),var(--shadow-s)}
+.jump-grid button[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:transparent;box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 38%,transparent)}
 .today-btn{
   font-weight:600;font-size:14px;color:var(--accent-ink);
   padding:7px 14px;border-radius:var(--r-pill);background:var(--glass-strong);
@@ -381,7 +393,7 @@ button.row{text-align:left}
 
 <header class="head">
   <div class="head-top">
-    <h1 class="title" id="title"></h1>
+    <button class="title-btn" data-act="jump" aria-label="Jump to a month"><h1 class="title" id="title"></h1><svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
     <div class="head-acts"><button class="today-btn" id="todayBtn" data-act="today" hidden>Today</button><button class="icon-btn" data-act="share" aria-label="Share a picture of this"><svg class="i" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M7.5 7.5L12 3l4.5 4.5"/><path d="M5 12v6.5A2.5 2.5 0 007.5 21h9a2.5 2.5 0 002.5-2.5V12"/></svg></button></div>
   </div>
   <div class="head-row">
@@ -407,7 +419,7 @@ button.row{text-align:left}
 
 <script>
 'use strict';
-/* ═════════ Nova 4 ═════════
+/* ═════════ Nova 5 ═════════
    Local-first: everything draws from localStorage. All writes go through save(),
    which is the single place background sync will hook into later. */
 
@@ -1267,6 +1279,32 @@ function sharePreview(url) {
     <img class="share-img" src="${url}" alt="Picture of your ${ui.view}">`);
 }
 
+/* Jump to a month: tap the title */
+function openJump(year) {
+  const a = pd(ui.anchor), t = pd(todayStr());
+  // in week view the week can straddle two months; treat the week's last day as "where we are"
+  const here = ui.view === 'week' ? pd(addDays(weekStartOf(ui.anchor), 6)) : a;
+  const y = year || here.getFullYear();
+  ctx = { kind: 'jump', year: y };
+  openSheet(`
+    <div class="sheet-head"><h2>Go to a month</h2><button class="link" data-act="close">Cancel</button></div>
+    <div class="jump-year">
+      <button data-act="jump-year" data-y="${y - 1}" aria-label="Previous year"><svg class="i" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <b>${y}</b>
+      <button data-act="jump-year" data-y="${y + 1}" aria-label="Next year"><svg class="i" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="jump-grid">${MON_LONG.map((name, m) => `<button data-act="jump-month" data-m="${m}"
+      class="${y === t.getFullYear() && m === t.getMonth() ? 'now' : ''}"
+      aria-pressed="${y === here.getFullYear() && m === here.getMonth()}">${MON[m] === 'Sep' ? 'Sept' : MON[m]}</button>`).join('')}</div>
+    <div class="actions"><button class="btn quiet wide" data-act="jump-today">Back to today</button></div>`);
+}
+function jumpTo(y, m) {
+  const t = todayStr(), first = ds(new Date(y, m, 1));
+  const dir = first > ui.anchor ? 1 : -1;
+  ui.anchor = t.slice(0, 7) === first.slice(0, 7) ? t : first;   // this month lands on today, any other on its 1st
+  closeSheet(); render(dir); $('main').scrollTop = 0;
+}
+
 /* ───────── Navigation ───────── */
 function step(dir) {
   if (ui.view === 'week') ui.anchor = addDays(ui.anchor, 7 * dir);
@@ -1295,6 +1333,10 @@ document.addEventListener('click', e => {
       case 'prev': step(-1); break;
       case 'next': step(1); break;
       case 'today': goToday(); break;
+      case 'jump': openJump(); break;
+      case 'jump-year': openJump(Number(d.y)); break;
+      case 'jump-month': jumpTo(ctx.year, Number(d.m)); break;
+      case 'jump-today': closeSheet(); goToday(); break;
       case 'paint': startPaint(); break;
       case 'paint-pick': ui.paint.id = d.id; ui.lastPaint = d.id; renderDock(); break;
       case 'paint-undo': undoPaint(); break;
