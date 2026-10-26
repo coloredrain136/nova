@@ -8,11 +8,11 @@
 const crypto = require('crypto');
 
 const TABLES = {
-  shift_types: { name: 'nova_shift_types', pk: ['id'], cols: ['id', 'name', 'label', 'start_time', 'end_time', 'color', 'position', 'together'] },
-  events: { name: 'nova_events', pk: ['id'], cols: ['id', 'title', 'date', 'start_time', 'end_time', 'all_day', 'notes', 'repeat', 'repeat_until'] },
+  shift_types: { name: 'nova_shift_types', pk: ['id'], cols: ['id', 'name', 'label', 'start_time', 'end_time', 'color', 'position', 'together', 'remind'] },
+  events: { name: 'nova_events', pk: ['id'], cols: ['id', 'title', 'date', 'start_time', 'end_time', 'all_day', 'notes', 'repeat', 'repeat_until', 'remind'] },
   shifts: { name: 'nova_shifts', pk: ['date'], cols: ['date', 'shift_type_id'] },
   skips: { name: 'nova_event_skips', pk: ['event_id', 'date'], cols: ['event_id', 'date'] },
-  settings: { name: 'nova_settings', pk: ['id'], cols: ['id', 'view', 'week_start', 'share_on'] }
+  settings: { name: 'nova_settings', pk: ['id'], cols: ['id', 'view', 'week_start', 'share_on', 'prefs'] }
 };
 const UPSERT_ORDER = ['shift_types', 'events', 'shifts', 'skips', 'settings'];   // parents before children
 const DELETE_ORDER = ['skips', 'shifts', 'events', 'shift_types'];               // children before parents

@@ -25,6 +25,8 @@
 
   /* The one accent token. Change this and the whole app follows. */
   --accent:#ff4d8d;
+  --paper:#fdeff4;
+  --paper-2:#fbe3ec;
   --accent-ink:color-mix(in srgb,var(--accent) 70%,#3a0a22);
   --accent-wash:color-mix(in srgb,var(--accent) 12%,#fff);
   --accent-soft:color-mix(in srgb,var(--accent) 24%,#fff);
@@ -58,7 +60,7 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{height:100%;overflow:hidden;-webkit-text-size-adjust:100%;background:#fdeff4;overscroll-behavior:none}
+html{height:100%;overflow:hidden;-webkit-text-size-adjust:100%;background:var(--paper);overscroll-behavior:none}
 body{
   min-height:100%;font-family:var(--font);color:var(--ink);font-size:16px;line-height:1.35;
   -webkit-font-smoothing:antialiased;-webkit-user-select:none;user-select:none;
@@ -77,7 +79,7 @@ input,select,textarea{font:inherit;color:inherit;-webkit-user-select:text;user-s
     radial-gradient(90% 55% at 100% 18%,#ffe1cf 0%,transparent 62%),
     radial-gradient(110% 60% at 85% 100%,#e9defF 0%,transparent 60%),
     radial-gradient(90% 50% at 0% 90%,color-mix(in srgb,var(--accent) 14%,#fff) 0%,transparent 65%),
-    #fdf3f6;
+    var(--paper);
 }
 
 .glass{
@@ -92,15 +94,17 @@ input,select,textarea{font:inherit;color:inherit;-webkit-user-select:text;user-s
 .head{
   position:fixed;top:0;left:0;right:0;z-index:5;
   padding:calc(var(--safe-t) + var(--s3)) var(--s4) var(--s3);
-  background:linear-gradient(rgba(253,239,244,.86),rgba(253,239,244,.62));
+  background:linear-gradient(color-mix(in srgb,var(--paper) 86%,transparent),color-mix(in srgb,var(--paper) 62%,transparent));
   -webkit-backdrop-filter:blur(var(--blur)) saturate(1.7);
   backdrop-filter:blur(var(--blur)) saturate(1.7);
   border-bottom:1px solid rgba(255,255,255,.7);
 }
-.head-top{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--s3);min-height:40px}
-.title{font-family:var(--round);font-weight:700;font-size:28px;letter-spacing:-.02em;line-height:1.1}
-.title small{font-size:15px;font-weight:600;color:var(--ink-2);letter-spacing:0;margin-left:6px}
+.head-top{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);min-height:40px}
+.head-left{display:flex;align-items:center;gap:10px;min-width:0}
+.title{font-family:var(--round);font-weight:700;font-size:26px;letter-spacing:-.02em;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.title small{font-size:.58em;font-weight:600;color:var(--ink-2);letter-spacing:0;margin-left:.24em}
 .title-btn{display:flex;align-items:center;gap:6px;text-align:left;min-width:0;border-radius:var(--r-s)}
+.gear-btn{flex:none;color:var(--ink)!important}
 .title-btn svg{width:18px;height:18px;color:var(--ink-3);flex:none;margin-top:4px;stroke-width:2.6}
 .title-btn:active{opacity:.6}
 .jump-year{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--s4)}
@@ -113,8 +117,8 @@ input,select,textarea{font:inherit;color:inherit;-webkit-user-select:text;user-s
 .jump-grid button.now{color:var(--accent-ink);box-shadow:inset 0 0 0 2px var(--accent-soft),var(--shadow-s)}
 .jump-grid button[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:transparent;box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 38%,transparent)}
 .today-btn{
-  font-weight:600;font-size:14px;color:var(--accent-ink);
-  padding:7px 14px;border-radius:var(--r-pill);background:var(--glass-strong);
+  font-weight:600;font-size:13.5px;color:var(--accent-ink);
+  padding:7px 11px;border-radius:var(--r-pill);background:var(--glass-strong);
   border:1px solid var(--edge);box-shadow:var(--shadow-s);flex:none;
 }
 .head-acts{display:flex;align-items:center;gap:var(--s2);flex:none}
@@ -444,7 +448,7 @@ button.row{text-align:left}
 .tg-blk-sleep{background:repeating-linear-gradient(45deg,var(--tg-sleep) 0 1.5px,rgba(169,159,166,.18) 1.5px 5px)}
 .tg-band{position:absolute;top:-3px;bottom:-3px;border-radius:6px;background:var(--tg-free-wash);box-shadow:inset 0 0 0 1.5px rgba(47,185,133,.55)}
 .tg-tl:not(.tg-tl-big) .tg-band{top:-2px;bottom:-2px;border-radius:4px}
-.tg-past{position:absolute;left:0;top:-3px;bottom:-3px;z-index:1;background:rgba(253,243,246,.66);border-radius:6px}
+.tg-past{position:absolute;left:0;top:-3px;bottom:-3px;z-index:1;background:color-mix(in srgb,var(--paper) 66%,transparent);border-radius:6px}
 .tg-ticks{position:relative;height:16px;margin-top:5px}
 .tg-ticks span{position:absolute;top:0;transform:translateX(-50%);font-size:11px;font-weight:500;color:var(--ink-3);font-variant-numeric:tabular-nums}
 .tg-ticks span:first-child{transform:none}
@@ -508,6 +512,70 @@ button.row{text-align:left}
 .tg-wide{display:flex;width:100%}
 .tg-wide button{flex:1}
 
+/* ───────── Settings ───────── */
+.set-head{margin-bottom:var(--s2)}
+.set-back{display:inline-flex;align-items:center;gap:2px;margin-left:-6px}
+.set-back svg{width:20px;height:20px;stroke-width:2.4}
+.set-title{font-family:var(--round);font-weight:700;font-size:26px;letter-spacing:-.02em;margin:0 var(--s1) var(--s4)}
+.set-link{width:100%;text-align:left;justify-content:flex-start}
+.set-link .lbl{flex:1}
+.set-link:active{background:rgba(120,50,85,.05)}
+.set-tile{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex:none;color:#fff;
+  background:linear-gradient(160deg,color-mix(in srgb,var(--c) 78%,#fff),var(--c));box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+.set-tile svg{width:18px;height:18px;stroke-width:2}
+.row .lbl small{display:block;font-size:12.5px;color:var(--ink-2);margin-top:1px;font-weight:400}
+.row > .lbl{flex:1 1 auto;min-width:0}
+.row .seg.sm{flex:none}
+.set-sel{flex:1;text-align:right;direction:ltr!important;text-align-last:right}
+.row input[type=text]#set-prefix{text-align:right}
+.set-swatches{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2);padding:var(--s3)}
+.set-swatch{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-m);font-size:14.5px;font-weight:600;background:rgba(120,50,85,.04)}
+.set-swatch i{width:22px;height:22px;border-radius:50%;background:var(--c);flex:none;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.set-swatch[aria-pressed="true"]{background:color-mix(in srgb,var(--c) 14%,#fff);box-shadow:inset 0 0 0 2px var(--c)}
+.set-status{border-radius:var(--r-l);padding:var(--s4) var(--s4) var(--s4);margin-bottom:var(--s2)}
+.set-status b{font-family:var(--round);font-size:18px;font-weight:700;display:block}
+.set-status.on b{color:#18825c}
+.set-status p{font-size:14.5px;color:var(--ink-2);margin:4px 0 var(--s3)}
+.set-status .btn{margin-top:var(--s2)}
+.set-status p.set-msg{margin:var(--s3) 0 0;color:var(--ink)}
+.set-btns{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s2)}
+.set-btns .btn{margin:0}
+
+/* in-app banner */
+.toast{position:fixed;left:12px;right:12px;top:calc(var(--safe-t) + 8px);z-index:30;display:flex;align-items:center;gap:12px;
+  padding:12px 14px;border-radius:var(--r-l);background:rgba(255,255,255,.9);
+  -webkit-backdrop-filter:blur(24px) saturate(1.8);backdrop-filter:blur(24px) saturate(1.8);
+  border:1px solid #fff;box-shadow:var(--shadow-l);transform:translateY(calc(-100% - 40px));transition:transform .32s cubic-bezier(.2,.85,.25,1)}
+.toast.show{transform:none}
+.toast-icon{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;flex:none;color:#fff;background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 78%,#fff),var(--accent))}
+.toast-icon svg{width:19px;height:19px}
+.toast-text{display:flex;flex-direction:column;min-width:0}
+.toast-text b{font-weight:600;font-size:15px}
+.toast-text span{font-size:14px;color:var(--ink-2)}
+
+/* share preview */
+.sh-prev{max-height:50vh;overflow-y:auto;border-radius:var(--r-l);background:rgba(120,50,85,.05);padding:10px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.sh-prev img{display:block;width:100%;border-radius:14px;box-shadow:var(--shadow-m);-webkit-user-select:auto;user-select:auto;-webkit-touch-callout:default}
+.sh-opts{display:flex;flex-direction:column;gap:var(--s2);margin-top:var(--s4)}
+.sh-seg{display:flex;width:100%}
+.sh-seg button{flex:1}
+.sh-chips{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:2px}
+.sh-chip{padding:8px 14px;border-radius:var(--r-pill);font-size:14px;font-weight:600;color:var(--ink-2);background:rgba(255,255,255,.7);border:1px solid var(--edge)}
+.sh-chip[aria-pressed="true"]{color:var(--accent-ink);background:var(--accent-wash);border-color:color-mix(in srgb,var(--accent) 30%,#fff)}
+.sh-chip:disabled{opacity:.4}
+
+/* settings that change the calendar */
+.bg-plain .bg{background:var(--paper)}
+.compact .week{gap:6px}
+.compact .day{padding:8px 10px 8px 6px;gap:var(--s2)}
+.compact .day-body{gap:4px;padding-top:1px}
+.compact .num{width:30px;height:30px;font-size:19px}
+.compact .cell{min-height:62px}
+.dim-past .day.past,.dim-past .cell.past:not(.out){opacity:.5}
+.no-dots .dots{visibility:hidden}
+.no-labels .chip-s{color:transparent!important}
+.no-motion *,.no-motion *::before,.no-motion *::after{animation:none!important;transition:none!important}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
 }
@@ -518,7 +586,7 @@ button.row{text-align:left}
 
 <header class="head">
   <div class="head-top">
-    <button class="title-btn" data-act="jump" aria-label="Jump to a month"><h1 class="title" id="title"></h1><svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+    <div class="head-left"><button class="icon-btn gear-btn" data-act="settings" aria-label="Settings"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></button><button class="title-btn" data-act="jump" aria-label="Jump to a month"><h1 class="title" id="title"></h1><svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div>
     <div class="head-acts"><button class="today-btn" id="todayBtn" data-act="today" hidden>Today</button><button class="icon-btn" data-act="share" aria-label="Share a picture of this"><svg class="i" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M7.5 7.5L12 3l4.5 4.5"/><path d="M5 12v6.5A2.5 2.5 0 007.5 21h9a2.5 2.5 0 002.5-2.5V12"/></svg></button></div>
   </div>
   <div class="head-row">
@@ -545,7 +613,7 @@ button.row{text-align:left}
 
 <script>
 'use strict';
-/* ═════════ Nova 7 ═════════
+/* ═════════ Nova 8 ═════════
    Local-first: everything draws from localStorage. All writes go through save(),
    which is the single place background sync will hook into later. */
 
@@ -580,6 +648,58 @@ function save() {
 }
 reindex();
 
+/* ───────── Settings values ─────────
+   Everything in Settings lives in db.settings.prefs, grouped by section. It's backed up with the
+   rest (nova_settings.prefs), so it survives a reinstall and the notification sweep can read it.
+   Only changed values are stored; anything missing falls back to PREF_DEF. */
+const ACCENTS = { pink: ['Pink', '#ff4d8d'], rose: ['Rose', '#e5466e'], coral: ['Coral', '#ff7655'], lavender: ['Lavender', '#9168f5'], sky: ['Sky', '#3a93f3'], mint: ['Mint', '#1fae82'] };
+const PREF_DEF = {
+  appearance: { accent: 'pink', bg: 'glow', time24: false, compact: false, nextDay: true, motion: true },
+  calendar: { openTo: 'last', showOff: true, dimPast: false, comingUp: 4, monthDots: true, monthLabels: true, swipe: true },
+  shifts: { review: true, paintStart: 'last' },
+  plans: { start: '17:00', length: 60 },
+  share: { range: 'week', style: 'list', plans: true, times: true, offDays: true, hideNames: false, prefix: 'Work' },
+  notify: { shiftEve: true, eveTime: '20:00', shiftBefore: 'none', eventBefore: '60', notes: true, notesTime: '08:00', daily: false, dailyTime: '06:30', weekly: false, weeklyDay: 0, weeklyTime: '18:00', together: false, togetherTime: '10:00', quiet: true, quietFrom: '22:00', quietTo: '06:00' },
+  together: { weeks: 4, minH: 3, h0: 9, h1: 23, sleep: 14 }
+};
+const pref = sec => ({ ...PREF_DEF[sec], ...(((db.settings.prefs || {})[sec]) || {}) });
+function setPrefs(sec, vals) {
+  const p = { ...(db.settings.prefs || {}) };
+  p[sec] = { ...(p[sec] || {}), ...vals };
+  for (const k of Object.keys(p[sec])) if (p[sec][k] === PREF_DEF[sec][k]) delete p[sec][k];   // keep only what differs
+  if (!Object.keys(p[sec]).length) delete p[sec];
+  db.settings.prefs = p;
+  save(); applyPrefs();
+}
+const setPref = (sec, k, v) => setPrefs(sec, { [k]: v });
+function canon(v) {          // same object → same JSON, whatever order the keys came back in
+  if (Array.isArray(v)) return v.map(canon);
+  if (v && typeof v === 'object') return Object.keys(v).sort().reduce((o, k) => { o[k] = canon(v[k]); return o; }, {});
+  return v;
+}
+// The Together settings used to live only on the phone. Move them into the backed-up prefs.
+if (db.settings.tg) {
+  if (!(db.settings.prefs && db.settings.prefs.together)) db.settings.prefs = { ...(db.settings.prefs || {}), together: db.settings.tg };
+  delete db.settings.tg;
+}
+function applyPrefs() {
+  const a = pref('appearance'), c = pref('calendar'), b = document.body, r = document.documentElement;
+  const accent = (ACCENTS[a.accent] || ACCENTS.pink)[1];
+  const rgb = [1, 3, 5].map(i => parseInt(accent.slice(i, i + 2), 16));
+  const tint = k => '#' + rgb.map(v => Math.round(v * k + 255 * (1 - k)).toString(16).padStart(2, '0')).join('');
+  r.style.setProperty('--accent', accent);
+  r.style.setProperty('--paper', tint(0.07));        // the page colour, a faint wash of the accent
+  r.style.setProperty('--paper-2', tint(0.11));
+  b.classList.toggle('bg-plain', a.bg === 'plain');
+  b.classList.toggle('compact', !!a.compact);
+  b.classList.toggle('no-motion', a.motion === false);
+  b.classList.toggle('dim-past', !!c.dimPast);
+  b.classList.toggle('no-dots', c.monthDots === false);
+  b.classList.toggle('no-labels', c.monthLabels === false);
+  const m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.setAttribute('content', tint(0.09));
+}
+
 /* ───────── Dates ───────── */
 const pad = n => String(n).padStart(2, '0');
 const ds = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -597,6 +717,7 @@ const MON_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July'
 function fmtTime(t, withMer = true) {
   if (!t) return '';
   let [h, m] = t.split(':').map(Number);
+  if (pref('appearance').time24) return pad(h) + ':' + pad(m);
   const mer = h >= 12 ? 'PM' : 'AM';
   h = h % 12 || 12;
   return h + ':' + pad(m) + (withMer ? ' ' + mer : '');
@@ -605,11 +726,12 @@ const isPM = t => Number(t.split(':')[0]) >= 12;
 function fmtRange(a, b) {
   if (!a) return '';
   if (!b) return fmtTime(a);
+  if (pref('appearance').time24) return fmtTime(a) + ' – ' + fmtTime(b);
   const sameHalf = isPM(a) === isPM(b) && b > a;
   return fmtTime(a, !sameHalf) + ' – ' + fmtTime(b);
 }
 const overnight = t => t.start_time && t.end_time && t.end_time <= t.start_time;
-const shiftRange = t => fmtRange(t.start_time, t.end_time) + (overnight(t) ? ' next day' : '');
+const shiftRange = t => fmtRange(t.start_time, t.end_time) + (overnight(t) && pref('appearance').nextDay ? ' next day' : '');
 
 /* ───────── Helpers ───────── */
 const $ = (s, r = document) => r.querySelector(s);
@@ -627,7 +749,9 @@ const ICON = {
   chev: '<svg class="i" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>',
   up: '<svg class="i" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>',
   grip: '<svg class="i" viewBox="0 0 24 24"><path d="M5 9h14M5 15h14"/></svg>',
-  down: '<svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>'
+  down: '<svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>',
+  back: '<svg class="i" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>',
+  bell: '<svg class="i" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0112 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 004 0"/></svg>'
 };
 const COLORS = ['#ff5c8a', '#ff7a59', '#f5a524', '#34c38f', '#22b8cf', '#4c8dff', '#8b6cff', '#c05cff', '#7a8194'];
 
@@ -663,11 +787,11 @@ let dirtySeq = 0, syncing = false, syncTimer = null;
 
 const SYNC_TABLES = ['shift_types', 'events', 'shifts', 'skips', 'settings'];
 const NORM = {
-  shift_types: r => ({ id: r.id, name: r.name, label: r.label || '', start_time: r.start_time, end_time: r.end_time, color: r.color, position: r.position || 0, together: r.together === 'work' || r.together === 'ignore' ? r.together : null }),
-  events: r => ({ id: r.id, title: r.title, date: r.date, start_time: r.start_time || null, end_time: r.end_time || null, all_day: !!r.all_day, notes: r.notes || '', repeat: r.repeat || 'none', repeat_until: r.repeat_until || null }),
+  shift_types: r => ({ id: r.id, name: r.name, label: r.label || '', start_time: r.start_time, end_time: r.end_time, color: r.color, position: r.position || 0, together: r.together === 'work' || r.together === 'ignore' ? r.together : null, remind: r.remind || null }),
+  events: r => ({ id: r.id, title: r.title, date: r.date, start_time: r.start_time || null, end_time: r.end_time || null, all_day: !!r.all_day, notes: r.notes || '', repeat: r.repeat || 'none', repeat_until: r.repeat_until || null, remind: r.remind || null }),
   shifts: r => ({ date: r.date, shift_type_id: r.shift_type_id }),
   skips: r => ({ event_id: r.event_id, date: r.date }),
-  settings: r => ({ id: r.id, view: r.view || 'week', week_start: r.week_start || 0, share_on: r.share_on !== false })
+  settings: r => ({ id: r.id, view: r.view || 'week', week_start: r.week_start || 0, share_on: r.share_on !== false, prefs: canon(r.prefs && typeof r.prefs === 'object' ? r.prefs : {}) })
 };
 const ROWKEY = { shift_types: r => r.id, events: r => r.id, shifts: r => r.date, skips: r => r.event_id + '|' + r.date, settings: r => r.id };
 function toRows(d) {
@@ -677,7 +801,7 @@ function toRows(d) {
     events: d.events.map(NORM.events),
     shifts: Object.entries(d.shifts).filter(([, id]) => typeIds.has(id)).map(([date, id]) => ({ date, shift_type_id: id })),
     skips: d.skips.filter(s => evIds.has(s.event_id)).map(NORM.skips),
-    settings: [{ id: 'main', view: d.settings.view, week_start: d.settings.weekStart, share_on: d.settings.shareOn !== false }]
+    settings: [{ id: 'main', view: d.settings.view, week_start: d.settings.weekStart, share_on: d.settings.shareOn !== false, prefs: canon(d.settings.prefs || {}) }]
   };
 }
 function fromRows(r) {
@@ -687,7 +811,7 @@ function fromRows(r) {
     shifts: Object.fromEntries(r.shifts.map(x => [x.date, x.shift_type_id])),
     events: r.events.map(x => ({ ...x })),
     skips: r.skips.map(x => ({ ...x })),
-    settings: st ? { ...db.settings, view: st.view, weekStart: st.week_start, shareOn: st.share_on !== false } : { ...db.settings }   // keeps phone-only settings like Together's
+    settings: st ? { ...db.settings, view: st.view, weekStart: st.week_start, shareOn: st.share_on !== false, prefs: st.prefs || {} } : { ...db.settings }   // keeps phone-only settings like Together's
   };
 }
 function normAll(data) {
@@ -742,7 +866,7 @@ async function syncNow() {
     if (first && !serverHasData) again = true;                 // empty backup: send up what's on the phone
     else if (seq !== dirtySeq) again = true;                   // she kept editing while it was sending
     else if (ui.paint) again = false;                          // mid-paint: leave the phone's copy alone
-    else { db = fromRows(server); persist(); render(); }
+    else { db = fromRows(server); persist(); applyPrefs(); render(); }
     setSyncState('ok');
   } catch (e) {
     setSyncState('wait');
@@ -753,7 +877,8 @@ async function syncNow() {
 }
 
 /* ───────── UI state ───────── */
-const ui = { view: ['month', 'together'].includes(db.settings.view) ? db.settings.view : 'week', anchor: todayStr(), paint: null, lastPaint: null };
+const OPEN_TO = (() => { const o = pref('calendar').openTo; return o === 'last' ? db.settings.view : o; })();
+const ui = { view: ['month', 'together'].includes(OPEN_TO) ? OPEN_TO : 'week', anchor: todayStr(), paint: null, lastPaint: null };
 
 /* ───────── Render ───────── */
 function render(dir) {
@@ -765,6 +890,12 @@ function render(dir) {
   document.body.classList.toggle('painting', !!ui.paint);
 }
 
+function fitTitle() {           // shrink the title a little rather than cut it off (small iPhones, Today showing)
+  const t = $('#title');
+  t.style.fontSize = '';
+  for (let px = 25; px >= 17 && t.scrollWidth > t.clientWidth; px--) t.style.fontSize = px + 'px';
+}
+window.addEventListener('resize', () => fitTitle());
 function renderHead() {
   const today = todayStr(), nowY = new Date().getFullYear();
   let title, showToday;
@@ -785,6 +916,7 @@ function renderHead() {
   }
   $('#title').innerHTML = title;
   $('#todayBtn').hidden = !showToday;
+  fitTitle();
   document.querySelectorAll('.seg [data-act="view"]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === ui.view)));
 }
 
@@ -808,12 +940,12 @@ function weekHTML() {
   h += '<div class="week">';
   for (let i = 0; i < 7; i++) {
     const date = addDays(start, i), d = pd(date), t = shiftOn(date), evs = eventsOn(date);
-    h += `<div class="day ${t ? 'work' : 'off'}${date === today ? ' today' : ''}" data-date="${date}" role="button" tabindex="0"${t ? ` style="--c:${t.color}"` : ''}
+    h += `<div class="day ${t ? 'work' : 'off'}${date === today ? ' today' : ''}${date < today ? ' past' : ''}" data-date="${date}" role="button" tabindex="0"${t ? ` style="--c:${t.color}"` : ''}
       aria-label="${DOW_LONG[d.getDay()]} ${MON_LONG[d.getMonth()]} ${d.getDate()}">
       <div class="day-date"><span class="dow">${DOW[d.getDay()]}</span><span class="num">${d.getDate()}</span></div>
       <div class="day-body">
         ${t ? `<div class="shift"><span class="shift-name">${esc(t.name)}</span><span class="shift-time">${shiftRange(t)}</span></div>`
-            : (evs.length ? '' : `<div class="off-label">${hasTypes ? 'Off' : ''}</div>`)}
+            : (evs.length ? '' : `<div class="off-label">${hasTypes && pref('calendar').showOff ? 'Off' : ''}</div>`)}
         ${evs.map(e => evHTML(e, date)).join('')}
       </div></div>`;
   }
@@ -821,11 +953,12 @@ function weekHTML() {
 
   // Coming up: the next few events after this week (only while looking at the current week)
   const end = addDays(start, 6);
-  if (today >= start && today <= end && db.events.length) {
+  const upN = pref('calendar').comingUp;
+  if (upN && today >= start && today <= end && db.events.length) {
     const up = [], seen = new Set();   // a repeating event is listed once, at its next date
-    for (let i = 1; i <= 60 && up.length < 4; i++) {
+    for (let i = 1; i <= 60 && up.length < upN; i++) {
       const date = addDays(end, i);
-      for (const e of eventsOn(date)) { if (up.length < 4 && !seen.has(e.id)) { seen.add(e.id); up.push([date, e]); } }
+      for (const e of eventsOn(date)) { if (up.length < upN && !seen.has(e.id)) { seen.add(e.id); up.push([date, e]); } }
     }
     if (up.length) {
       h += '<section class="next"><h2>Coming up</h2>' + up.map(([date, e]) => {
@@ -848,7 +981,7 @@ function monthHTML() {
   for (let i = 0; i < weeks * 7; i++) {
     const date = addDays(gridStart, i), d = pd(date), t = shiftOn(date), n = eventsOn(date).length;
     const out = d.getMonth() !== m;
-    h += `<button class="cell${t ? ' work' : ''}${out ? ' out' : ''}${date === today ? ' today' : ''}" data-date="${date}"${t ? ` style="--c:${t.color}"` : ''}
+    h += `<button class="cell${t ? ' work' : ''}${out ? ' out' : ''}${date === today ? ' today' : ''}${date < today ? ' past' : ''}" data-date="${date}"${t ? ` style="--c:${t.color}"` : ''}
       aria-label="${MON_LONG[d.getMonth()]} ${d.getDate()}${t ? ', ' + esc(t.name) : ''}${n ? ', ' + n + ' event' + (n > 1 ? 's' : '') : ''}">
       <span class="n">${d.getDate()}</span>
       <span class="chip-s${t ? '' : ' none'}">${t ? esc(t.label || t.name.slice(0, 1)) : '·'}</span>
@@ -882,7 +1015,7 @@ function renderDock() {
 function startPaint() {
   if (ui.view === 'together') setView('week');
   if (!db.shiftTypes.length) { openShifts(); return; }
-  const id = ui.lastPaint && (ui.lastPaint === 'clear' || typeById(ui.lastPaint)) ? ui.lastPaint : sortedTypes()[0].id;
+  const id = pref('shifts').paintStart === 'last' && ui.lastPaint && (ui.lastPaint === 'clear' || typeById(ui.lastPaint)) ? ui.lastPaint : sortedTypes()[0].id;
   ui.paint = { id, before: {}, hist: [] };   // before: what each touched day had when painting started
   render();
 }
@@ -913,6 +1046,7 @@ function paintChanges() {
 function finishPaint() {
   const ch = paintChanges();
   if (!ch.length) { ui.paint = null; render(); return; }
+  if (!pref('shifts').review) { confirmPaint(); return; }
   const added = ch.filter(c => c.now && !c.was).length, changed = ch.filter(c => c.now && c.was).length, cleared = ch.filter(c => !c.now).length;
   const parts = [];
   if (added) parts.push(added + ' added');
@@ -1000,7 +1134,10 @@ function openEvent(id, occ, presetDate) {
   const back = sheetOpen && ctx.kind === 'day' ? ctx.date : null;
   ctx = { kind: 'event', id: ev ? ev.id : null, occ: occ || null, back };
   const v = ev ? { ...ev, date: (isRepeat(ev) && occ) ? occ : ev.date }
-               : { title: '', date: presetDate || defaultNewDate(), all_day: false, start_time: '17:00', end_time: '18:00', notes: '', repeat: 'none', repeat_until: '' };
+               : (() => { const pl = pref('plans'), st = pl.start || '17:00', [h, m] = st.split(':').map(Number), e = Math.min(h * 60 + m + pl.length, 23 * 60 + 59);
+                    return { title: '', date: presetDate || defaultNewDate(), all_day: false, start_time: st, end_time: pad(Math.floor(e / 60)) + ':' + pad(e % 60), notes: '', repeat: 'none', repeat_until: '', remind: null }; })();
+  const nd = pref('notify'), rem = v.remind || '';
+  const remOpts = (list, def) => `<option value=""${rem === '' ? ' selected' : ''}>Default (${def})</option>` + list.map(([k, l]) => `<option value="${k}"${rem === k ? ' selected' : ''}>${l}</option>`).join('');
   openSheet(`
     <div class="sheet-head"><h2>${ev ? 'Edit event' : 'New event'}</h2><button class="link" data-act="cancel-form">Cancel</button></div>
     <div class="group">
@@ -1018,6 +1155,10 @@ function openEvent(id, occ, presetDate) {
       </select></div>
       <div class="row" id="r-until"><label for="f-until">Stops after</label><input id="f-until" type="date" value="${v.repeat_until || ''}"></div>
     </div>
+    <div class="group">
+      <div class="row" id="r-rem-t"><label for="f-rem-t">Reminder</label><select id="f-rem-t" class="set-sel">${remOpts(REM_TIMED, remLabel(nd.eventBefore))}</select></div>
+      <div class="row" id="r-rem-n"><label for="f-rem-n">Reminder</label><select id="f-rem-n" class="set-sel">${remOpts(REM_NOTE, nd.notes ? 'morning of' : 'off')}</select></div>
+    </div>
     <div class="group"><textarea id="f-notes" placeholder="Notes">${esc(v.notes || '')}</textarea></div>
     <div class="actions">
       <button class="btn primary wide" data-act="save-event">Save event</button>
@@ -1034,7 +1175,12 @@ function syncEventForm() {
   if (!$('#f-all')) return;
   const all = $('#f-all').checked, rep = $('#f-rep').value !== 'none';
   $('#r-start').hidden = all; $('#r-end').hidden = all; $('#r-until').hidden = !rep;
+  $('#r-rem-t').hidden = all; $('#r-rem-n').hidden = !all;
 }
+const REM_TIMED = [['none', 'None'], ['0', 'When it starts'], ['10', '10 min before'], ['15', '15 min before'], ['30', '30 min before'], ['60', '1 hour before'], ['120', '2 hours before'], ['1440', '1 day before']];
+const REM_NOTE = [['none', 'None'], ['morning', 'Morning of'], ['eve', 'Night before']];
+const REM_SHIFT = [['none', 'None'], ['30', '30 min before'], ['60', '1 hour before'], ['90', '1.5 hours before'], ['120', '2 hours before']];
+function remLabel(v) { const f = REM_TIMED.concat(REM_SHIFT).find(([k]) => k === String(v)); return f ? f[1].toLowerCase().replace('none', 'off') : 'off'; }
 function afterForm() {
   render();
   if (ctx.back) openDay(ctx.back); else closeSheet();
@@ -1045,6 +1191,7 @@ async function saveEvent() {
     start_time: $('#f-start').value || null, end_time: $('#f-end').value || null,
     repeat: $('#f-rep').value, repeat_until: $('#f-until').value || null, notes: $('#f-notes').value.trim()
   };
+  f.remind = (f.all_day || !f.start_time ? $('#f-rem-n').value : $('#f-rem-t').value) || null;
   if (!f.title) { $('#r-title').classList.add('bad'); $('#f-title').focus(); return; }
   if (!f.date) return;
   if (f.all_day) { f.start_time = null; f.end_time = null; }
@@ -1101,13 +1248,7 @@ function openShifts() {
         </div>`).join('')}</div>${types.length > 1 ? '<p class="hint">Drag the handle to change the order.</p>' : ''}`
       : `<p class="empty">Make a shift for each kind you work, like Days or Nights. You only do this once.</p>`}
     <div class="actions"><button class="btn primary wide" data-act="edit-shift" data-id="">New shift</button></div>
-    <div class="sub">Calendar</div>
-    <div class="group"><div class="row"><span class="lbl">Week starts on</span>
-      <div class="seg sm"><button data-act="week-start" data-v="0" aria-pressed="${db.settings.weekStart === 0}">Sunday</button><button data-act="week-start" data-v="1" aria-pressed="${db.settings.weekStart === 1}">Monday</button></div>
-    </div>
-    <button class="row" data-act="backup" style="width:100%"><span class="lbl">Backup</span><span class="row-val"><span id="backupStatus">${backupLabel()}</span>${ICON.chev}</span></button>
-    <button class="row" data-act="tg-settings" style="width:100%"><span class="lbl">Together</span><span class="row-val"><span>${db.settings.shareOn !== false ? 'Sharing on' : 'Sharing off'}</span>${ICON.chev}</span></button>
-    </div>`);
+    <p class="hint" style="margin-top:var(--s4)">Week start, reminders, backup and more are in Settings, the gear at the top left.</p>`);
   initPresetDrag();
 }
 function initPresetDrag() {
@@ -1144,22 +1285,7 @@ function initPresetDrag() {
   });
 }
 
-/* Backup */
-function openBackup() {
-  const back = sheetOpen && ctx.kind === 'shifts';
-  ctx = { kind: 'backup', backToShifts: back };
-  openSheet(`
-    <div class="sheet-head"><h2>Backup</h2><button class="link" data-act="backup-close">${sync.code ? 'Done' : 'Cancel'}</button></div>
-    <p class="empty" style="padding-top:0">Backup keeps a copy of the calendar safe, so it comes back if the app is ever removed from this phone.</p>
-    <div class="group" style="margin-top:12px">
-      <div class="row" id="r-code"><label for="b-code">Passcode</label><input id="b-code" type="text" value="${esc(sync.code)}" placeholder="Enter passcode" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done"></div>
-    </div>
-    <p class="hint" id="b-msg">${sync.code ? backupLabel() : ''}</p>
-    <div class="actions">
-      <button class="btn primary wide" data-act="backup-save">${sync.code ? 'Save passcode' : 'Turn on backup'}</button>
-      ${sync.code ? '<button class="btn danger wide" data-act="backup-off">Turn off backup on this phone</button>' : ''}
-    </div>`);
-}
+function openBackup() { openSettings('backup'); }
 async function saveBackup() {
   const code = $('#b-code').value.trim();
   if (!code) { $('#r-code').classList.add('bad'); return; }
@@ -1168,7 +1294,7 @@ async function saveBackup() {
   msg.textContent = 'Checking…';
   clearTimeout(syncTimer);
   await syncNow();
-  if (sync.state === 'ok' && ctx.kind === 'backup') { if (ctx.backToShifts) openShifts(); else closeSheet(); render(); tgMaybeFetch(); }
+  if (sync.state === 'ok' && ctx.kind === 'settings') { render(); tgMaybeFetch(); NT.state = 'unknown'; if (ctx.direct) closeSheet(); else openSettings('backup', true); }
   else if (document.getElementById('b-msg')) {
     $('#b-msg').textContent = sync.state === 'bad' ? 'That passcode is not right.' : 'Could not reach the backup. Check the connection and try again.';
     if (sync.state === 'bad') $('#r-code').classList.add('bad');
@@ -1178,7 +1304,7 @@ async function backupOff() {
   const ok = await ask('The calendar stays on this phone. It just stops being backed up.', [{ label: 'Turn off backup', value: true, danger: true }]);
   if (!ok) return;
   sync.code = ''; sync.snap = null; sync.at = null; saveSync(); setSyncState('off');
-  render(); if (ctx.backToShifts) openShifts(); else closeSheet();
+  render(); NT.state = 'unknown'; openSettings('backup', true);
 }
 function openShiftForm(id) {
   const t = id ? typeById(id) : null;
@@ -1199,6 +1325,9 @@ function openShiftForm(id) {
     </div>
     <p class="hint">Leave the times empty if this shift changes from day to day.</p>
     <p class="hint" id="s-night" hidden>Ends the next day.</p>
+    <div class="group" id="s-rem" style="margin-top:12px"><div class="row"><label for="s-remind">Reminder</label><select id="s-remind" class="set-sel">
+      <option value=""${!v.remind ? ' selected' : ''}>Use my defaults</option>${REM_SHIFT.map(([k, l]) => `<option value="${k}"${v.remind === k ? ' selected' : ''}>${l}</option>`).join('')}</select></div></div>
+    <p class="hint" id="s-rem-hint">Defaults are in Settings, Notifications. None turns off every reminder for this shift.</p>
     <div id="s-tg">
       <div class="sub">With no set time, Together counts it as</div>
       <div class="seg sm tg-wide"><button data-act="shift-tg" data-v="work" aria-pressed="${tgNow === 'work'}">Work all day</button><button data-act="shift-tg" data-v="ignore" aria-pressed="${tgNow === 'ignore'}">Ignore</button></div>
@@ -1223,7 +1352,8 @@ function saveShift() {
   if (!name) { $('#r-name').classList.add('bad'); $('#s-name').focus(); return; }
   const f = {
     name, label: ($('#s-label').value.trim() || name.slice(0, 1)).slice(0, 3).toUpperCase(),
-    start_time: $('#s-start').value || null, end_time: $('#s-end').value || null, color: ctx.color, together: ctx.tg || null
+    start_time: $('#s-start').value || null, end_time: $('#s-end').value || null, color: ctx.color, together: ctx.tg || null,
+    remind: $('#s-remind').value || null
   };
   const t = ctx.id ? typeById(ctx.id) : null;
   if (t) Object.assign(t, f);
@@ -1278,7 +1408,7 @@ function wrapText(ctx, text, maxW) {
 }
 function paintBg(ctx, W, H) {
   const accent = cssVar('--accent') || '#ff4d8d';
-  ctx.fillStyle = '#fdf3f6'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = cssVar('--paper') || '#fdeff4'; ctx.fillRect(0, 0, W, H);
   const blob = (x, y, r, col) => { const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, col); g.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); };
   blob(0, 0, W * 1.1, rgba(accent, .22));
   blob(W, Math.min(H * .2, 300), W * .9, 'rgba(255,225,207,.9)');
@@ -1298,122 +1428,218 @@ function paintEvents(ctx, evs, x, y, w) {          // returns the new y
   }
   return y;
 }
-function paintWeek(ctx, W) {
-  const P = 16, today = todayStr(), start = weekStartOf(ui.anchor), end = addDays(start, 6), a = pd(start), b = pd(end);
-  const accent = cssVar('--accent') || '#ff4d8d', hasTypes = db.shiftTypes.length > 0;
-  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
-  ctx.font = FONT(700, 27, 1); ctx.fillStyle = INK;
-  ctx.fillText(`${MON[a.getMonth()]} ${a.getDate()} – ${a.getMonth() === b.getMonth() ? '' : MON[b.getMonth()] + ' '}${b.getDate()}`, P + 4, 46);
-  let y = 66;
-  for (let i = 0; i < 7; i++) {
-    const date = addDays(start, i), d = pd(date), t = shiftOn(date), evs = eventsOn(date);
-    const x = P, w = W - P * 2, cx = x + 66, cw = x + w - 14 - cx;
-    // measure
-    let twoLine = false, time = t ? shiftRange(t) : '';
-    if (t) { ctx.font = FONT(700, 17, 1); const nw = ctx.measureText(t.name).width; ctx.font = FONT(500, 13.5); twoLine = !!time && nw + 8 + ctx.measureText(time).width > cw; }
-    const top = y + 14;
-    let inner = t ? (twoLine ? 42 : 24) : (evs.length ? 0 : 24);
-    if (evs.length) inner += (t ? 6 : 2);
-    let evH = 0;
-    { const m = document.createElement('canvas').getContext('2d'); evH = paintEvents(m, evs, 0, 0, cw) - (evs.length ? 7 : 0); }
-    const h = Math.max(64, 14 + inner + evH + 14);
-    // card
-    ctx.save();
-    if (t || evs.length) { ctx.shadowColor = 'rgba(125,45,85,.10)'; ctx.shadowBlur = 14; ctx.shadowOffsetY = 4; }
-    rr(ctx, x, y, w, h, 20);
-    if (t) { const g = ctx.createLinearGradient(x, 0, x + w * .62, 0); g.addColorStop(0, mix(t.color, .17)); g.addColorStop(1, 'rgba(255,255,255,.9)'); ctx.fillStyle = g; }
-    else ctx.fillStyle = evs.length ? 'rgba(255,255,255,.78)' : 'rgba(255,255,255,.42)';
-    ctx.fill(); ctx.restore();
-    rr(ctx, x + .5, y + .5, w - 1, h - 1, 20); ctx.strokeStyle = 'rgba(255,255,255,.95)'; ctx.lineWidth = 1; ctx.stroke();
-    if (t) { ctx.save(); rr(ctx, x, y, w, h, 20); ctx.clip(); ctx.fillStyle = t.color; ctx.fillRect(x, y, 5, h); ctx.restore(); }
-    // date
-    const dx = x + 8 + 26; ctx.textAlign = 'center';
-    ctx.font = FONT(600, 12); ctx.fillStyle = date === today ? mix(accent, .7, '#3a0a22') : INK2; ctx.fillText(DOW[d.getDay()], dx, y + 24);
-    if (date === today) { ctx.fillStyle = accent; ctx.beginPath(); ctx.arc(dx, y + 43, 16, 0, Math.PI * 2); ctx.fill(); }
-    ctx.font = FONT(700, 20, 1); ctx.fillStyle = date === today ? '#fff' : INK; ctx.fillText(String(d.getDate()), dx, y + 50);
-    ctx.textAlign = 'left';
-    // content
-    let cy = top;
-    if (t) {
-      ctx.font = FONT(700, 17, 1); ctx.fillStyle = mix(t.color, .62, INK); ctx.fillText(t.name, cx, cy + 17);
-      const nw = ctx.measureText(t.name).width;
-      ctx.font = FONT(500, 13.5); ctx.fillStyle = INK2;
-      if (twoLine) ctx.fillText(time, cx, cy + 36); else if (time) ctx.fillText(time, cx + nw + 8, cy + 17);
-      cy += (twoLine ? 42 : 24) + (evs.length ? 6 : 0);
-    } else if (!evs.length) {
-      if (hasTypes) { ctx.font = FONT(500, 15); ctx.fillStyle = INK3; ctx.fillText('Off', cx, cy + 19); }
-    } else cy += 2;
-    paintEvents(ctx, evs, cx, cy, cw);
-    y += h + 8;
-  }
-  return y + P - 8 + 6;
-}
-function paintMonth(ctx, W) {
-  const P = 16, today = todayStr(), a = pd(ui.anchor), yr = a.getFullYear(), m = a.getMonth(), accent = cssVar('--accent') || '#ff4d8d';
-  const first = ds(new Date(yr, m, 1)), last = ds(new Date(yr, m + 1, 0)), gridStart = weekStartOf(first);
-  const weeks = Math.ceil((dayDiff(gridStart, last) + 1) / 7), gap = 4, cw = (W - P * 2 - gap * 6) / 7, ch = 62;
-  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
-  ctx.font = FONT(700, 27, 1); ctx.fillStyle = INK; ctx.fillText(`${MON_LONG[m]} ${yr}`, P + 4, 46);
-  let y = 66;
-  ctx.textAlign = 'center'; ctx.font = FONT(600, 12); ctx.fillStyle = INK2;
-  for (let i = 0; i < 7; i++) ctx.fillText(DOW[(db.settings.weekStart + i) % 7], P + i * (cw + gap) + cw / 2, y + 10);
-  y += 20;
-  for (let i = 0; i < weeks * 7; i++) {
-    const date = addDays(gridStart, i), d = pd(date), t = shiftOn(date), n = eventsOn(date).length;
-    const x = P + (i % 7) * (cw + gap), cy = y + Math.floor(i / 7) * (ch + gap), mid = x + cw / 2;
-    ctx.globalAlpha = d.getMonth() !== m ? .34 : 1;
-    rr(ctx, x, cy, cw, ch, 13); ctx.fillStyle = t ? 'rgba(255,255,255,.86)' : 'rgba(255,255,255,.4)'; ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.lineWidth = 1; ctx.stroke();
-    if (date === today) { ctx.fillStyle = accent; ctx.beginPath(); ctx.arc(mid, cy + 16, 11, 0, Math.PI * 2); ctx.fill(); }
-    ctx.font = FONT(date === today ? 700 : 600, 13, 1); ctx.fillStyle = date === today ? '#fff' : INK; ctx.fillText(String(d.getDate()), mid, cy + 20.5);
-    if (t) {
-      rr(ctx, x + 3, cy + 31, cw - 6, 16, 6); ctx.fillStyle = mix(t.color, .26); ctx.fill();
-      ctx.font = FONT(700, 11, 1); ctx.fillStyle = mix(t.color, .58, INK); ctx.fillText(t.label || t.name.slice(0, 1), mid, cy + 43);
-    }
-    const dots = Math.min(n, 3), dw = dots * 5 + (dots - 1) * 3;
-    ctx.fillStyle = accent;
-    for (let k = 0; k < dots; k++) { ctx.beginPath(); ctx.arc(mid - dw / 2 + 2.5 + k * 8, cy + 54, 2.5, 0, Math.PI * 2); ctx.fill(); }
-  }
-  ctx.globalAlpha = 1; ctx.textAlign = 'left';
-  y += weeks * (ch + gap) + 14;
-  // everything that's happening this month, in full
+/* ───────── Share ─────────
+   Share opens a preview first. She picks List or Calendar, the range, and what to show; the
+   picture redraws as she goes and is sized to read on one phone screen. "Share picture" then hands
+   that exact picture to the iPhone share sheet, which needs to happen straight from a tap. */
+const SH = { opt: null, url: null, file: null, name: '' };
+const MONS = i => (i === 8 ? 'Sept' : MON[i]);
+
+function shareModel(o) {
+  const p = pref('share'), prefix = (p.prefix || 'Work').trim() || 'Work', thisYear = new Date().getFullYear();
+  const anchor = ui.view === 'together' ? todayStr() : ui.anchor;
   const days = [];
-  for (let date = first; date <= last; date = addDays(date, 1)) { const evs = eventsOn(date); if (evs.length) days.push([date, evs]); }
-  for (const [date, evs] of days) {
-    const d = pd(date);
-    ctx.fillStyle = 'rgba(120,50,85,.10)'; ctx.fillRect(P + 4, y, W - P * 2 - 8, 1);
-    y += 10;
-    ctx.font = FONT(500, 13.5); ctx.fillStyle = INK2; ctx.fillText(`${DOW[d.getDay()]}, ${MON[d.getMonth()]} ${d.getDate()}`, P + 4, y + 15);
-    y = paintEvents(ctx, evs, P + 96, y, W - P - 4 - (P + 96)) + 3;
+  if (o.range === 'month') {
+    const a = pd(anchor), y = a.getFullYear(), m = a.getMonth();
+    const first = ds(new Date(y, m, 1)), last = ds(new Date(y, m + 1, 0));
+    for (let d = first; d <= last; d = addDays(d, 1)) days.push(d);
+    const yr = y !== thisYear ? ' ' + y : '';
+    return { days, first, last, month: m, grid: [weekStartOf(first), addDays(weekStartOf(last), 6)], title: `${prefix}: ${MON_LONG[m]}${yr}`, name: `${prefix} - ${MON_LONG[m]}${yr}` };
+  }
+  const start = weekStartOf(anchor), n = o.range === '2w' ? 14 : 7, last = addDays(start, n - 1);
+  for (let i = 0; i < n; i++) days.push(addDays(start, i));
+  const a = pd(start), b = pd(last), same = a.getMonth() === b.getMonth();
+  const yr = b.getFullYear() !== thisYear ? `, ${b.getFullYear()}` : '';
+  return {
+    days, first: start, last, month: null, grid: [start, last],
+    title: `${prefix}: ${MONS(a.getMonth())} ${a.getDate()} – ${same ? '' : MONS(b.getMonth()) + ' '}${b.getDate()}${yr}`,
+    name: `${prefix} - ${MONS(a.getMonth())} ${a.getDate()} - ${MONS(b.getMonth())} ${b.getDate()}${yr.replace(',', '')}`
+  };
+}
+function sharePlans(date, o) {
+  if (!o.plans) return [];
+  return eventsOn(date).filter(e => !(o.hideNames && (e.all_day || !e.start_time)))
+    .map(e => ({ title: o.hideNames ? 'Busy' : e.title, time: o.times ? evTime(e) : '' }));
+}
+const shiftTimes = (t, o) => (o.times && t.start_time && t.end_time ? shiftRange(t) : '');
+
+function paintTitle(c, W, M) {
+  c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+  c.font = FONT(700, 24, 1); c.fillStyle = INK;
+  const lines = wrapText(c, M.title, W - 40);
+  let y = 40;
+  for (const l of lines) { c.fillText(l, 20, y); y += 30; }
+  return y - 10;
+}
+
+/* One line per plan: dot, name (wraps), and its time after the name, or under it if there's no room */
+function planLines(c, plans, x, y, w, dot) {
+  for (const p of plans) {
+    c.font = FONT(600, 14);
+    const lines = wrapText(c, p.title, w - (dot ? 12 : 0));
+    const tx = x + (dot ? 12 : 0);
+    if (dot) { c.fillStyle = dot; c.beginPath(); c.arc(x + 3.5, y + 9, 3.5, 0, Math.PI * 2); c.fill(); }
+    let lastW = 0;
+    for (const l of lines) { c.font = FONT(600, 14); c.fillStyle = INK; c.fillText(l, tx, y + 14); lastW = c.measureText(l).width; y += 19; }
+    if (p.time) {
+      c.font = FONT(500, 12.5); c.fillStyle = INK2;
+      const tw = c.measureText(p.time).width;
+      if (tx - x + lastW + 8 + tw <= w) c.fillText(p.time, tx + lastW + 8, y - 5);
+      else { c.fillText(p.time, tx, y + 12); y += 17; }
+    }
+    y += 3;
+  }
+  return y;
+}
+
+/* List: one compact row per day, all on one glass card */
+function paintList(c, W, M, o, H) {
+  const P = 16, accent = cssVar('--accent') || '#ff4d8d';
+  let y = paintTitle(c, W, M) + 6;
+  const cardTop = y;
+  if (H) {                                      // second pass: we know how tall the card is
+    c.save(); c.shadowColor = 'rgba(125,45,85,.10)'; c.shadowBlur = 16; c.shadowOffsetY = 4;
+    rr(c, P, cardTop, W - P * 2, H - cardTop - P, 20); c.fillStyle = 'rgba(255,255,255,.86)'; c.fill(); c.restore();
+  }
+  const rows = M.days.filter(d => o.offDays || shiftOn(d) || sharePlans(d, o).length);
+  if (!rows.length) {
+    c.font = FONT(500, 15); c.fillStyle = INK2; c.fillText('Nothing on the calendar.', P + 16, y + 34);
+    return y + 60 + P;
+  }
+  rows.forEach((date, i) => {
+    const d = pd(date), t = shiftOn(date), plans = sharePlans(date, o);
+    const cx = P + 62, cw = W - P - 14 - cx;
+    let cy = y + 12;
+    if (t) {
+      c.font = FONT(700, 13.5, 1);
+      const nw = c.measureText(t.name).width, pw = nw + 20, times = shiftTimes(t, o);
+      rr(c, cx, cy, pw, 23, 11.5); c.fillStyle = mix(t.color, .22); c.fill();
+      c.fillStyle = mix(t.color, .6, INK); c.fillText(t.name, cx + 10, cy + 16);
+      if (times) {
+        c.font = FONT(500, 13); c.fillStyle = INK2;
+        if (pw + 8 + c.measureText(times).width <= cw) { c.fillText(times, cx + pw + 8, cy + 16); cy += 30; }
+        else { c.fillText(times, cx, cy + 40); cy += 50; }
+      } else cy += 30;
+    } else if (!plans.length) {
+      c.font = FONT(500, 14); c.fillStyle = INK3; c.fillText('Off', cx, cy + 16); cy += 26;
+    }
+    cy = planLines(c, plans, cx, cy, cw, accent);
+    const rowH = Math.max(52, cy - y + 8);
+    // date column
+    c.textAlign = 'center';
+    c.font = FONT(600, 11.5); c.fillStyle = INK2; c.fillText(DOW[d.getDay()], P + 32, y + 22);
+    c.font = FONT(700, 20, 1); c.fillStyle = INK; c.fillText(String(d.getDate()), P + 32, y + 43);
+    c.textAlign = 'left';
+    if (t) { c.fillStyle = t.color; rr(c, P + 54, y + 12, 3, rowH - 24, 1.5); c.fill(); }
+    y += rowH;
+    if (i < rows.length - 1) { c.fillStyle = 'rgba(120,50,85,.09)'; c.fillRect(P + 14, y, W - P * 2 - 28, 1); }
+  });
+  return y + 10 + P;
+}
+
+/* Calendar: a month-style grid with shift labels, then a key for the shifts and the plans */
+function paintCal(c, W, M, o) {
+  const P = 16, gap = 4, cw = (W - P * 2 - gap * 6) / 7, ch = 58, accent = cssVar('--accent') || '#ff4d8d';
+  let y = paintTitle(c, W, M) + 8;
+  c.textAlign = 'center'; c.font = FONT(600, 12); c.fillStyle = INK2;
+  for (let i = 0; i < 7; i++) c.fillText(DOW[(db.settings.weekStart + i) % 7], P + i * (cw + gap) + cw / 2, y + 10);
+  y += 20;
+  const cells = dayDiff(M.grid[0], M.grid[1]) + 1, used = new Map();
+  for (let i = 0; i < cells; i++) {
+    const date = addDays(M.grid[0], i), d = pd(date), inRange = date >= M.first && date <= M.last;
+    const t = inRange ? shiftOn(date) : null, n = inRange ? sharePlans(date, o).length : 0;
+    const x = P + (i % 7) * (cw + gap), cy = y + Math.floor(i / 7) * (ch + gap), mid = x + cw / 2;
+    if (t) used.set(t.id, t);
+    c.globalAlpha = inRange ? 1 : .32;
+    rr(c, x, cy, cw, ch, 12); c.fillStyle = t ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.45)'; c.fill();
+    c.strokeStyle = 'rgba(255,255,255,.95)'; c.lineWidth = 1; c.stroke();
+    c.font = FONT(600, 13, 1); c.fillStyle = INK; c.fillText(String(d.getDate()), mid, cy + 18);
+    if (t) {
+      rr(c, x + 3, cy + 26, cw - 6, 17, 6); c.fillStyle = mix(t.color, .26); c.fill();
+      c.font = FONT(700, 11, 1); c.fillStyle = mix(t.color, .58, INK); c.fillText(t.label || t.name.slice(0, 1), mid, cy + 38.5);
+    }
+    if (n) {
+      const k = Math.min(n, 3), w = k * 5 + (k - 1) * 3;
+      c.fillStyle = accent;
+      for (let j = 0; j < k; j++) { c.beginPath(); c.arc(mid - w / 2 + 2.5 + j * 8, cy + 51, 2.5, 0, Math.PI * 2); c.fill(); }
+    }
+  }
+  c.globalAlpha = 1; c.textAlign = 'left';
+  y += Math.ceil(cells / 7) * (ch + gap) + 12;
+
+  // key: what each label means
+  const key = sortedTypes().filter(t => used.has(t.id));
+  if (key.length) {
+    for (const t of key) {
+      c.font = FONT(700, 11, 1);
+      const lw = Math.max(30, c.measureText(t.label || t.name.slice(0, 1)).width + 14);
+      rr(c, P + 4, y, lw, 18, 6); c.fillStyle = mix(t.color, .26); c.fill();
+      c.textAlign = 'center'; c.fillStyle = mix(t.color, .58, INK); c.fillText(t.label || t.name.slice(0, 1), P + 4 + lw / 2, y + 12.5);
+      c.textAlign = 'left'; c.font = FONT(600, 14); c.fillStyle = INK; c.fillText(t.name, P + lw + 14, y + 13.5);
+      const times = shiftTimes(t, o);
+      if (times) { const nw = c.measureText(t.name).width; c.font = FONT(500, 13); c.fillStyle = INK2; c.fillText(times, P + lw + 14 + nw + 8, y + 13.5); }
+      y += 25;
+    }
+    y += 4;
+  }
+
+  // the plans, in full
+  if (o.plans) {
+    const withPlans = M.days.map(d => [d, sharePlans(d, o)]).filter(([, p]) => p.length);
+    if (withPlans.length) {
+      c.fillStyle = 'rgba(120,50,85,.10)'; c.fillRect(P + 4, y, W - P * 2 - 8, 1); y += 6;
+      for (const [date, plans] of withPlans) {
+        const d = pd(date);
+        c.font = FONT(500, 13); c.fillStyle = INK2; c.fillText(`${DOW[d.getDay()]} ${d.getDate()}`, P + 4, y + 17);
+        y = planLines(c, plans, P + 66, y + 3, W - P - 4 - (P + 66), null) - 3;
+        y += 4;
+      }
+    }
   }
   return y + P;
 }
-function shareName() {            // "Work - Sept 27 - Oct 3" or "Work - October" (a file name can't hold a colon)
-  const M = i => (i === 8 ? 'Sept' : MON[i]);
-  if (ui.view === 'month') return 'Work - ' + MON_LONG[pd(ui.anchor).getMonth()];
-  const s = weekStartOf(ui.anchor), a = pd(s), b = pd(addDays(s, 6));
-  return `Work - ${M(a.getMonth())} ${a.getDate()} - ${M(b.getMonth())} ${b.getDate()}`;
-}
-function shareImage() {
-  const W = 390, paint = ui.view === 'week' ? paintWeek : paintMonth;
-  const H = Math.ceil(paint(document.createElement('canvas').getContext('2d'), W));
-  const scale = W * 3 * H * 3 > 15e6 ? 2 : 3;
-  const c = document.createElement('canvas'); c.width = W * scale; c.height = H * scale;
-  const ctx = c.getContext('2d'); ctx.scale(scale, scale);
-  paintBg(ctx, W, H); paint(ctx, W);
-  const url = c.toDataURL('image/png'), bin = atob(url.split(',')[1]), bytes = new Uint8Array(bin.length);
+
+function buildShareImage() {
+  const o = SH.opt, M = shareModel(o), paint = o.style === 'cal' ? paintCal : paintList, W = 390;
+  const H = Math.ceil(paint(document.createElement('canvas').getContext('2d'), W, M, o, 0));
+  const scale = W * 3 * H * 3 > 16e6 ? 2 : 3;
+  const cv = document.createElement('canvas'); cv.width = W * scale; cv.height = H * scale;
+  const g = cv.getContext('2d'); g.scale(scale, scale);
+  paintBg(g, W, H); paint(g, W, M, o, H);
+  SH.url = cv.toDataURL('image/png'); SH.name = M.name; SH.size = [W, H];
+  const bin = atob(SH.url.split(',')[1]), bytes = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  let file = null;
-  try { file = new File([bytes], shareName() + '.png', { type: 'image/png' }); } catch (e) {}
-  if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-    navigator.share({ files: [file] }).catch(e => { if (e && e.name !== 'AbortError') sharePreview(url); });
-  } else sharePreview(url);
+  try { SH.file = new File([bytes], M.name + '.png', { type: 'image/png' }); } catch (e) { SH.file = null; }
 }
-function sharePreview(url) {
+const canShareFile = () => !!(SH.file && navigator.canShare && navigator.canShare({ files: [SH.file] }));
+
+function openShare() {
+  const p = pref('share');
+  SH.opt = { style: p.style, range: ui.view === 'month' ? 'month' : p.range, plans: p.plans, times: p.times, offDays: p.offDays, hideNames: p.hideNames };
+  renderShare();
+}
+function renderShare() {
+  buildShareImage();
+  const o = SH.opt, keep = sheetOpen && ctx.kind === 'share' ? sheet.scrollTop : 0;
   ctx = { kind: 'share' };
-  openSheet(`<div class="sheet-head"><h2>Your ${ui.view}</h2><button class="link" data-act="close">Done</button></div>
-    <p class="intro">Press and hold the picture to save or share it.</p>
-    <img class="share-img" src="${url}" alt="Picture of your ${ui.view}">`);
+  const seg = (k, opts) => `<div class="seg sm sh-seg">${opts.map(([v, l]) => `<button data-act="sh-opt" data-k="${k}" data-v="${v}" aria-pressed="${o[k] === v}">${l}</button>`).join('')}</div>`;
+  const chip = (k, l, off) => `<button class="sh-chip" data-act="sh-opt" data-k="${k}" data-v="${!o[k]}" aria-pressed="${!!o[k]}"${off ? ' disabled' : ''}>${l}</button>`;
+  openSheet(`
+    <div class="sheet-head"><h2>Share</h2><button class="link" data-act="close">Cancel</button></div>
+    <div class="sh-prev"><img src="${SH.url}" alt="Preview of the picture you’re about to share"></div>
+    <div class="sh-opts">
+      ${seg('style', [['list', 'List'], ['cal', 'Calendar']])}
+      ${seg('range', [['week', 'Week'], ['2w', '2 weeks'], ['month', 'Month']])}
+      <div class="sh-chips">${chip('plans', 'Plans')}${chip('times', 'Times')}${chip('offDays', 'Days off', o.style === 'cal')}${chip('hideNames', 'Hide plan names', !o.plans)}</div>
+    </div>
+    <div class="actions"><button class="btn primary wide" data-act="sh-go">Share picture</button></div>
+    <p class="hint">${canShareFile() ? 'Opens the iPhone share sheet, where you can also Save Image.' : 'Press and hold the picture to save it.'} Your starting choices are in Settings, Sharing.</p>`);
+  sheet.scrollTop = keep;
+}
+function shareGo() {
+  if (canShareFile()) {
+    navigator.share({ files: [SH.file] }).catch(e => { if (e && e.name !== 'AbortError') toast('Couldn’t open sharing', 'Press and hold the picture to save it.'); });
+  } else toast('Press and hold the picture', 'Then choose Save to Photos or Share.');
 }
 
 /* Jump to a month: tap the title */
@@ -1640,7 +1866,7 @@ const ME_NAME = 'Irina';
 const TG_KEY = 'nova:together';
 const TG_DEF = { weeks: 4, minH: 3, h0: 9, h1: 23, sleep: 14 };
 const TG_STALE = 5 * 60e3;
-const tgOpt = () => ({ ...TG_DEF, ...(db.settings.tg || {}) });
+const tgOpt = () => pref('together');
 const tgMode = t => t.together || (/pay/i.test(t.name || '') ? 'ignore' : 'work');
 const tgUntimed = t => !(t.start_time && t.end_time);
 const tg = { data: null, at: null, from: null, to: null, err: null, loading: false, plan: null };
@@ -1898,46 +2124,373 @@ function openTgDay(key) {
     </div>`);
 }
 
-/* settings */
-function openTgSettings() {
-  const back = sheetOpen && (ctx.kind === 'shifts' || (ctx.kind === 'tgset' && ctx.backToShifts));
-  ctx = { kind: 'tgset', backToShifts: back };
-  const o = tgOpt(), untimed = sortedTypes().filter(tgUntimed);
-  const seg = (k, vals, fmt) => `<div class="seg sm">${vals.map(v => `<button data-act="tg-set" data-k="${k}" data-v="${v}" aria-pressed="${o[k] === v}">${fmt(v)}</button>`).join('')}</div>`;
-  const hr = h => h === 24 ? 'Midnight' : h === 12 ? 'Noon' : `${h % 12 || 12} ${h < 12 ? 'AM' : 'PM'}`;
-  const opts = (vals, cur, fmt) => vals.map(v => `<option value="${v}"${v === cur ? ' selected' : ''}>${fmt(v)}</option>`).join('');
-  openSheet(`
-    <div class="sheet-head"><h2>Together</h2><button class="link" data-act="tg-settings-close">Done</button></div>
-    <p class="intro">Together lines up your schedule with ${esc((tg.data && tg.data.name) || 'Joe')}’s and finds the times you’re both free.</p>
-    <div class="group">
-      <div class="row"><span class="lbl">Share my schedule with Joe</span><label class="switch"><input type="checkbox" data-tgset="share" ${db.settings.shareOn !== false ? 'checked' : ''} aria-label="Share my schedule with Joe"><span></span></label></div>
-    </div>
-    <p class="hint">${sync.code ? 'Joe sees your shifts and the names and times of your plans. Notes stay private.' : 'Sharing needs backup on.'}</p>
-    <div class="sub">Finding free time</div>
-    <div class="group">
-      <div class="row"><span class="lbl">Look ahead</span>${seg('weeks', [2, 4, 6], v => v + ' wk')}</div>
-      <div class="row"><span class="lbl">Shortest hang</span>${seg('minH', [2, 3, 4], v => v + 'h')}</div>
-      <div class="row"><span class="lbl">Hang hours</span><span class="tg-hours">
-        <select data-tgset="h0" aria-label="Hang hours start">${opts([6, 7, 8, 9, 10, 11, 12], o.h0, hr)}</select><span>to</span>
-        <select data-tgset="h1" aria-label="Hang hours end">${opts([18, 19, 20, 21, 22, 23, 24], o.h1, hr)}</select></span></div>
-      <div class="row"><label for="tg-sleep">Up after a night shift</label><select id="tg-sleep" data-tgset="sleep">${opts([0, 11, 12, 13, 14, 15, 16], o.sleep, v => v ? hr(v) : 'Off')}</select></div>
-    </div>
-    <p class="hint">Anything on either calendar blocks that time. Day notes, like pay day, don\u2019t. After an overnight shift, whoever worked it counts as asleep until the time above.</p>
-    ${untimed.length ? `<div class="sub">Shifts with no set time</div>
-    <div class="group">${untimed.map(t => `<div class="row"><span class="lbl">${esc(t.name)}</span><div class="seg sm">
-      <button data-act="tg-type" data-id="${t.id}" data-v="work" aria-pressed="${tgMode(t) === 'work'}">Work all day</button>
-      <button data-act="tg-type" data-id="${t.id}" data-v="ignore" aria-pressed="${tgMode(t) === 'ignore'}">Ignore</button></div></div>`).join('')}</div>
-    <p class="hint">Work all day counts the whole day as busy. Ignore leaves it out, like a pay day.</p>` : ''}`);
-}
+function openTgSettings() { openSettings('together'); }
 function tgSet(k, v) {
   const o = tgOpt();
   o[k] = v;
   if (o.h1 - o.h0 < o.minH) { if (k === 'h0') o.h1 = Math.min(24, o.h0 + o.minH); else if (k === 'h1') o.h0 = Math.max(0, o.h1 - o.minH); else o.minH = Math.min(o.minH, o.h1 - o.h0); }
-  db.settings.tg = o;
-  persist();                      // these stay on this phone; nothing for Supabase
+  setPrefs('together', o);
   if (ui.view === 'together') render();
-  openTgSettings();
+  openSettings('together', true);
   tgMaybeFetch();
+}
+
+/* ───────── Notifications (this iPhone) ─────────
+   Same setup as Volley: the phone subscribes with the browser's push service, the server keeps
+   the subscription, and a sweep every 5 minutes sends whatever is due. iPhone only allows this
+   from the Home Screen app, and the permission prompt has to come from a tap. */
+const NT = { state: 'unknown', busy: false, msg: '' };
+const ntSupported = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+const ntStandalone = () => navigator.standalone === true || (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
+function b64ToBytes(s) {
+  const pad = '='.repeat((4 - s.length % 4) % 4), raw = atob((s + pad).replace(/-/g, '+').replace(/_/g, '/'));
+  return Uint8Array.from(raw, c => c.charCodeAt(0));
+}
+async function ntApi(action, extra) {
+  const res = await fetch('/api/push', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-nova-passcode': sync.code }, body: JSON.stringify({ action, ...(extra || {}) }) });
+  if (res.status === 503) throw Object.assign(new Error('not_setup'), { code: 'not_setup' });
+  if (res.status === 401) throw Object.assign(new Error('passcode'), { code: 'passcode' });
+  if (!res.ok) throw new Error('push ' + res.status);
+  return res.json();
+}
+async function ntCheck() {
+  if (!ntSupported()) NT.state = ntStandalone() ? 'unsupported' : 'browser';
+  else if (!sync.code) NT.state = 'nobackup';
+  else if (Notification.permission === 'denied') NT.state = 'denied';
+  else {
+    try {
+      const reg = await navigator.serviceWorker.ready, sub = await reg.pushManager.getSubscription();
+      NT.state = sub ? 'on' : 'off';
+    } catch (e) { NT.state = 'off'; }
+  }
+  if (sheetOpen && ctx.kind === 'settings' && (ctx.page === 'notify' || ctx.page === 'home')) openSettings(ctx.page, true);
+  return NT.state;
+}
+async function ntEnable() {
+  NT.busy = true; NT.msg = ''; openSettings('notify', true);
+  try {
+    const perm = await Notification.requestPermission();      // must be the first await, straight from the tap
+    if (perm !== 'granted') { NT.state = perm === 'denied' ? 'denied' : 'off'; return; }
+    const { publicKey } = await ntApi('key');
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToBytes(publicKey) });
+    await ntApi('subscribe', { sub: sub.toJSON() });
+    NT.state = 'on'; NT.msg = 'Notifications are on. Send a test to check.';
+  } catch (e) {
+    NT.msg = e.code === 'not_setup' ? 'Nova isn’t set up for notifications yet. Joe needs to add the push keys in Vercel.'
+      : e.code === 'passcode' ? 'Your backup passcode isn’t working.' : 'Couldn’t turn on notifications. Check your connection and try again.';
+  } finally { NT.busy = false; openSettings('notify', true); }
+}
+async function ntDisable() {
+  NT.busy = true; openSettings('notify', true);
+  try {
+    const reg = await navigator.serviceWorker.ready, sub = await reg.pushManager.getSubscription();
+    if (sub) { try { await ntApi('unsubscribe', { endpoint: sub.endpoint }); } catch (e) {} await sub.unsubscribe(); }
+    NT.state = 'off'; NT.msg = 'Notifications are off on this iPhone.';
+  } catch (e) { NT.msg = 'Couldn’t turn them off. Try again.'; }
+  finally { NT.busy = false; openSettings('notify', true); }
+}
+async function ntTest() {
+  NT.busy = true; NT.msg = ''; openSettings('notify', true);
+  try {
+    const r = await ntApi('test');
+    NT.msg = r.sent ? 'Test sent. It should show up in a few seconds.' : 'No iPhones are signed up yet. Turn notifications on first.';
+  } catch (e) { NT.msg = e.code === 'not_setup' ? 'Nova isn’t set up for notifications yet.' : 'Couldn’t send the test. Try again.'; }
+  finally { NT.busy = false; openSettings('notify', true); }
+}
+
+/* In-app banner, for pushes that arrive while Nova is open (and for small confirmations) */
+let toastTimer = null;
+function toast(title, body) {
+  let el = $('#toast');
+  if (!el) { el = document.createElement('div'); el.id = 'toast'; el.className = 'toast'; el.setAttribute('role', 'status'); document.body.appendChild(el); el.addEventListener('click', () => el.classList.remove('show')); }
+  el.innerHTML = `<span class="toast-icon">${ICON.bell}</span><span class="toast-text"><b>${esc(title)}</b>${body ? `<span>${esc(body)}</span>` : ''}</span>`;
+  requestAnimationFrame(() => el.classList.add('show'));
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 4500);
+}
+if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('message', e => {
+  if (e.data && e.data.type === 'nova-push') toast(e.data.title, e.data.body);
+});
+
+/* ───────── Settings screen ───────── */
+const SET_PAGES = {
+  appearance: ['Appearance', '#ff4d8d', '<circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h8"/>'],
+  calendar: ['Calendar', '#3a93f3', '<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/>'],
+  shifts: ['Shifts', '#8b6cff', '<rect x="4" y="5" width="16" height="5" rx="2"/><rect x="4" y="14" width="16" height="5" rx="2"/>'],
+  plans: ['Plans', '#ff7655', '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>'],
+  share: ['Sharing', '#1fae82', '<path d="M12 14V4"/><path d="M8 7.5L12 4l4 3.5"/><path d="M6 11v7a2 2 0 002 2h8a2 2 0 002-2v-7"/>'],
+  notify: ['Notifications', '#e5466e', '<path d="M6 16V11a6 6 0 0112 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 004 0"/>'],
+  together: ['Together', '#2fb985', '<circle cx="9" cy="10" r="3"/><circle cx="16" cy="10" r="3"/><path d="M4 19c.8-2.700 2.700-4 5-4s4.200 1.300 5 4M13 15.500c.9-.3 1.900-.5 3-.5 2.300 0 4.200 1.300 5 4"/>'],
+  backup: ['Backup', '#f5a524', '<path d="M7 18a4 4 0 01-.5-8 6 6 0 0111.500 1.500A3.500 3.500 0 0117 18z"/>'],
+  data: ['Data', '#7a8194', '<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.700 3.100 3 7 3s7-1.300 7-3V6M5 12c0 1.700 3.100 3 7 3s7-1.300 7-3"/>'],
+  about: ['About', '#b5a6af', '<circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8h.01"/>']
+};
+const NOVA_VERSION = 'Nova 8';
+const hrLabel = h => h === 24 ? 'Midnight' : h === 12 ? 'Noon' : `${h % 12 || 12} ${h < 12 ? 'AM' : 'PM'}`;
+
+/* little builders; every control is tagged with the setting it changes */
+const pv = (sec, k) => pref(sec)[k];
+function sToggle(sec, k, label, sub) {
+  return `<div class="row"><span class="lbl">${label}${sub ? `<small>${sub}</small>` : ''}</span><label class="switch"><input type="checkbox" data-pref="${sec}.${k}" ${pv(sec, k) ? 'checked' : ''} aria-label="${esc(label)}"><span></span></label></div>`;
+}
+function sSeg(sec, k, label, opts) {
+  const cur = String(pv(sec, k));
+  return `<div class="row"><span class="lbl">${label}</span><div class="seg sm">${opts.map(([v, l]) => `<button data-act="pref" data-k="${sec}.${k}" data-v="${v}" aria-pressed="${cur === String(v)}">${l}</button>`).join('')}</div></div>`;
+}
+function sSelect(sec, k, label, opts, id) {
+  const cur = String(pv(sec, k));
+  return `<div class="row"><label for="${id}">${label}</label><select id="${id}" class="set-sel" data-pref="${sec}.${k}">${opts.map(([v, l]) => `<option value="${v}"${cur === String(v) ? ' selected' : ''}>${l}</option>`).join('')}</select></div>`;
+}
+function sTime(sec, k, label, id, off) {
+  return `<div class="row${off ? ' set-off' : ''}"><label for="${id}">${label}</label><input id="${id}" type="time" data-pref="${sec}.${k}" value="${pv(sec, k)}"></div>`;
+}
+const sLink = (act, label, val, extra = '') => `<button class="row set-link" data-act="${act}" ${extra}><span class="lbl">${label}</span><span class="row-val">${val ? `<span>${val}</span>` : ''}${ICON.chev}</span></button>`;
+
+function setValue(page) {
+  switch (page) {
+    case 'appearance': return (ACCENTS[pref('appearance').accent] || ACCENTS.pink)[0];
+    case 'notify': return { on: 'On', off: 'Off', denied: 'Blocked', nobackup: 'Needs backup', browser: 'Home Screen only', unsupported: 'Not available' }[NT.state] || '';
+    case 'together': return db.settings.shareOn !== false ? 'Sharing on' : 'Sharing off';
+    case 'backup': return backupLabel();
+    case 'about': return NOVA_VERSION;
+    default: return '';
+  }
+}
+
+function openSettings(page = 'home', keep) {
+  const was = ctx.kind === 'settings' ? ctx : null;
+  const scroll = keep && sheetOpen ? sheet.scrollTop : 0;
+  // direct: opened straight to this page from somewhere else (the Together tab, the first-run card…)
+  ctx = { kind: 'settings', page, direct: was ? (keep ? was.direct : false) : page !== 'home' };
+  const head = page === 'home'
+    ? `<div class="sheet-head"><h2>Settings</h2><button class="link" data-act="close">Done</button></div>`
+    : `<div class="sheet-head set-head"><button class="link set-back" data-act="settings">${ICON.back}Settings</button><button class="link" data-act="close">Done</button></div><h2 class="set-title">${SET_PAGES[page][0]}</h2>`;
+  openSheet(head + settingsBody(page));
+  if (keep) sheet.scrollTop = scroll;
+  if (page === 'notify' && NT.state === 'unknown') ntCheck();
+}
+
+function settingsBody(page) {
+  const tile = p => `<span class="set-tile" style="--c:${SET_PAGES[p][1]}"><svg class="i" viewBox="0 0 24 24">${SET_PAGES[p][2]}</svg></span>`;
+  const row = p => `<button class="row set-link" data-act="settings" data-page="${p}">${tile(p)}<span class="lbl">${SET_PAGES[p][0]}</span><span class="row-val"><span>${setValue(p)}</span>${ICON.chev}</span></button>`;
+  const a = pref('appearance'), c = pref('calendar'), s = pref('share'), n = pref('notify');
+  switch (page) {
+    case 'home':
+      return `<div class="group">${['appearance', 'calendar', 'shifts', 'plans'].map(row).join('')}</div>
+        <div class="group">${['share', 'notify', 'together'].map(row).join('')}</div>
+        <div class="group">${['backup', 'data', 'about'].map(row).join('')}</div>`;
+
+    case 'appearance':
+      return `<div class="sub">Accent colour</div>
+        <div class="group"><div class="set-swatches">${Object.entries(ACCENTS).map(([k, [l, hex]]) => `<button class="set-swatch" data-act="pref" data-k="appearance.accent" data-v="${k}" style="--c:${hex}" aria-pressed="${a.accent === k}"><i></i><span>${l}</span></button>`).join('')}</div></div>
+        <div class="group" style="margin-top:12px">
+          ${sSeg('appearance', 'bg', 'Background', [['glow', 'Soft glow'], ['plain', 'Plain']])}
+          ${sToggle('appearance', 'time24', '24-hour time', a.time24 ? '19:30' : '7:30 PM')}
+          ${sToggle('appearance', 'compact', 'Compact week', 'Tighter day rows, more on screen')}
+          ${sToggle('appearance', 'nextDay', 'Say “next day” on overnight shifts')}
+          ${sToggle('appearance', 'motion', 'Animations')}
+        </div>`;
+
+    case 'calendar':
+      return `<div class="group">
+          ${sSelect('calendar', 'openTo', 'Open to', [['last', 'Where I left off'], ['week', 'Week'], ['month', 'Month'], ['together', 'Together']], 'set-open')}
+          <div class="row"><span class="lbl">Week starts on</span><div class="seg sm"><button data-act="week-start" data-v="0" aria-pressed="${db.settings.weekStart === 0}">Sunday</button><button data-act="week-start" data-v="1" aria-pressed="${db.settings.weekStart === 1}">Monday</button></div></div>
+          ${sToggle('calendar', 'swipe', 'Swipe to change weeks')}
+        </div>
+        <div class="sub">Week</div>
+        <div class="group">
+          ${sToggle('calendar', 'showOff', 'Say “Off” on days off')}
+          ${sToggle('calendar', 'dimPast', 'Fade days that have passed')}
+          ${sSeg('calendar', 'comingUp', 'Coming up list', [[0, 'Off'], [3, '3'], [4, '4'], [6, '6']])}
+        </div>
+        <div class="sub">Month</div>
+        <div class="group">
+          ${sToggle('calendar', 'monthLabels', 'Shift labels', 'Off shows just the colour')}
+          ${sToggle('calendar', 'monthDots', 'Dots for plans')}
+        </div>`;
+
+    case 'shifts':
+      return `<div class="group">${sLink('shifts', 'My shifts', db.shiftTypes.length + (db.shiftTypes.length === 1 ? ' shift' : ' shifts'))}</div>
+        <div class="sub">Paint shifts</div>
+        <div class="group">
+          ${sToggle('shifts', 'review', 'Check before saving', 'Shows the days you painted before they’re saved')}
+          ${sSeg('shifts', 'paintStart', 'Start with', [['last', 'Last used'], ['first', 'First shift']])}
+        </div>
+        <p class="hint">Reminders for shifts are in Notifications. Each shift can also have its own in My shifts, then Edit.</p>`;
+
+    case 'plans':
+      return `<div class="sub">New plans</div>
+        <div class="group">
+          ${sTime('plans', 'start', 'Start at', 'set-pstart')}
+          ${sSeg('plans', 'length', 'Length', [[30, '30m'], [60, '1h'], [90, '1.5h'], [120, '2h']])}
+        </div>
+        <div class="group" style="margin-top:12px">${sLink('settings', 'Reminders', setValue('notify'), 'data-page="notify"')}</div>`;
+
+    case 'share':
+      return `<p class="intro">These are the starting choices when you tap Share. You can change them on the preview each time too.</p>
+        <div class="group">
+          ${sSeg('share', 'style', 'Style', [['list', 'List'], ['cal', 'Calendar']])}
+          ${sSeg('share', 'range', 'Range', [['week', 'Week'], ['2w', '2 weeks'], ['month', 'Month']])}
+        </div>
+        <div class="sub">Show</div>
+        <div class="group">
+          ${sToggle('share', 'plans', 'Plans')}
+          ${sToggle('share', 'times', 'Times')}
+          ${sToggle('share', 'offDays', 'Days off', 'List style only')}
+          ${sToggle('share', 'hideNames', 'Hide what my plans are', 'Plans show as “Busy” and day notes are left out')}
+        </div>
+        <div class="sub">Picture title</div>
+        <div class="group"><div class="row"><label for="set-prefix">Starts with</label><input id="set-prefix" type="text" maxlength="24" data-pref="share.prefix" value="${esc(s.prefix)}" placeholder="Work" autocomplete="off"></div></div>
+        <p class="hint">Titles read like “${esc(s.prefix || 'Work')}: Oct 25 – 31”.</p>`;
+
+    case 'notify': {
+      const st = NT.state, on = st === 'on';
+      const status = {
+        on: ['On for this iPhone', ''],
+        off: ['Off', 'Get reminders for shifts and plans on this iPhone.'],
+        denied: ['Blocked', 'Notifications are blocked for Nova. Turn them on in iPhone Settings, Notifications, Nova.'],
+        nobackup: ['Needs backup', 'Reminders are sent from your backup, so backup needs to be on first.'],
+        browser: ['Open Nova from your Home Screen', 'iPhone only allows notifications in the Home Screen app, not in Safari.'],
+        unsupported: ['Not available', 'This phone or browser can’t get notifications from Nova.'],
+        unknown: ['Checking…', '']
+      }[st] || ['', ''];
+      const btn = st === 'nobackup' ? `<button class="btn primary" data-act="settings" data-page="backup">Turn on backup</button>`
+        : st === 'off' ? `<button class="btn primary" data-act="nt-on" ${NT.busy ? 'disabled' : ''}>${NT.busy ? 'Turning on…' : 'Turn on notifications'}</button>`
+        : on ? `<div class="set-btns"><button class="btn quiet small" data-act="nt-test" ${NT.busy ? 'disabled' : ''}>Send a test</button><button class="btn quiet small" data-act="nt-off" ${NT.busy ? 'disabled' : ''}>Turn off on this iPhone</button></div>` : '';
+      const mins = (opts) => opts.map(m => [m, m === 'none' ? 'Off' : m === '0' ? 'When it starts' : +m >= 1440 ? '1 day before' : +m >= 60 ? (+m / 60) + (+m === 60 ? ' hour' : ' hours') + ' before' : m + ' min before']);
+      const days = DOW_LONG.map((d, i) => [i, d]);
+      return `<section class="set-status glass${on ? ' on' : ''}"><b>${status[0]}</b>${status[1] ? `<p>${status[1]}</p>` : ''}${btn}${NT.msg ? `<p class="set-msg">${esc(NT.msg)}</p>` : ''}</section>
+        <div class="sub">Shifts</div>
+        <div class="group">
+          ${sToggle('notify', 'shiftEve', 'The night before', 'Tomorrow’s shift and its hours')}
+          ${n.shiftEve ? sTime('notify', 'eveTime', 'At', 'set-eve') : ''}
+          ${sSelect('notify', 'shiftBefore', 'Before it starts', mins(['none', '30', '60', '90', '120']), 'set-sb')}
+        </div>
+        <div class="sub">Plans</div>
+        <div class="group">
+          ${sSelect('notify', 'eventBefore', 'Before a plan', mins(['none', '0', '10', '15', '30', '60', '120', '1440']), 'set-eb')}
+          ${sToggle('notify', 'notes', 'Day notes the morning of', 'Things with no set time, like pay day')}
+          ${n.notes ? sTime('notify', 'notesTime', 'At', 'set-notes') : ''}
+        </div>
+        <p class="hint">Any plan or shift can have its own reminder. Open it and change Reminder.</p>
+        <div class="sub">Summaries</div>
+        <div class="group">
+          ${sToggle('notify', 'daily', 'The day’s rundown', 'Your shift and plans for the day')}
+          ${n.daily ? sTime('notify', 'dailyTime', 'At', 'set-daily') : ''}
+          ${sToggle('notify', 'weekly', 'The week ahead', 'How many shifts and plans are coming up')}
+          ${n.weekly ? sSelect('notify', 'weeklyDay', 'On', days, 'set-wday') + sTime('notify', 'weeklyTime', 'At', 'set-wtime') : ''}
+          ${sToggle('notify', 'together', 'Free with Joe today', 'When you’re both free, from the Together tab')}
+          ${n.together ? sTime('notify', 'togetherTime', 'At', 'set-tg') : ''}
+        </div>
+        <div class="sub">Quiet hours</div>
+        <div class="group">
+          ${sToggle('notify', 'quiet', 'Hold reminders overnight')}
+          ${n.quiet ? sTime('notify', 'quietFrom', 'From', 'set-qf') + sTime('notify', 'quietTo', 'Until', 'set-qt') : ''}
+        </div>
+        <p class="hint">“Before” reminders that would land in quiet hours wait until they end, unless the thing has already started. Anything you set a time for always comes at that time.</p>`;
+    }
+
+    case 'together': {
+      const o = pref('together'), untimed = sortedTypes().filter(tgUntimed);
+      const seg = (k, vals, fmt) => `<div class="seg sm">${vals.map(v => `<button data-act="tg-set" data-k="${k}" data-v="${v}" aria-pressed="${o[k] === v}">${fmt(v)}</button>`).join('')}</div>`;
+      const opts = (vals, cur, fmt) => vals.map(v => `<option value="${v}"${v === cur ? ' selected' : ''}>${fmt(v)}</option>`).join('');
+      return `<p class="intro">Together lines up your schedule with ${esc((tg.data && tg.data.name) || 'Joe')}’s and finds the times you’re both free.</p>
+        <div class="group">
+          <div class="row"><span class="lbl">Share my schedule with Joe</span><label class="switch"><input type="checkbox" data-tgset="share" ${db.settings.shareOn !== false ? 'checked' : ''} aria-label="Share my schedule with Joe"><span></span></label></div>
+        </div>
+        <p class="hint">${sync.code ? 'Joe sees your shifts and the names and times of your plans. Notes stay private.' : 'Sharing needs backup on.'}</p>
+        <div class="sub">Finding free time</div>
+        <div class="group">
+          <div class="row"><span class="lbl">Look ahead</span>${seg('weeks', [2, 4, 6], v => v + ' wk')}</div>
+          <div class="row"><span class="lbl">Shortest hang</span>${seg('minH', [2, 3, 4], v => v + 'h')}</div>
+          <div class="row"><span class="lbl">Hang hours</span><span class="tg-hours">
+            <select data-tgset="h0" aria-label="Hang hours start">${opts([6, 7, 8, 9, 10, 11, 12], o.h0, hrLabel)}</select><span>to</span>
+            <select data-tgset="h1" aria-label="Hang hours end">${opts([18, 19, 20, 21, 22, 23, 24], o.h1, hrLabel)}</select></span></div>
+          <div class="row"><label for="tg-sleep">Up after a night shift</label><select id="tg-sleep" data-tgset="sleep">${opts([0, 11, 12, 13, 14, 15, 16], o.sleep, v => v ? hrLabel(v) : 'Off')}</select></div>
+        </div>
+        <p class="hint">Anything on either calendar blocks that time. Day notes, like pay day, don’t. After an overnight shift, whoever worked it counts as asleep until the time above.</p>
+        ${untimed.length ? `<div class="sub">Shifts with no set time</div>
+        <div class="group">${untimed.map(t => `<div class="row"><span class="lbl">${esc(t.name)}</span><div class="seg sm">
+          <button data-act="tg-type" data-id="${t.id}" data-v="work" aria-pressed="${tgMode(t) === 'work'}">Work all day</button>
+          <button data-act="tg-type" data-id="${t.id}" data-v="ignore" aria-pressed="${tgMode(t) === 'ignore'}">Ignore</button></div></div>`).join('')}</div>
+        <p class="hint">Work all day counts the whole day as busy. Ignore leaves it out, like a pay day.</p>` : ''}`;
+    }
+
+    case 'backup':
+      return `<p class="intro">Backup keeps a copy of the calendar safe, so it comes back if the app is ever removed from this phone. Together and notifications use it too.</p>
+        <div class="group">
+          <div class="row" id="r-code"><label for="b-code">Passcode</label><input id="b-code" type="text" value="${esc(sync.code)}" placeholder="Enter passcode" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done"></div>
+        </div>
+        <p class="hint" id="b-msg">${sync.code ? 'Status: ' + backupLabel() + (sync.at ? `. Last backed up ${tgAgo(sync.at)}.` : '.') : ''}</p>
+        <div class="actions">
+          <button class="btn primary wide" data-act="backup-save">${sync.code ? 'Save passcode' : 'Turn on backup'}</button>
+          ${sync.code ? '<button class="btn danger wide" data-act="backup-off">Turn off backup on this phone</button>' : ''}
+        </div>`;
+
+    case 'data': {
+      const nShifts = Object.keys(db.shifts).length, nPlans = db.events.length;
+      return `<div class="group">
+          <div class="row"><span class="lbl">Days with a shift</span><span class="row-val">${nShifts}</span></div>
+          <div class="row"><span class="lbl">Plans and day notes</span><span class="row-val">${nPlans}</span></div>
+          <div class="row"><span class="lbl">Kinds of shifts</span><span class="row-val">${db.shiftTypes.length}</span></div>
+        </div>
+        <div class="actions">
+          <button class="btn quiet wide" data-act="data-export">Save a copy</button>
+          <button class="btn danger wide" data-act="data-erase">Erase this phone</button>
+        </div>
+        <p class="hint">Save a copy makes a file of everything, for safekeeping. Erase this phone clears Nova from this iPhone only. Your backup isn’t touched, so entering the passcode again brings everything back.</p>`;
+    }
+
+    case 'about':
+      return `<div class="group">
+          <div class="row"><span class="lbl">Version</span><span class="row-val">${NOVA_VERSION}</span></div>
+          <div class="row"><span class="lbl">Made for</span><span class="row-val">Irina</span></div>
+        </div>
+        <div class="actions"><button class="btn quiet wide" data-act="app-update">Check for updates</button></div>
+        <p class="hint">Nova updates itself in the background. If something looks out of date, Check for updates loads the newest version now.</p>`;
+  }
+  return '';
+}
+
+function settingsChange(el) {
+  const [sec, k] = el.dataset.pref.split('.');
+  const def = PREF_DEF[sec][k];
+  let v = el.type === 'checkbox' ? el.checked : el.value;
+  if (typeof def === 'number') v = Number(v);
+  if (sec === 'share' && k === 'prefix') v = String(v).trim().slice(0, 24) || 'Work';
+  if (el.type === 'time' && !v) return openSettings(ctx.page, true);   // cleared a time: keep the old one
+  setPref(sec, k, v);
+  render();
+  openSettings(ctx.page, true);
+}
+function settingsPick(key, raw) {
+  const [sec, k] = key.split('.');
+  const def = PREF_DEF[sec][k];
+  setPref(sec, k, typeof def === 'number' ? Number(raw) : typeof def === 'boolean' ? raw === 'true' : raw);
+  render();
+  openSettings(ctx.page, true);
+}
+
+function exportData() {
+  const copy = { app: 'nova', version: NOVA_VERSION, saved: new Date().toISOString(), shiftTypes: db.shiftTypes, shifts: db.shifts, events: db.events, skips: db.skips, settings: db.settings };
+  const name = `Nova copy ${todayStr()}.json`, blob = new Blob([JSON.stringify(copy, null, 2)], { type: 'application/json' });
+  let file = null;
+  try { file = new File([blob], name, { type: 'application/json' }); } catch (e) {}
+  if (file && navigator.canShare && navigator.canShare({ files: [file] })) { navigator.share({ files: [file] }).catch(() => {}); return; }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+async function eraseData() {
+  const ok = await ask(sync.code ? 'Clear Nova from this iPhone? Your backup stays, and the passcode brings it back.' : 'Backup is off, so this deletes everything for good.', [{ label: 'Erase this phone', value: true, danger: true }]);
+  if (!ok) return;
+  try { if (ntSupported()) { const reg = await navigator.serviceWorker.ready, sub = await reg.pushManager.getSubscription(); if (sub) { try { await ntApi('unsubscribe', { endpoint: sub.endpoint }); } catch (e) {} await sub.unsubscribe(); } } } catch (e) {}
+  try { ['nova:v1', 'nova:sync', 'nova:together'].forEach(k => localStorage.removeItem(k)); } catch (e) {}
+  location.reload();
+}
+async function appUpdate() {
+  try { const reg = await navigator.serviceWorker.getRegistration(); if (reg) await reg.update(); const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); } catch (e) {}
+  location.reload();
 }
 
 /* ───────── Navigation ───────── */
@@ -1980,12 +2533,21 @@ document.addEventListener('click', e => {
       case 'paint-done': finishPaint(); break;
       case 'paint-back': $('#review').hidden = true; break;
       case 'paint-confirm': confirmPaint(); break;
-      case 'share': if (ui.view !== 'together') shareImage(); break;
+      case 'share': if (ui.view !== 'together') openShare(); break;
+      case 'sh-opt': SH.opt[d.k] = d.v === 'true' ? true : d.v === 'false' ? false : d.v; renderShare(); break;
+      case 'sh-go': shareGo(); break;
+      case 'settings': ui.paint = null; render(); openSettings(d.page || 'home'); break;
+      case 'pref': settingsPick(d.k, d.v); break;
+      case 'nt-on': ntEnable(); break;
+      case 'nt-off': ntDisable(); break;
+      case 'nt-test': ntTest(); break;
+      case 'data-export': exportData(); break;
+      case 'data-erase': eraseData(); break;
+      case 'app-update': appUpdate(); break;
       case 'tg-refresh': tgFetch(); break;
-      case 'tg-settings': openTgSettings(); break;
-      case 'tg-settings-close': if (ctx.backToShifts) openShifts(); else closeSheet(); break;
+      case 'tg-settings': openSettings('together'); break;
       case 'tg-set': tgSet(d.k, Number(d.v)); break;
-      case 'tg-type': { const t = typeById(d.id); if (t) { t.together = d.v; save(); render(); openTgSettings(); } break; }
+      case 'tg-type': { const t = typeById(d.id); if (t) { t.together = d.v; save(); render(); openSettings('together', true); } break; }
       case 'shift-tg': ctx.tg = d.v; sheet.querySelectorAll('[data-act="shift-tg"]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === d.v))); break;
       case 'add-event': openEvent(null, null, d.date || null); break;
       case 'shifts': ui.paint = null; render(); openShifts(); break;
@@ -1998,11 +2560,10 @@ document.addEventListener('click', e => {
       case 'save-shift': saveShift(); break;
       case 'delete-shift': deleteShift(); break;
       case 'pick-color': ctx.color = d.c; sheet.querySelectorAll('.swatch').forEach(s => s.setAttribute('aria-pressed', String(s.dataset.c === d.c))); break;
-      case 'backup': openBackup(); break;
-      case 'backup-close': if (ctx.backToShifts) openShifts(); else closeSheet(); break;
+      case 'backup': openSettings('backup'); break;
       case 'backup-save': saveBackup(); break;
       case 'backup-off': backupOff(); break;
-      case 'week-start': db.settings.weekStart = Number(d.v); save(); render(); openShifts(); break;
+      case 'week-start': db.settings.weekStart = Number(d.v); save(); render(); openSettings('calendar', true); break;
     }
     return;
   }
@@ -2017,8 +2578,9 @@ document.addEventListener('click', e => {
 scrim.addEventListener('click', closeSheet);
 sheet.addEventListener('change', e => {
   syncEventForm(); syncShiftForm();
+  if (e.target.dataset && e.target.dataset.pref) { settingsChange(e.target); return; }
   const k = e.target.dataset && e.target.dataset.tgset;
-  if (k === 'share') { db.settings.shareOn = e.target.checked; save(); }
+  if (k === 'share') { db.settings.shareOn = e.target.checked; save(); openSettings('together', true); }
   else if (k) tgSet(k, Number(e.target.value));
 });
 sheet.addEventListener('input', e => { const r = e.target.closest('.row.bad'); if (r) r.classList.remove('bad'); });
@@ -2035,7 +2597,7 @@ document.addEventListener('keydown', e => {
   m.addEventListener('touchend', e => {
     if (!on) return; on = false;
     const t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0;
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.8) step(dx < 0 ? 1 : -1);
+    if (pref('calendar').swipe && Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.8) step(dx < 0 ? 1 : -1);
   }, { passive: true });
 })();
 
@@ -2072,6 +2634,7 @@ document.addEventListener('visibilitychange', () => {
 });
 
 /* ───────── Boot ───────── */
+applyPrefs();
 render();
 const setHeadH = () => document.documentElement.style.setProperty('--head-h', $('.head').offsetHeight + 'px');
 setHeadH(); window.addEventListener('resize', setHeadH);
@@ -2079,7 +2642,7 @@ if (sync.code) queueSync(300);
 tgMaybeFetch();
 window.addEventListener('online', () => queueSync(200));
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
-if ('serviceWorker' in navigator && location.protocol === 'https:') {
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
 </script>
