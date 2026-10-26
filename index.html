@@ -383,6 +383,139 @@ button.row{text-align:left}
 .ask-card button.cancel{color:var(--ink-2);font-weight:500}
 .ask-card button:active{background:rgba(120,50,85,.06)}
 
+/* ───────── Together ─────────
+   Everything here is tg- prefixed so it can't collide with the calendar's classes. */
+:root{
+  --tg-me:var(--accent);
+  --tg-them:#7b6cf6;
+  --tg-free:#2fb985;
+  --tg-free-wash:rgba(47,185,133,.20);
+  --tg-sleep:#a99fa6;
+}
+.head.tg-mode .title-btn svg,.head.tg-mode .arrows,.head.tg-mode .head-acts{visibility:hidden}
+.head.tg-mode .title-btn{pointer-events:none}
+.head .seg button{padding:7px 14px;min-width:70px}
+
+.tg-pull{position:fixed;left:50%;top:calc(var(--head-h) + 8px);z-index:4;transform:translate(-50%,-6px);opacity:0;pointer-events:none;
+  padding:6px 14px;border-radius:var(--r-pill);background:var(--glass-strong);border:1px solid var(--edge);box-shadow:var(--shadow-s);
+  font-size:13px;font-weight:600;color:var(--ink-2);transition:opacity .15s,transform .15s}
+.tg-pull.ready{color:var(--accent-ink)}
+.tg-pull.on{opacity:1;transform:translate(-50%,0)}
+
+.tg-state{border-radius:var(--r-l);padding:var(--s5)}
+.tg-state h2{font-family:var(--round);font-size:20px;font-weight:700;margin-bottom:4px}
+.tg-state p{color:var(--ink-2);font-size:15px;margin-bottom:var(--s4)}
+.tg-loading p{margin:0}
+.tg-skel{height:14px;border-radius:7px;margin-top:var(--s3);background:linear-gradient(90deg,rgba(120,50,85,.07),rgba(120,50,85,.13),rgba(120,50,85,.07));background-size:200% 100%;animation:tgShine 1.2s linear infinite}
+.tg-skel-s{width:60%}
+@keyframes tgShine{from{background-position:200% 0}to{background-position:0 0}}
+
+.tg-banner{font-size:14px;color:var(--ink-2);background:rgba(255,255,255,.66);border:1px solid var(--edge);border-radius:var(--r-m);padding:10px 14px;margin-bottom:var(--s3)}
+.tg-banner b{color:var(--ink);font-weight:600}
+
+.tg-hero{border-radius:var(--r-xl);padding:var(--s5) var(--s4) var(--s4);cursor:pointer;
+  background:linear-gradient(160deg,rgba(255,255,255,.82),rgba(255,255,255,.58));}
+.tg-hero:active{transform:scale(.99)}
+.tg-hero-none{cursor:default}
+.tg-hero-none:active{transform:none}
+.tg-hero-k{font-size:14px;font-weight:600;color:var(--accent-ink)}
+.tg-hero-day{font-family:var(--round);font-weight:700;font-size:30px;letter-spacing:-.02em;line-height:1.1;margin:4px 0 2px}
+.tg-hero-none .tg-hero-day{font-size:22px}
+.tg-hero-sub{color:var(--ink-2);font-size:15px;margin-top:6px}
+.tg-hero-when{display:flex;align-items:center;gap:var(--s2);font-size:17px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums;margin-bottom:var(--s4)}
+.tg-len{display:inline-block;font-size:13px;font-weight:700;font-family:var(--round);color:#18825c;background:rgba(47,185,133,.14);padding:2px 8px;border-radius:var(--r-pill);white-space:nowrap}
+
+/* timeline */
+.tg-tl{display:grid;grid-template-columns:1fr;gap:0 8px;align-items:start}
+.tg-tl-big{grid-template-columns:auto 1fr}
+.tg-tl-names{display:flex;flex-direction:column;gap:6px;padding-top:1px}
+.tg-tl-names span{height:16px;line-height:16px;font-size:12px;font-weight:600;color:var(--ink-2)}
+.tg-tl-names span:first-child{color:color-mix(in srgb,var(--tg-me) 70%,#3a0a22)}
+.tg-tl-names span:last-child{color:color-mix(in srgb,var(--tg-them) 70%,#1e1550)}
+.tg-tl-body{min-width:0}
+.tg-tl-track{position:relative;display:flex;flex-direction:column;gap:6px}
+.tg-tl:not(.tg-tl-big) .tg-tl-track{gap:3px}
+.tg-lane{position:relative;height:16px;border-radius:5px;background:rgba(120,50,85,.06);overflow:hidden}
+.tg-tl:not(.tg-tl-big) .tg-lane{height:6px;border-radius:3px}
+.tg-blk{position:absolute;top:0;bottom:0}
+.tg-lane-me{--c:var(--tg-me)}
+.tg-lane-them{--c:var(--tg-them)}
+.tg-blk-work{background:var(--c)}
+.tg-blk-plan{background:repeating-linear-gradient(135deg,var(--c) 0 3px,color-mix(in srgb,var(--c) 22%,#fff) 3px 6px)}
+.tg-blk-sleep{background:repeating-linear-gradient(45deg,var(--tg-sleep) 0 1.5px,rgba(169,159,166,.18) 1.5px 5px)}
+.tg-band{position:absolute;top:-3px;bottom:-3px;border-radius:6px;background:var(--tg-free-wash);box-shadow:inset 0 0 0 1.5px rgba(47,185,133,.55)}
+.tg-band-maybe{background:rgba(47,185,133,.08);box-shadow:none;outline:1.5px dashed rgba(47,185,133,.6);outline-offset:-1.5px}
+.tg-tl:not(.tg-tl-big) .tg-band{top:-2px;bottom:-2px;border-radius:4px}
+.tg-past{position:absolute;left:0;top:-3px;bottom:-3px;z-index:1;background:rgba(253,243,246,.66);border-radius:6px}
+.tg-ticks{position:relative;height:16px;margin-top:5px}
+.tg-ticks span{position:absolute;top:0;transform:translateX(-50%);font-size:11px;font-weight:500;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.tg-ticks span:first-child{transform:none}
+.tg-ticks span:last-child{transform:translateX(-100%)}
+.tg-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:var(--s3);font-size:12px;color:var(--ink-2)}
+.tg-legend span{display:inline-flex;align-items:center;gap:5px}
+.tg-key{width:14px;height:9px;border-radius:3px;display:inline-block}
+.tg-key-work{background:linear-gradient(90deg,var(--tg-me) 50%,var(--tg-them) 50%)}
+.tg-key-plan{background:repeating-linear-gradient(135deg,var(--ink-3) 0 2px,#fff 2px 4px)}
+.tg-key-sleep{background:repeating-linear-gradient(45deg,var(--tg-sleep) 0 1.5px,rgba(169,159,166,.2) 1.5px 4px)}
+.tg-key-band{background:var(--tg-free-wash);box-shadow:inset 0 0 0 1.5px rgba(47,185,133,.55)}
+
+.tg-chips{display:flex;flex-wrap:wrap;gap:var(--s2);margin:var(--s4) 0 var(--s2)}
+.tg-chip{font-size:13.5px;font-weight:600;color:var(--ink);padding:6px 12px;border-radius:var(--r-pill);background:rgba(255,255,255,.7);border:1px solid var(--edge)}
+
+.tg-week{margin-top:var(--s5)}
+.tg-week h3{font-family:var(--round);font-size:15px;font-weight:700;color:var(--ink-2);margin:0 var(--s1) var(--s2)}
+.tg-rows{display:flex;flex-direction:column;gap:var(--s2)}
+.tg-row{display:grid;grid-template-columns:44px 1fr;gap:var(--s3);align-items:start;width:100%;text-align:left;
+  padding:var(--s3) var(--s4) var(--s3) var(--s3);border-radius:var(--r-l);background:rgba(255,255,255,.62);border:1px solid var(--edge);box-shadow:var(--shadow-s)}
+.tg-row:active{transform:scale(.985)}
+.tg-k-full{background:linear-gradient(90deg,rgba(47,185,133,.14),rgba(255,255,255,.7) 65%)}
+.tg-k-maybe{background:rgba(255,255,255,.44);box-shadow:none}
+.tg-row-date{display:flex;flex-direction:column;align-items:center;gap:1px}
+.tg-row-date small{font-size:12px;font-weight:600;color:var(--ink-2)}
+.tg-row-date b{font-family:var(--round);font-size:22px;font-weight:700;line-height:1.1}
+.tg-row-main{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tg-row-top{display:flex;align-items:center;justify-content:space-between;gap:var(--s2)}
+.tg-row-top b{font-family:var(--round);font-weight:700;font-size:16.5px}
+.tg-k-full .tg-row-top b{color:#18825c}
+.tg-k-maybe .tg-row-top b{color:var(--ink-2)}
+.tg-k-maybe .tg-len{color:var(--ink-2);background:rgba(120,50,85,.07)}
+.tg-row-time{font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.tg-row-time i{font-style:normal;color:var(--ink-3)}
+.tg-row-skip{font-size:13.5px;color:var(--ink-2)}
+.tg-row .tg-tl{margin-top:8px}
+
+.tg-foot{margin-top:var(--s6);padding:0 var(--s1);font-size:13.5px;color:var(--ink-2)}
+.tg-foot p{margin-bottom:6px}
+.tg-foot-acts{display:flex;flex-wrap:wrap;align-items:center;gap:2px var(--s4);margin-top:var(--s2)}
+.tg-foot-acts .link{font-size:14px}
+
+/* day sheet */
+.tg-day-tl{padding:var(--s4)}
+.tg-cols{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);margin-top:var(--s5)}
+.tg-col h3{font-family:var(--round);font-size:15px;font-weight:700;margin:0 var(--s1) var(--s2)}
+.tg-col-me h3{color:color-mix(in srgb,var(--tg-me) 70%,#3a0a22)}
+.tg-col-them h3{color:color-mix(in srgb,var(--tg-them) 70%,#1e1550)}
+.tg-col ul{list-style:none;background:rgba(255,255,255,.82);border:1px solid #fff;border-radius:var(--r-m);box-shadow:var(--shadow-s);overflow:hidden}
+.tg-li{display:flex;flex-direction:column;gap:1px;padding:10px 12px 10px 24px;border-top:1px solid var(--hair);position:relative;font-size:14px}
+.tg-li:first-child{border-top:0}
+.tg-li::before{content:"";position:absolute;left:10px;top:15px;width:8px;height:8px;border-radius:50%}
+.tg-col-me .tg-li{--c:var(--tg-me)}
+.tg-col-them .tg-li{--c:var(--tg-them)}
+.tg-li-work::before{background:var(--c)}
+.tg-li-plan::before{background:repeating-linear-gradient(135deg,var(--c) 0 2px,#fff 2px 4px);box-shadow:inset 0 0 0 1px var(--c)}
+.tg-li-note::before{box-shadow:inset 0 0 0 1.5px var(--ink-3)}
+.tg-li-sleep::before{background:var(--tg-sleep)}
+.tg-li b{font-weight:600;overflow-wrap:anywhere}
+.tg-li span{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.tg-col-none{font-size:14px;color:var(--ink-3);padding:var(--s2) var(--s1)}
+
+/* settings */
+.tg-hours{display:flex;align-items:center;gap:6px;font-size:15px;color:var(--ink-2)}
+.tg-hours select{flex:none;width:auto;direction:ltr;text-align:right}
+.row select[data-tgset]{direction:ltr;text-align:right;text-align-last:right}
+.tg-wide{display:flex;width:100%}
+.tg-wide button{flex:1}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
 }
@@ -400,6 +533,7 @@ button.row{text-align:left}
     <div class="seg" role="group" aria-label="View">
       <button data-act="view" data-v="week">Week</button>
       <button data-act="view" data-v="month">Month</button>
+      <button data-act="view" data-v="together">Together</button>
     </div>
     <div class="arrows">
       <button data-act="prev" aria-label="Previous"><svg class="i" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
@@ -419,7 +553,7 @@ button.row{text-align:left}
 
 <script>
 'use strict';
-/* ═════════ Nova 5 ═════════
+/* ═════════ Nova 6 ═════════
    Local-first: everything draws from localStorage. All writes go through save(),
    which is the single place background sync will hook into later. */
 
@@ -537,11 +671,11 @@ let dirtySeq = 0, syncing = false, syncTimer = null;
 
 const SYNC_TABLES = ['shift_types', 'events', 'shifts', 'skips', 'settings'];
 const NORM = {
-  shift_types: r => ({ id: r.id, name: r.name, label: r.label || '', start_time: r.start_time, end_time: r.end_time, color: r.color, position: r.position || 0 }),
+  shift_types: r => ({ id: r.id, name: r.name, label: r.label || '', start_time: r.start_time, end_time: r.end_time, color: r.color, position: r.position || 0, together: r.together === 'work' || r.together === 'ignore' ? r.together : null }),
   events: r => ({ id: r.id, title: r.title, date: r.date, start_time: r.start_time || null, end_time: r.end_time || null, all_day: !!r.all_day, notes: r.notes || '', repeat: r.repeat || 'none', repeat_until: r.repeat_until || null }),
   shifts: r => ({ date: r.date, shift_type_id: r.shift_type_id }),
   skips: r => ({ event_id: r.event_id, date: r.date }),
-  settings: r => ({ id: r.id, view: r.view || 'week', week_start: r.week_start || 0 })
+  settings: r => ({ id: r.id, view: r.view || 'week', week_start: r.week_start || 0, share_on: r.share_on !== false })
 };
 const ROWKEY = { shift_types: r => r.id, events: r => r.id, shifts: r => r.date, skips: r => r.event_id + '|' + r.date, settings: r => r.id };
 function toRows(d) {
@@ -551,7 +685,7 @@ function toRows(d) {
     events: d.events.map(NORM.events),
     shifts: Object.entries(d.shifts).filter(([, id]) => typeIds.has(id)).map(([date, id]) => ({ date, shift_type_id: id })),
     skips: d.skips.filter(s => evIds.has(s.event_id)).map(NORM.skips),
-    settings: [{ id: 'main', view: d.settings.view, week_start: d.settings.weekStart }]
+    settings: [{ id: 'main', view: d.settings.view, week_start: d.settings.weekStart, share_on: d.settings.shareOn !== false }]
   };
 }
 function fromRows(r) {
@@ -561,7 +695,7 @@ function fromRows(r) {
     shifts: Object.fromEntries(r.shifts.map(x => [x.date, x.shift_type_id])),
     events: r.events.map(x => ({ ...x })),
     skips: r.skips.map(x => ({ ...x })),
-    settings: st ? { view: st.view, weekStart: st.week_start } : { ...db.settings }
+    settings: st ? { ...db.settings, view: st.view, weekStart: st.week_start, shareOn: st.share_on !== false } : { ...db.settings }   // keeps phone-only settings like Together's
   };
 }
 function normAll(data) {
@@ -627,13 +761,13 @@ async function syncNow() {
 }
 
 /* ───────── UI state ───────── */
-const ui = { view: db.settings.view === 'month' ? 'month' : 'week', anchor: todayStr(), paint: null, lastPaint: null };
+const ui = { view: ['month', 'together'].includes(db.settings.view) ? db.settings.view : 'week', anchor: todayStr(), paint: null, lastPaint: null };
 
 /* ───────── Render ───────── */
 function render(dir) {
   renderHead();
   const v = $('#view');
-  v.innerHTML = ui.view === 'week' ? weekHTML() : monthHTML();
+  v.innerHTML = ui.view === 'together' ? togetherHTML() : ui.view === 'week' ? weekHTML() : monthHTML();
   if (dir) { v.classList.remove('go-next', 'go-prev'); void v.offsetWidth; v.classList.add(dir > 0 ? 'go-next' : 'go-prev'); }
   renderDock();
   document.body.classList.toggle('painting', !!ui.paint);
@@ -642,7 +776,10 @@ function render(dir) {
 function renderHead() {
   const today = todayStr(), nowY = new Date().getFullYear();
   let title, showToday;
-  if (ui.view === 'week') {
+  $('.head').classList.toggle('tg-mode', ui.view === 'together');
+  if (ui.view === 'together') {
+    title = 'Together'; showToday = false;
+  } else if (ui.view === 'week') {
     const s = weekStartOf(ui.anchor), e = addDays(s, 6), a = pd(s), b = pd(e);
     title = a.getMonth() === b.getMonth()
       ? `${MON[a.getMonth()]} ${a.getDate()} – ${b.getDate()}`
@@ -751,6 +888,7 @@ function renderDock() {
 
 /* ───────── Paint mode ───────── */
 function startPaint() {
+  if (ui.view === 'together') setView('week');
   if (!db.shiftTypes.length) { openShifts(); return; }
   const id = ui.lastPaint && (ui.lastPaint === 'clear' || typeById(ui.lastPaint)) ? ui.lastPaint : sortedTypes()[0].id;
   ui.paint = { id, before: {}, hist: [] };   // before: what each touched day had when painting started
@@ -976,6 +1114,7 @@ function openShifts() {
       <div class="seg sm"><button data-act="week-start" data-v="0" aria-pressed="${db.settings.weekStart === 0}">Sunday</button><button data-act="week-start" data-v="1" aria-pressed="${db.settings.weekStart === 1}">Monday</button></div>
     </div>
     <button class="row" data-act="backup" style="width:100%"><span class="lbl">Backup</span><span class="row-val"><span id="backupStatus">${backupLabel()}</span>${ICON.chev}</span></button>
+    <button class="row" data-act="tg-settings" style="width:100%"><span class="lbl">Together</span><span class="row-val"><span>${db.settings.shareOn !== false ? 'Sharing on' : 'Sharing off'}</span>${ICON.chev}</span></button>
     </div>`);
   initPresetDrag();
 }
@@ -1037,7 +1176,7 @@ async function saveBackup() {
   msg.textContent = 'Checking…';
   clearTimeout(syncTimer);
   await syncNow();
-  if (sync.state === 'ok' && ctx.kind === 'backup') { if (ctx.backToShifts) openShifts(); else closeSheet(); }
+  if (sync.state === 'ok' && ctx.kind === 'backup') { if (ctx.backToShifts) openShifts(); else closeSheet(); render(); tgMaybeFetch(); }
   else if (document.getElementById('b-msg')) {
     $('#b-msg').textContent = sync.state === 'bad' ? 'That passcode is not right.' : 'Could not reach the backup. Check the connection and try again.';
     if (sync.state === 'bad') $('#r-code').classList.add('bad');
@@ -1053,7 +1192,8 @@ function openShiftForm(id) {
   const t = id ? typeById(id) : null;
   const used = new Set(db.shiftTypes.map(x => x.color));
   const v = t || { name: '', label: '', start_time: '07:00', end_time: '19:30', color: COLORS.find(c => !used.has(c)) || COLORS[0] };
-  ctx = { kind: 'shift', id: t ? t.id : null, color: v.color };
+  ctx = { kind: 'shift', id: t ? t.id : null, color: v.color, tg: t ? (t.together || null) : null };
+  const tgNow = tgMode({ name: v.name, together: ctx.tg });
   openSheet(`
     <div class="sheet-head"><h2>${t ? 'Edit shift' : 'New shift'}</h2><button class="link" data-act="shifts">Cancel</button></div>
     <div class="group">
@@ -1067,6 +1207,10 @@ function openShiftForm(id) {
     </div>
     <p class="hint">Leave the times empty if this shift changes from day to day.</p>
     <p class="hint" id="s-night" hidden>Ends the next day.</p>
+    <div id="s-tg">
+      <div class="sub">With no set time, Together counts it as</div>
+      <div class="seg sm tg-wide"><button data-act="shift-tg" data-v="work" aria-pressed="${tgNow === 'work'}">Work all day</button><button data-act="shift-tg" data-v="ignore" aria-pressed="${tgNow === 'ignore'}">Ignore</button></div>
+    </div>
     <div class="group" style="margin-top:12px"><div class="swatches">
       ${COLORS.map(c => `<button class="swatch" style="--c:${c}" data-act="pick-color" data-c="${c}" aria-pressed="${c === v.color}" aria-label="Colour"></button>`).join('')}
     </div></div>
@@ -1080,13 +1224,14 @@ function syncShiftForm() {
   if (!$('#s-start')) return;
   const a = $('#s-start').value, b = $('#s-end').value;
   $('#s-night').hidden = !(a && b && b <= a);
+  $('#s-tg').hidden = !!(a && b);
 }
 function saveShift() {
   const name = $('#s-name').value.trim();
   if (!name) { $('#r-name').classList.add('bad'); $('#s-name').focus(); return; }
   const f = {
     name, label: ($('#s-label').value.trim() || name.slice(0, 1)).slice(0, 3).toUpperCase(),
-    start_time: $('#s-start').value || null, end_time: $('#s-end').value || null, color: ctx.color
+    start_time: $('#s-start').value || null, end_time: $('#s-end').value || null, color: ctx.color, together: ctx.tg || null
   };
   const t = ctx.id ? typeById(ctx.id) : null;
   if (t) Object.assign(t, f);
@@ -1305,8 +1450,533 @@ function jumpTo(y, m) {
   closeSheet(); render(dir); $('main').scrollTop = 0;
 }
 
+/*TOGETHER-CORE-START*/
+/* Together: when are both people free? Pure functions, no screen code.
+   Glance and Nova use this exact block, so both apps always agree.
+   Times are local (both phones are in the same time zone).
+
+   Item: {s, e (ms), allDay, kind:'work'|'plan'|'note', title, who:'me'|'them'}
+     work = can't move · plan = could be skipped · note = never busy
+   TG.plan({items, from, days, now, through:{me,them}, opt:{h0,h1,minH,sleep}})
+     h0/h1   hang hours (9 and 23 = 9am to 11pm)
+     minH    shortest time that counts as a hang, in hours
+     sleep   after an overnight shift ends in the morning, busy until this hour (0 = off)
+     through last date ('YYYY-MM-DD') each person's schedule is filled in, or null
+   Each day comes back as one of:
+     full    neither works during hang hours ("day off together")
+     free    a stretch of at least minH with nothing in the way
+     maybe   free only if someone skips a flexible plan (skip lists them)
+     none    nothing long enough
+     unknown past someone's filled-in schedule */
+var TG = (function () {
+  var MIN = 6e4, HOUR = 36e5;
+  function sod(ms) { var d = new Date(ms); return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime(); }
+  function next(ms) { var d = new Date(ms); return new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1).getTime(); }
+  function at(day, h) { var d = new Date(day); return new Date(d.getFullYear(), d.getMonth(), d.getDate(), Math.floor(h), Math.round((h % 1) * 60)).getTime(); }
+  function key(ms) { var d = new Date(ms); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function parse(s) { // "YYYY-MM-DD" or "YYYY-MM-DDTHH:MM", local wall time
+    var m = /^(\d{4})-(\d\d)-(\d\d)(?:[T ](\d\d):(\d\d))?/.exec(s || '');
+    return m ? new Date(+m[1], m[2] - 1, +m[3], +(m[4] || 0), +(m[5] || 0)).getTime() : NaN;
+  }
+  // Items from the other app's /api/share answer
+  function fromShare(list, who) {
+    var out = [];
+    (list || []).forEach(function (x) {
+      var s = parse(x.start), e = parse(x.end);
+      if (isNaN(s)) return;
+      if (isNaN(e) || e < s) e = s;
+      var k = x.kind === 'work' || x.kind === 'note' ? x.kind : 'plan';
+      out.push({ s: s, e: e, allDay: !!x.all_day, kind: k, title: String(x.title || ''), who: who });
+    });
+    return out;
+  }
+  // [a,b] minus a list of [s,e] blocks
+  function minus(a, b, blocks) {
+    var segs = a < b ? [[a, b]] : [];
+    blocks.forEach(function (k) {
+      var out = [];
+      segs.forEach(function (g) {
+        if (k[1] <= g[0] || k[0] >= g[1]) { out.push(g); return; }
+        if (k[0] > g[0]) out.push([g[0], k[0]]);
+        if (k[1] < g[1]) out.push([k[1], g[1]]);
+      });
+      segs = out;
+    });
+    return segs;
+  }
+  function longest(segs) { var b = null; segs.forEach(function (g) { if (!b || g[1] - g[0] > b[1] - b[0]) b = g; }); return b; }
+  function partOfDay(a, b) {
+    var h = new Date(a).getHours();
+    if (b - a >= 7 * HOUR) return h < 12 ? 'Most of the day' : 'Afternoon & evening';
+    return h < 12 ? 'Morning' : h < 16 ? 'Afternoon' : 'Evening';
+  }
+
+  function plan(o) {
+    var opt = o.opt || {}, h0 = opt.h0 == null ? 9 : opt.h0, h1 = opt.h1 == null ? 23 : opt.h1;
+    var minMs = (opt.minH || 3) * HOUR, sleep = opt.sleep == null ? 14 : opt.sleep;
+    var now = o.now || Date.now(), thr = o.through || {};
+    var items = (o.items || []).filter(function (x) { return x.kind !== 'note'; });
+    var days = [], day = sod(o.from || now), counts = { full: 0, free: 0, maybe: 0 }, first = null, unknown = null;
+
+    for (var i = 0; i < (o.days || 28); i++, day = next(day)) {
+      var k = key(day), dEnd = next(day);
+      var W0 = at(day, h0), W1 = h1 >= 24 ? dEnd : at(day, h1), full0 = W0, full1 = W1;
+      if (now > W0) W0 = Math.ceil(now / (15 * MIN)) * 15 * MIN; // today: only what's left
+      var D = { key: k, day: day, win: [W0, W1], kind: 'none', segs: [], skip: [], plans: [], busy: { me: [], them: [] } };
+      days.push(D);
+      var lateMe = thr.me && k > thr.me, lateThem = thr.them && k > thr.them;
+      if (lateMe || lateThem) {
+        D.kind = 'unknown'; D.who = lateMe && lateThem ? 'both' : lateMe ? 'me' : 'them';
+        if (!unknown) unknown = { key: k, who: D.who };
+        continue;
+      }
+      if (W1 - W0 < minMs) continue;
+
+      var hard = [], soft = [];
+      items.forEach(function (x) {
+        var s = x.allDay ? sod(x.s) : x.s, e = x.allDay ? sod(x.e) : x.e;
+        if (x.allDay && x.kind !== 'work') return;        // all-day plans are reminders, not busy time
+        if (e > day && s < dEnd) {
+          var blk = [Math.max(s, day), Math.min(e, dEnd), x];
+          (x.kind === 'work' ? hard : soft).push(blk);
+          if (e > full0 && s < full1) D.busy[x.who].push({ a: Math.max(s, full0), b: Math.min(e, full1), kind: x.kind, title: x.title });
+        }
+        // An overnight shift that ended this morning: asleep until the sleep hour
+        if (sleep && x.kind === 'work' && !x.allDay && s < day && e > day && e - s >= 6 * HOUR && new Date(e).getHours() < 12) {
+          var wake = at(day, sleep);
+          if (wake > e) {
+            hard.push([e, wake, x]);
+            if (wake > full0) D.busy[x.who].push({ a: Math.max(e, full0), b: Math.min(wake, full1), kind: 'sleep', title: 'Sleeping after ' + x.title });
+          }
+        }
+      });
+
+      var hardFree = minus(W0, W1, hard).filter(function (g) { return g[1] - g[0] >= minMs; });
+      if (!hardFree.length) continue;
+
+      var inWin = function (b) { return b[1] > W0 && b[0] < W1; };
+      if (full1 - full0 >= 8 * HOUR && W0 === full0 && !hard.some(inWin)) {
+        D.kind = 'full'; D.segs = [[W0, W1]];
+        D.plans = soft.filter(inWin).map(function (b) { return b[2]; });
+      } else {
+        var softFree = [];
+        hardFree.forEach(function (g) {
+          minus(g[0], g[1], soft).forEach(function (f) { if (f[1] - f[0] >= minMs) softFree.push(f); });
+        });
+        if (softFree.length) { D.kind = 'free'; D.segs = softFree; }
+        else {
+          var g = longest(hardFree);
+          D.kind = 'maybe'; D.segs = [g];
+          D.skip = soft.filter(function (b) { return b[1] > g[0] && b[0] < g[1]; }).map(function (b) { return b[2]; });
+        }
+      }
+      var best = D.kind === 'full' ? D.segs[0] : longest(D.segs);
+      D.a = best[0]; D.b = best[1]; D.len = best[1] - best[0];
+      D.label = D.kind === 'full' ? 'Day off together' : partOfDay(D.a, D.b);
+      counts[D.kind]++;
+      if (!first && (D.kind === 'full' || D.kind === 'free')) first = D;
+    }
+    return { days: days, counts: counts, next: first, unknown: unknown };
+  }
+
+  return { plan: plan, fromShare: fromShare, parse: parse, key: key, minus: minus };
+})();
+/*TOGETHER-CORE-END*/
+
+/*SHARE-ITEMS-START*/
+/* Turns Nova's tables into the shared schedule format both apps speak.
+   This exact block lives in api/share.js (what Joe's Glance receives) and in index.html
+   (Irina's side of the Together tab), so both always describe her day the same way.
+   o = { types, shifts:[{date, shift_type_id}], events, skips:[{event_id, date}], from, to }
+   from/to are 'YYYY-MM-DD', to not included. Returns [{ title, start, end, all_day, kind }] */
+function shareItems(o) {
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  var toU = function (s) { var p = s.split('-'); return Date.UTC(+p[0], p[1] - 1, +p[2]); };
+  var fromU = function (ms) { var d = new Date(ms); return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()); };
+  var plus = function (s, n) { return fromU(toU(s) + n * 864e5); };
+  var hm = function (t) {
+    var m = /^(\d{1,2}):(\d{2})/.exec(typeof t === 'string' ? t : '');
+    return m && +m[1] < 24 ? pad(+m[1]) + ':' + m[2] : null;
+  };
+  var from = o.from, to = o.to, prev = plus(from, -1), out = [];
+  var overlaps = function (start, end) { return start < to && end > from; };   // string compare works on these formats
+  var types = {}, skip = {};
+  (o.types || []).forEach(function (t) { types[t.id] = t; });
+  (o.skips || []).forEach(function (s) { skip[s.event_id + '|' + s.date] = 1; });
+
+  // Shifts. The day before 'from' is included so an overnight shift that ends inside the range shows up.
+  (o.shifts || []).forEach(function (s) {
+    var t = types[s.shift_type_id];
+    if (!t || s.date < prev || s.date >= to) return;
+    var st = hm(t.start_time), et = hm(t.end_time);
+    if (st && et) {
+      var start = s.date + 'T' + st, end = (et <= st ? plus(s.date, 1) : s.date) + 'T' + et;   // end at or before start: ends the next day
+      if (overlaps(start, end)) out.push({ title: t.name, start: start, end: end, all_day: false, kind: 'work' });
+    } else if (s.date >= from) {
+      var mode = t.together || (/pay/i.test(t.name || '') ? 'ignore' : 'work');
+      out.push({ title: t.name, start: s.date, end: plus(s.date, 1), all_day: true, kind: mode === 'ignore' ? 'note' : 'work' });
+    }
+  });
+
+  // Events, with repeats expanded and skipped dates dropped.
+  var occurs = function (ev, d) {
+    if (d < ev.date) return false;
+    if (!ev.repeat || ev.repeat === 'none') return d === ev.date;
+    if (ev.repeat_until && d > ev.repeat_until) return false;
+    if (skip[ev.id + '|' + d]) return false;
+    var n = Math.round((toU(d) - toU(ev.date)) / 864e5);
+    if (ev.repeat === 'weekly') return n % 7 === 0;
+    if (ev.repeat === 'biweekly') return n % 14 === 0;
+    if (ev.repeat === 'monthly') return d.slice(8) === ev.date.slice(8);
+    return false;
+  };
+  for (var d = prev; d < to; d = plus(d, 1)) {
+    (o.events || []).forEach(function (ev) {
+      if (!ev.date || !occurs(ev, d)) return;
+      var st = ev.all_day ? null : hm(ev.start_time);
+      if (!st) {                                   // no set time: a marker, never busy
+        if (d >= from) out.push({ title: ev.title, start: d, end: plus(d, 1), all_day: true, kind: 'note' });
+        return;
+      }
+      var et = hm(ev.end_time), endDay = d;
+      if (!et) {                                   // no end time: call it an hour
+        var h = +st.slice(0, 2) + 1;
+        if (h >= 24) { h -= 24; endDay = plus(d, 1); }
+        et = pad(h) + st.slice(2);
+      } else if (et <= st) endDay = plus(d, 1);
+      var start = d + 'T' + st, end = endDay + 'T' + et;
+      if (overlaps(start, end)) out.push({ title: ev.title, start: start, end: end, all_day: false, kind: 'plan' });
+    });
+  }
+  return out.sort(function (a, b) { return a.start < b.start ? -1 : a.start > b.start ? 1 : 0; });
+}
+/*SHARE-ITEMS-END*/
+
+/* ───────── Together ─────────
+   When are Irina and Joe both free? Irina's side comes straight from this phone (shareItems
+   above, the same code /api/share uses). Joe's side comes from Glance through /api/partner.
+   The math is TG (together-core, shared word for word with Glance). The last good answer from
+   Glance is kept on the phone so the tab still works offline or when Glance is down. */
+const ME_NAME = 'Irina';
+const TG_KEY = 'nova:together';
+const TG_DEF = { weeks: 4, minH: 3, h0: 9, h1: 23, sleep: 14 };
+const TG_STALE = 5 * 60e3;
+const tgOpt = () => ({ ...TG_DEF, ...(db.settings.tg || {}) });
+const tgMode = t => t.together || (/pay/i.test(t.name || '') ? 'ignore' : 'work');
+const tgUntimed = t => !(t.start_time && t.end_time);
+const tg = { data: null, at: null, from: null, to: null, err: null, loading: false, plan: null };
+(() => {
+  try {
+    const c = JSON.parse(localStorage.getItem(TG_KEY));
+    if (c && c.data && Array.isArray(c.data.items)) Object.assign(tg, { data: c.data, at: c.at, from: c.from, to: c.to });
+  } catch (e) {}
+})();
+
+function tgRange() {
+  const t = todayStr();
+  return { from: addDays(t, -1), to: addDays(t, tgOpt().weeks * 7 + 1) };   // the day before catches overnight shifts
+}
+function tgNeedsFetch() {
+  const r = tgRange();
+  return !tg.data || !tg.at || Date.now() - tg.at > TG_STALE || tg.from > r.from || tg.to < r.to;
+}
+async function tgFetch() {
+  if (!sync.code || tg.loading) return;
+  const r = tgRange();
+  tg.loading = true; tgRefresh();
+  let ans;
+  try {
+    const res = await fetch(`/api/partner?from=${r.from}&to=${r.to}`, { headers: { 'x-nova-passcode': sync.code }, cache: 'no-store' });
+    if (res.status === 401) ans = { ok: false, state: 'passcode' };
+    else if (res.status === 404) ans = { ok: false, state: 'not_setup' };          // api/partner.js isn't uploaded
+    else if (!res.ok) ans = { ok: false, state: 'unreachable' };
+    else ans = await res.json();
+  } catch (e) { ans = { ok: false, state: 'offline' }; }
+  tg.loading = false;
+  if (ans && ans.ok && ans.data && Array.isArray(ans.data.items)) {
+    Object.assign(tg, { data: ans.data, at: Date.now(), from: r.from, to: r.to, err: null });
+    try { localStorage.setItem(TG_KEY, JSON.stringify({ data: tg.data, at: tg.at, from: tg.from, to: tg.to })); } catch (e) {}
+  } else tg.err = (ans && ans.state) || 'bad_answer';
+  tgRefresh();
+}
+function tgMaybeFetch() { if (ui.view === 'together' && sync.code && tgNeedsFetch()) tgFetch(); }
+function tgRefresh() {
+  if (ui.view === 'together') { $('#view').innerHTML = togetherHTML(); }
+  if (sheetOpen && ctx.kind === 'tgday' && tg.plan) openTgDay(ctx.key);
+}
+
+/* Irina's items, built from what's on this phone */
+function tgMine(from, to) {
+  return shareItems({
+    types: db.shiftTypes,
+    shifts: Object.keys(db.shifts).map(date => ({ date, shift_type_id: db.shifts[date] })),
+    events: db.events, skips: db.skips, from, to
+  });
+}
+const tgLastShift = () => Object.keys(db.shifts).filter(d => typeById(db.shifts[d])).sort().pop() || null;
+
+function tgCompute() {
+  const o = tgOpt(), today = todayStr(), days = o.weeks * 7, last = addDays(today, days - 1);
+  const r = tgRange();
+  const me = TG.fromShare(tgMine(r.from, r.to), 'me');
+  const them = TG.fromShare(tg.data.items, 'them');
+  // Joe's side only counts as known through his own known_through and through the range we actually fetched
+  const fetchedTo = tg.to ? addDays(tg.to, -1) : null;
+  let themThrough = tg.data.known_through || null;
+  if (fetchedTo && fetchedTo < last && (!themThrough || fetchedTo < themThrough)) themThrough = fetchedTo;
+  const meThrough = tgLastShift();
+  const res = TG.plan({
+    items: me.concat(them), from: pd(today).getTime(), days, now: Date.now(),
+    through: { me: meThrough, them: themThrough },
+    opt: { h0: o.h0, h1: o.h1, minH: o.minH, sleep: o.sleep }
+  });
+  tg.plan = { res, me, them, meThrough, themThrough, last, o, joe: tg.data.name || 'Joe' };
+  return tg.plan;
+}
+
+/* formatting */
+const tgHM = ms => { const d = new Date(ms); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+const tgRange2 = (a, b) => fmtRange(tgHM(a), tgHM(b));
+function tgLen(ms) {
+  const m = Math.round(ms / 60e3), h = Math.floor(m / 60), r = m % 60;
+  return h ? (r ? `${h}h ${r}m` : `${h}h`) : `${r}m`;
+}
+function tgDay(key, long) {
+  const d = pd(key), t = todayStr();
+  if (key === t) return 'Today';
+  if (key === addDays(t, 1)) return 'Tomorrow';
+  return long ? `${DOW_LONG[d.getDay()]}, ${MON[d.getMonth()]} ${d.getDate()}` : `${DOW[d.getDay()]}, ${MON[d.getMonth()]} ${d.getDate()}`;
+}
+const tgShortDate = key => { const d = pd(key); return `${DOW[d.getDay()]}, ${MON[d.getMonth()]} ${d.getDate()}`; };
+function tgLabel(D) {
+  if (D.kind === 'full') return 'Day off together';
+  if (D.kind === 'free') return 'Free ' + D.label.toLowerCase();
+  return D.label + ', maybe';
+}
+function tgSkipText(D, joe) {
+  const mine = D.skip.filter(x => x.who === 'me').map(x => x.title), his = D.skip.filter(x => x.who === 'them').map(x => x.title);
+  const parts = [];
+  if (mine.length) parts.push('you skip ' + mine.join(' and '));
+  if (his.length) parts.push(joe + ' skips ' + his.join(' and '));
+  return parts.length ? 'If ' + parts.join(' and ') : '';
+}
+function tgAgo(ms) {
+  const m = Math.round((Date.now() - ms) / 60e3);
+  if (m < 1) return 'just now';
+  if (m < 60) return m + ' min ago';
+  const h = Math.round(m / 60);
+  if (h < 24) return h + (h === 1 ? ' hour ago' : ' hours ago');
+  const d = Math.round(h / 24);
+  return d + (d === 1 ? ' day ago' : ' days ago');
+}
+
+/* timeline: one lane per person across the hang hours, green where both are free */
+function tgTimeline(D, big, joe) {
+  const o = tgOpt(), d0 = new Date(D.day);
+  const W0 = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate(), o.h0).getTime();
+  const W1 = o.h1 >= 24 ? new Date(d0.getFullYear(), d0.getMonth(), d0.getDate() + 1).getTime() : new Date(d0.getFullYear(), d0.getMonth(), d0.getDate(), o.h1).getTime();
+  const span = W1 - W0;
+  const pos = (a, b) => { const l = Math.max(0, (a - W0) / span * 100), r = Math.min(100, (b - W0) / span * 100); return r > l ? `left:${l.toFixed(2)}%;width:${(r - l).toFixed(2)}%` : null; };
+  const lane = who => (D.busy[who] || []).map(x => { const p = pos(x.a, x.b); return p ? `<i class="tg-blk tg-blk-${x.kind}" style="${p}" title="${esc(x.title)}"></i>` : ''; }).join('');
+  const bands = (D.segs || []).map(g => { const p = pos(g[0], g[1]); return p ? `<i class="tg-band${D.kind === 'maybe' ? ' tg-band-maybe' : ''}" style="${p}"></i>` : ''; }).join('');
+  const past = D.win[0] > W0 ? `<i class="tg-past" style="${pos(W0, D.win[0]) || 'width:0'}"></i>` : '';
+  let ticks = '';
+  if (big) {
+    const step = (o.h1 - o.h0) > 10 ? 3 : 2;
+    for (let h = Math.ceil(o.h0 / step) * step; h <= o.h1; h += step) {
+      const l = (h - o.h0) / (o.h1 - o.h0) * 100, hh = h % 24;
+      ticks += `<span style="left:${l.toFixed(2)}%">${hh % 12 || 12}${hh < 12 ? 'a' : 'p'}</span>`;
+    }
+  }
+  return `<div class="tg-tl${big ? ' tg-tl-big' : ''}">
+    ${big ? `<div class="tg-tl-names"><span>${esc(ME_NAME)}</span><span>${esc(joe)}</span></div>` : ''}
+    <div class="tg-tl-body">
+      <div class="tg-tl-track">${bands}${past}<div class="tg-lane tg-lane-me">${lane('me')}</div><div class="tg-lane tg-lane-them">${lane('them')}</div></div>
+      ${big ? `<div class="tg-ticks">${ticks}</div>` : ''}
+    </div>
+  </div>`;
+}
+const TG_LEGEND = `<div class="tg-legend"><span><i class="tg-key tg-key-work"></i>Work</span><span><i class="tg-key tg-key-plan"></i>Plans</span><span><i class="tg-key tg-key-sleep"></i>Sleeping</span><span><i class="tg-key tg-key-band"></i>Both free</span></div>`;
+
+const TG_STATES = {
+  nobackup: ['Turn on backup first', 'Together swaps schedules with Joe through your backup, so backup needs to be on.'],
+  not_setup: ['Together isn’t set up yet', 'Nova still needs its sharing key. Joe adds it in Vercel.'],
+  not_ready: ['Waiting on Glance', 'Joe’s app isn’t sharing yet. Pull down to check again.'],
+  key_mismatch: ['Nova and Glance can’t connect', 'The two apps have different sharing keys. Joe needs to make them match.'],
+  sharing_off: ['Joe’s sharing is off', 'Joe has turned off sharing in Glance.'],
+  unreachable: ['Can’t reach Joe’s app', 'Pull down to try again.'],
+  offline: ['You’re offline', 'Pull down to try again once you’re connected.'],
+  bad_answer: ['Joe’s app sent something unexpected', 'Pull down to try again.'],
+  passcode: ['Your backup passcode isn’t working', 'Check it in My shifts, then Backup.']
+};
+
+function togetherHTML() {
+  let h = `<div class="tg-pull" id="tgPull" aria-hidden="true">${tg.loading ? 'Updating…' : 'Pull to refresh'}</div>`;
+  if (!sync.code) {
+    const [t, p] = TG_STATES.nobackup;
+    return h + `<section class="tg-state glass"><h2>${t}</h2><p>${p}</p><button class="btn primary" data-act="backup">Turn on backup</button></section>`;
+  }
+  if (!tg.data) {
+    if (tg.loading || !tg.err) return h + `<section class="tg-state glass tg-loading"><h2>Checking ${'Joe'}’s schedule…</h2><div class="tg-skel"></div><div class="tg-skel tg-skel-s"></div></section>`;
+    const [t, p] = TG_STATES[tg.err] || TG_STATES.bad_answer;
+    return h + `<section class="tg-state glass"><h2>${t}</h2><p>${p}</p><button class="btn quiet" data-act="tg-refresh">Try again</button></section>` + tgFooter(null);
+  }
+  const P = tgCompute(), res = P.res, joe = P.joe;
+
+  if (tg.err) {
+    const [t] = TG_STATES[tg.err] || TG_STATES.bad_answer;
+    h += `<div class="tg-banner"><b>${t}.</b> Showing ${esc(joe)}’s schedule from ${tgAgo(tg.at)}.</div>`;
+  }
+
+  // hero
+  const N = res.next;
+  if (N) {
+    h += `<section class="tg-hero glass" data-tg-day="${N.key}">
+      <p class="tg-hero-k">Next time you’re both free</p>
+      <h2 class="tg-hero-day">${tgDay(N.key, true)}</h2>
+      <p class="tg-hero-when"><span>${tgRange2(N.a, N.b)}</span><b class="tg-len">${tgLen(N.len)}</b></p>
+      ${tgTimeline(N, true, joe)}
+      ${TG_LEGEND}
+    </section>`;
+  } else {
+    h += `<section class="tg-hero glass tg-hero-none">
+      <p class="tg-hero-k">Next time you’re both free</p>
+      <h2 class="tg-hero-day">Nothing in the next ${P.o.weeks} weeks</h2>
+      <p class="tg-hero-sub">No stretch of ${P.o.minH} hours lines up for both of you. A shorter hang or wider hang hours in Together settings may find one.</p>
+    </section>`;
+  }
+
+  // summary chips
+  const stretches = res.days.filter(D => D.kind === 'free').reduce((n, D) => n + D.segs.length, 0);
+  const chips = [];
+  if (res.counts.full) chips.push(`${res.counts.full} ${res.counts.full === 1 ? 'day' : 'days'} off together`);
+  if (stretches) chips.push(`${stretches} free ${stretches === 1 ? 'stretch' : 'stretches'}`);
+  if (res.counts.maybe) chips.push(`${res.counts.maybe} ${res.counts.maybe === 1 ? 'maybe' : 'maybes'}`);
+  if (chips.length) h += `<div class="tg-chips">${chips.map(c => `<span class="tg-chip">${c}</span>`).join('')}</div>`;
+
+  // rows grouped by week
+  const shown = res.days.filter(D => D.kind === 'full' || D.kind === 'free' || D.kind === 'maybe');
+  const thisWeek = weekStartOf(todayStr());
+  let curWeek = null;
+  for (const D of shown) {
+    const ws = weekStartOf(D.key);
+    if (ws !== curWeek) {
+      if (curWeek) h += '</div></section>';
+      curWeek = ws;
+      const a = pd(ws), b = pd(addDays(ws, 6));
+      const name = ws === thisWeek ? 'This week' : ws === addDays(thisWeek, 7) ? 'Next week'
+        : a.getMonth() === b.getMonth() ? `${MON[a.getMonth()]} ${a.getDate()} – ${b.getDate()}` : `${MON[a.getMonth()]} ${a.getDate()} – ${MON[b.getMonth()]} ${b.getDate()}`;
+      h += `<section class="tg-week"><h3>${name}</h3><div class="tg-rows">`;
+    }
+    const d = pd(D.key), more = D.kind === 'free' && D.segs.length > 1 ? ` <i>+${D.segs.length - 1} more</i>` : '';
+    const sub = D.kind === 'maybe' ? tgSkipText(D, joe) : '';
+    h += `<button class="tg-row tg-k-${D.kind}" data-tg-day="${D.key}">
+      <span class="tg-row-date"><small>${D.key === todayStr() ? 'Today' : DOW[d.getDay()]}</small><b>${d.getDate()}</b></span>
+      <span class="tg-row-main">
+        <span class="tg-row-top"><b>${tgLabel(D)}</b><span class="tg-len">${tgLen(D.len)}</span></span>
+        <span class="tg-row-time">${tgRange2(D.a, D.b)}${more}</span>
+        ${sub ? `<span class="tg-row-skip">${esc(sub)}</span>` : ''}
+        ${tgTimeline(D, false, joe)}
+      </span>
+    </button>`;
+  }
+  if (curWeek) h += '</div></section>';
+  return h + tgFooter(P);
+}
+
+function tgFooter(P) {
+  let f = '';
+  if (P) {
+    if (P.themThrough && P.themThrough < P.last) f += `<p>${esc(P.joe)}’s one-off shifts are on the calendar through ${tgShortDate(P.themThrough)}.</p>`;
+    if (P.meThrough && P.meThrough < P.last) f += `<p>Your shifts are filled in through ${tgShortDate(P.meThrough)}. Paint more to see further.</p>`;
+    if (!P.meThrough) f += `<p>None of your shifts are painted yet, so every day counts as off for you.</p>`;
+  }
+  const upd = tg.loading ? 'Updating…' : tg.at ? `Updated ${tgAgo(tg.at)}` : '';
+  return `<footer class="tg-foot">${f}
+    <div class="tg-foot-acts">${upd ? `<span>${upd}</span>` : ''}<button class="link" data-act="tg-refresh">Refresh</button><button class="link" data-act="tg-settings">Together settings</button></div>
+  </footer>`;
+}
+
+/* one day, in detail */
+function openTgDay(key) {
+  const P = tg.plan; if (!P) return;
+  const D = P.res.days.find(x => x.key === key); if (!D) return;
+  ctx = { kind: 'tgday', key };
+  const d = pd(key), day0 = D.day, day1 = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1).getTime();
+  const whoList = (items, who) => {
+    const list = items.filter(x => {
+      if (x.allDay) { const s = new Date(x.s); return new Date(s.getFullYear(), s.getMonth(), s.getDate()).getTime() <= day0 && x.e > day0; }
+      return x.s < day1 && x.e > day0;
+    });
+    const sleep = (D.busy[who] || []).filter(b => b.kind === 'sleep');
+    let li = list.map(x => {
+      const when = x.allDay ? '' : x.s < day0 ? `Until ${fmtTime(tgHM(x.e))}` : x.e > day1 ? `${tgRange2(x.s, x.e)} next day` : tgRange2(x.s, x.e);
+      return `<li class="tg-li tg-li-${x.kind}"><b>${esc(x.title)}</b>${when ? `<span>${when}</span>` : ''}</li>`;
+    }).join('');
+    li += sleep.map(b => `<li class="tg-li tg-li-sleep"><b>Sleeping</b><span>Until ${fmtTime(tgHM(b.b))}</span></li>`).join('');
+    return li ? `<ul>${li}</ul>` : `<p class="tg-col-none">Nothing on</p>`;
+  };
+  const free = D.kind === 'none' || D.kind === 'unknown' ? '' : `
+    <div class="sub">${D.kind === 'maybe' ? 'Free if plans move' : 'Free together'}</div>
+    <div class="group">${D.segs.map(g => `<div class="row"><span class="lbl">${tgRange2(g[0], g[1])}</span><span class="row-val">${tgLen(g[1] - g[0])}</span></div>`).join('')}</div>
+    ${D.kind === 'maybe' ? `<p class="hint">${esc(tgSkipText(D, P.joe))}.</p>` : ''}
+    ${D.kind === 'full' && D.plans.length ? `<p class="hint">Plans that day: ${D.plans.map(x => esc(x.title)).join(', ')}.</p>` : ''}`;
+  openSheet(`
+    <div class="sheet-head"><h2>${DOW_LONG[d.getDay()]}, ${MON_LONG[d.getMonth()]} ${d.getDate()}</h2><button class="link" data-act="close">Done</button></div>
+    <p class="intro">${D.kind === 'full' || D.kind === 'free' || D.kind === 'maybe' ? `${tgLabel(D)}, ${tgLen(D.len)}` : 'No shared free time this day'}</p>
+    <div class="group tg-day-tl">${tgTimeline(D, true, P.joe)}${TG_LEGEND}</div>
+    ${free}
+    <div class="tg-cols">
+      <div class="tg-col tg-col-me"><h3>${esc(ME_NAME)}</h3>${whoList(P.me, 'me')}</div>
+      <div class="tg-col tg-col-them"><h3>${esc(P.joe)}</h3>${whoList(P.them, 'them')}</div>
+    </div>`);
+}
+
+/* settings */
+function openTgSettings() {
+  const back = sheetOpen && (ctx.kind === 'shifts' || (ctx.kind === 'tgset' && ctx.backToShifts));
+  ctx = { kind: 'tgset', backToShifts: back };
+  const o = tgOpt(), untimed = sortedTypes().filter(tgUntimed);
+  const seg = (k, vals, fmt) => `<div class="seg sm">${vals.map(v => `<button data-act="tg-set" data-k="${k}" data-v="${v}" aria-pressed="${o[k] === v}">${fmt(v)}</button>`).join('')}</div>`;
+  const hr = h => h === 24 ? 'Midnight' : h === 12 ? 'Noon' : `${h % 12 || 12} ${h < 12 ? 'AM' : 'PM'}`;
+  const opts = (vals, cur, fmt) => vals.map(v => `<option value="${v}"${v === cur ? ' selected' : ''}>${fmt(v)}</option>`).join('');
+  openSheet(`
+    <div class="sheet-head"><h2>Together</h2><button class="link" data-act="tg-settings-close">Done</button></div>
+    <p class="intro">Together lines up your schedule with ${esc((tg.data && tg.data.name) || 'Joe')}’s and finds the times you’re both free.</p>
+    <div class="group">
+      <div class="row"><span class="lbl">Share my schedule with Joe</span><label class="switch"><input type="checkbox" data-tgset="share" ${db.settings.shareOn !== false ? 'checked' : ''} aria-label="Share my schedule with Joe"><span></span></label></div>
+    </div>
+    <p class="hint">${sync.code ? 'Joe sees your shifts and the names and times of your plans. Notes stay private.' : 'Sharing needs backup on.'}</p>
+    <div class="sub">Finding free time</div>
+    <div class="group">
+      <div class="row"><span class="lbl">Look ahead</span>${seg('weeks', [2, 4, 6], v => v + ' wk')}</div>
+      <div class="row"><span class="lbl">Shortest hang</span>${seg('minH', [2, 3, 4], v => v + 'h')}</div>
+      <div class="row"><span class="lbl">Hang hours</span><span class="tg-hours">
+        <select data-tgset="h0" aria-label="Hang hours start">${opts([6, 7, 8, 9, 10, 11, 12], o.h0, hr)}</select><span>to</span>
+        <select data-tgset="h1" aria-label="Hang hours end">${opts([18, 19, 20, 21, 22, 23, 24], o.h1, hr)}</select></span></div>
+      <div class="row"><label for="tg-sleep">Up after a night shift</label><select id="tg-sleep" data-tgset="sleep">${opts([0, 11, 12, 13, 14, 15, 16], o.sleep, v => v ? hr(v) : 'Off')}</select></div>
+    </div>
+    <p class="hint">After a shift that ends in the morning, Together counts that person as asleep until this time.</p>
+    ${untimed.length ? `<div class="sub">Shifts with no set time</div>
+    <div class="group">${untimed.map(t => `<div class="row"><span class="lbl">${esc(t.name)}</span><div class="seg sm">
+      <button data-act="tg-type" data-id="${t.id}" data-v="work" aria-pressed="${tgMode(t) === 'work'}">Work all day</button>
+      <button data-act="tg-type" data-id="${t.id}" data-v="ignore" aria-pressed="${tgMode(t) === 'ignore'}">Ignore</button></div></div>`).join('')}</div>
+    <p class="hint">Work all day counts the whole day as busy. Ignore leaves it out, like a pay day.</p>` : ''}`);
+}
+function tgSet(k, v) {
+  const o = tgOpt();
+  o[k] = v;
+  if (o.h1 - o.h0 < o.minH) { if (k === 'h0') o.h1 = Math.min(24, o.h0 + o.minH); else if (k === 'h1') o.h0 = Math.max(0, o.h1 - o.minH); else o.minH = Math.min(o.minH, o.h1 - o.h0); }
+  db.settings.tg = o;
+  persist();                      // these stay on this phone; nothing for Supabase
+  if (ui.view === 'together') render();
+  openTgSettings();
+  tgMaybeFetch();
+}
+
 /* ───────── Navigation ───────── */
 function step(dir) {
+  if (ui.view === 'together') return;
   if (ui.view === 'week') ui.anchor = addDays(ui.anchor, 7 * dir);
   else { const a = pd(ui.anchor); ui.anchor = ds(new Date(a.getFullYear(), a.getMonth() + dir, 1)); }
   render(dir);
@@ -1321,6 +1991,7 @@ function setView(v) {
   // coming back from a month you browsed to: land on today if it's in that month, else its first week
   if (v === 'week' && ui.anchor.slice(0, 7) === todayStr().slice(0, 7)) ui.anchor = todayStr();
   ui.view = v; db.settings.view = v; save(); render(); $('main').scrollTop = 0;
+  tgMaybeFetch();
 }
 
 /* ───────── Input wiring ───────── */
@@ -1333,7 +2004,7 @@ document.addEventListener('click', e => {
       case 'prev': step(-1); break;
       case 'next': step(1); break;
       case 'today': goToday(); break;
-      case 'jump': openJump(); break;
+      case 'jump': if (ui.view !== 'together') openJump(); break;
       case 'jump-year': openJump(Number(d.y)); break;
       case 'jump-month': jumpTo(ctx.year, Number(d.m)); break;
       case 'jump-today': closeSheet(); goToday(); break;
@@ -1343,7 +2014,13 @@ document.addEventListener('click', e => {
       case 'paint-done': finishPaint(); break;
       case 'paint-back': $('#review').hidden = true; break;
       case 'paint-confirm': confirmPaint(); break;
-      case 'share': shareImage(); break;
+      case 'share': if (ui.view !== 'together') shareImage(); break;
+      case 'tg-refresh': tgFetch(); break;
+      case 'tg-settings': openTgSettings(); break;
+      case 'tg-settings-close': if (ctx.backToShifts) openShifts(); else closeSheet(); break;
+      case 'tg-set': tgSet(d.k, Number(d.v)); break;
+      case 'tg-type': { const t = typeById(d.id); if (t) { t.together = d.v; save(); render(); openTgSettings(); } break; }
+      case 'shift-tg': ctx.tg = d.v; sheet.querySelectorAll('[data-act="shift-tg"]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === d.v))); break;
       case 'add-event': openEvent(null, null, d.date || null); break;
       case 'shifts': ui.paint = null; render(); openShifts(); break;
       case 'close': closeSheet(); break;
@@ -1363,6 +2040,8 @@ document.addEventListener('click', e => {
     }
     return;
   }
+  const tgEl = e.target.closest('[data-tg-day]');
+  if (tgEl) { openTgDay(tgEl.dataset.tgDay); return; }
   const dayEl = e.target.closest('#view [data-date]');
   if (dayEl && ui.paint) { paintDay(dayEl.dataset.date); return; }
   const evEl = e.target.closest('[data-ev]');
@@ -1370,7 +2049,12 @@ document.addEventListener('click', e => {
   if (dayEl) { openDay(dayEl.dataset.date); return; }
 });
 scrim.addEventListener('click', closeSheet);
-sheet.addEventListener('change', () => { syncEventForm(); syncShiftForm(); });
+sheet.addEventListener('change', e => {
+  syncEventForm(); syncShiftForm();
+  const k = e.target.dataset && e.target.dataset.tgset;
+  if (k === 'share') { db.settings.shareOn = e.target.checked; save(); }
+  else if (k) tgSet(k, Number(e.target.value));
+});
 sheet.addEventListener('input', e => { const r = e.target.closest('.row.bad'); if (r) r.classList.remove('bad'); });
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && e.target.matches && e.target.matches('input[type=text]')) e.target.blur();
@@ -1389,6 +2073,28 @@ document.addEventListener('keydown', e => {
   }, { passive: true });
 })();
 
+/* Together: pull down to refresh */
+(() => {
+  const m = $('main');
+  let y0 = null, dy = 0;
+  m.addEventListener('touchstart', e => {
+    y0 = (ui.view === 'together' && m.scrollTop <= 0 && e.touches.length === 1 && !tg.loading) ? e.touches[0].clientY : null; dy = 0;
+  }, { passive: true });
+  m.addEventListener('touchmove', e => {
+    if (y0 == null) return;
+    dy = e.touches[0].clientY - y0;
+    const p = $('#tgPull'); if (!p) return;
+    p.classList.toggle('on', dy > 20); p.classList.toggle('ready', dy > 70);
+    p.textContent = dy > 70 ? 'Release to refresh' : 'Pull to refresh';
+  }, { passive: true });
+  m.addEventListener('touchend', () => {
+    if (y0 == null) return;
+    y0 = null;
+    const p = $('#tgPull');
+    if (dy > 70) { if (p) p.textContent = 'Updating\u2026'; tgFetch(); } else if (p) p.classList.remove('on', 'ready');
+  }, { passive: true });
+})();
+
 /* roll over to the new day if the app was left open overnight */
 let lastDay = todayStr();
 document.addEventListener('visibilitychange', () => {
@@ -1396,6 +2102,7 @@ document.addEventListener('visibilitychange', () => {
   const t = todayStr();
   if (t !== lastDay) { lastDay = t; if (!sheetOpen) { ui.anchor = t; } render(); }
   queueSync(200);
+  tgMaybeFetch();
 });
 
 /* ───────── Boot ───────── */
@@ -1403,6 +2110,7 @@ render();
 const setHeadH = () => document.documentElement.style.setProperty('--head-h', $('.head').offsetHeight + 'px');
 setHeadH(); window.addEventListener('resize', setHeadH);
 if (sync.code) queueSync(300);
+tgMaybeFetch();
 window.addEventListener('online', () => queueSync(200));
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
 if ('serviceWorker' in navigator && location.protocol === 'https:') {

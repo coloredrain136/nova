@@ -8,11 +8,11 @@
 const crypto = require('crypto');
 
 const TABLES = {
-  shift_types: { name: 'nova_shift_types', pk: ['id'], cols: ['id', 'name', 'label', 'start_time', 'end_time', 'color', 'position'] },
+  shift_types: { name: 'nova_shift_types', pk: ['id'], cols: ['id', 'name', 'label', 'start_time', 'end_time', 'color', 'position', 'together'] },
   events: { name: 'nova_events', pk: ['id'], cols: ['id', 'title', 'date', 'start_time', 'end_time', 'all_day', 'notes', 'repeat', 'repeat_until'] },
   shifts: { name: 'nova_shifts', pk: ['date'], cols: ['date', 'shift_type_id'] },
   skips: { name: 'nova_event_skips', pk: ['event_id', 'date'], cols: ['event_id', 'date'] },
-  settings: { name: 'nova_settings', pk: ['id'], cols: ['id', 'view', 'week_start'] }
+  settings: { name: 'nova_settings', pk: ['id'], cols: ['id', 'view', 'week_start', 'share_on'] }
 };
 const UPSERT_ORDER = ['shift_types', 'events', 'shifts', 'skips', 'settings'];   // parents before children
 const DELETE_ORDER = ['skips', 'shifts', 'events', 'shift_types'];               // children before parents
@@ -51,7 +51,10 @@ module.exports = async (req, res) => {
       const rows = Array.isArray(upserts[t]) ? upserts[t] : [];
       if (!rows.length) continue;
       const T = TABLES[t];
-      const clean = rows.slice(0, 5000).map(r => Object.fromEntries(T.cols.map(c => [c, r[c] === undefined ? null : r[c]])));
+      // Only send the columns the phone actually sent, so an older copy of the app that doesn't
+      // know about a newer column can't blank it out.
+      const cols = T.cols.filter(c => c in rows[0]);
+      const clean = rows.slice(0, 5000).map(r => Object.fromEntries(cols.map(c => [c, r[c] === undefined ? null : r[c]])));
       await call(`${T.name}?on_conflict=${T.pk.join(',')}`, {
         method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(clean)
       });
