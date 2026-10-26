@@ -104,7 +104,9 @@ input,select,textarea{font:inherit;color:inherit;-webkit-user-select:text;user-s
 .title{font-family:var(--round);font-weight:700;font-size:26px;letter-spacing:-.02em;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .title small{font-size:.58em;font-weight:600;color:var(--ink-2);letter-spacing:0;margin-left:.24em}
 .title-btn{display:flex;align-items:center;gap:6px;text-align:left;min-width:0;border-radius:var(--r-s)}
-.gear-btn{flex:none;color:var(--ink)!important}
+.gear-btn,.reload-btn{flex:none;color:var(--ink)!important}
+.reload-btn.spin svg{animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 .title-btn svg{width:18px;height:18px;color:var(--ink-3);flex:none;margin-top:4px;stroke-width:2.6}
 .title-btn:active{opacity:.6}
 .jump-year{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--s4)}
@@ -121,7 +123,9 @@ input,select,textarea{font:inherit;color:inherit;-webkit-user-select:text;user-s
   padding:7px 11px;border-radius:var(--r-pill);background:var(--glass-strong);
   border:1px solid var(--edge);box-shadow:var(--shadow-s);flex:none;
 }
-.head-acts{display:flex;align-items:center;gap:var(--s2);flex:none}
+.head-acts{display:flex;align-items:center;gap:6px;flex:none}
+.head-acts .icon-btn{width:36px;height:36px}
+.head.tight .title-btn svg{display:none}
 .icon-btn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--glass-strong);border:1px solid var(--edge);box-shadow:var(--shadow-s);color:var(--accent-ink)}
 .icon-btn:active{transform:scale(.94)}
 .head-row{display:flex;align-items:center;justify-content:space-between;margin-top:var(--s3)}
@@ -587,7 +591,7 @@ button.row{text-align:left}
 <header class="head">
   <div class="head-top">
     <div class="head-left"><button class="title-btn" data-act="jump" aria-label="Jump to a month"><h1 class="title" id="title"></h1><svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div>
-    <div class="head-acts"><button class="today-btn" id="todayBtn" data-act="today" hidden>Today</button><button class="icon-btn" data-act="share" aria-label="Share a picture of this"><svg class="i" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M7.5 7.5L12 3l4.5 4.5"/><path d="M5 12v6.5A2.5 2.5 0 007.5 21h9a2.5 2.5 0 002.5-2.5V12"/></svg></button><button class="icon-btn gear-btn" data-act="settings" aria-label="Settings"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></button></div>
+    <div class="head-acts"><button class="today-btn" id="todayBtn" data-act="today" hidden>Today</button><button class="icon-btn" data-act="share" aria-label="Share a picture of this"><svg class="i" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M7.5 7.5L12 3l4.5 4.5"/><path d="M5 12v6.5A2.5 2.5 0 007.5 21h9a2.5 2.5 0 002.5-2.5V12"/></svg></button><button class="icon-btn reload-btn" data-act="reload" aria-label="Reload"><svg class="i" viewBox="0 0 24 24"><path d="M20 11a8 8 0 10-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button><button class="icon-btn gear-btn" data-act="settings" aria-label="Settings"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></button></div>
   </div>
   <div class="head-row">
     <div class="seg" role="group" aria-label="View">
@@ -891,9 +895,11 @@ function render(dir) {
 }
 
 function fitTitle() {           // shrink the title a little rather than cut it off (small iPhones, Today showing)
-  const t = $('#title');
-  t.style.fontSize = '';
-  for (let px = 25; px >= 17 && t.scrollWidth > t.clientWidth; px--) t.style.fontSize = px + 'px';
+  const t = $('#title'), head = $('.head');
+  const shrink = min => { for (let px = 25; px >= min && t.scrollWidth > t.clientWidth; px--) t.style.fontSize = px + 'px'; };
+  t.style.fontSize = ''; head.classList.remove('tight');
+  shrink(20);
+  if (t.scrollWidth > t.clientWidth) { head.classList.add('tight'); t.style.fontSize = ''; shrink(17); }   // still too long: drop the little arrow
 }
 window.addEventListener('resize', () => fitTitle());
 function renderHead() {
@@ -2488,6 +2494,12 @@ async function eraseData() {
   try { ['nova:v1', 'nova:sync', 'nova:together'].forEach(k => localStorage.removeItem(k)); } catch (e) {}
   location.reload();
 }
+// Header reload: grab the newest version if there is one, then reload (the saved copy stays for offline)
+async function reloadApp(btn) {
+  if (btn) btn.classList.add('spin');
+  try { const reg = await navigator.serviceWorker.getRegistration(); if (reg) await Promise.race([reg.update(), new Promise(r => setTimeout(r, 2500))]); } catch (e) {}
+  location.reload();
+}
 async function appUpdate() {
   try { const reg = await navigator.serviceWorker.getRegistration(); if (reg) await reg.update(); const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); } catch (e) {}
   location.reload();
@@ -2544,6 +2556,7 @@ document.addEventListener('click', e => {
       case 'data-export': exportData(); break;
       case 'data-erase': eraseData(); break;
       case 'app-update': appUpdate(); break;
+      case 'reload': reloadApp(actEl); break;
       case 'tg-refresh': tgFetch(); break;
       case 'tg-settings': openSettings('together'); break;
       case 'tg-set': tgSet(d.k, Number(d.v)); break;

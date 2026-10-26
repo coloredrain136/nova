@@ -1,7 +1,7 @@
 /* Nova service worker — opens instantly, works offline, and shows notifications.
    Serves the saved copy first, then quietly fetches a fresh one for next time.
    Bump VERSION whenever files change so old copies get cleared. */
-const VERSION = 'nova-9';
+const VERSION = 'nova-10';
 const SHELL = ['./', 'manifest.webmanifest', 'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png'];
 
 self.addEventListener('install', e => {
