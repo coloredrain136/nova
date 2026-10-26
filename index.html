@@ -440,11 +440,9 @@ button.row{text-align:left}
 .tg-blk{position:absolute;top:0;bottom:0}
 .tg-lane-me{--c:var(--tg-me)}
 .tg-lane-them{--c:var(--tg-them)}
-.tg-blk-work{background:var(--c)}
-.tg-blk-plan{background:repeating-linear-gradient(135deg,var(--c) 0 3px,color-mix(in srgb,var(--c) 22%,#fff) 3px 6px)}
+.tg-blk-busy{background:var(--c)}
 .tg-blk-sleep{background:repeating-linear-gradient(45deg,var(--tg-sleep) 0 1.5px,rgba(169,159,166,.18) 1.5px 5px)}
 .tg-band{position:absolute;top:-3px;bottom:-3px;border-radius:6px;background:var(--tg-free-wash);box-shadow:inset 0 0 0 1.5px rgba(47,185,133,.55)}
-.tg-band-maybe{background:rgba(47,185,133,.08);box-shadow:none;outline:1.5px dashed rgba(47,185,133,.6);outline-offset:-1.5px}
 .tg-tl:not(.tg-tl-big) .tg-band{top:-2px;bottom:-2px;border-radius:4px}
 .tg-past{position:absolute;left:0;top:-3px;bottom:-3px;z-index:1;background:rgba(253,243,246,.66);border-radius:6px}
 .tg-ticks{position:relative;height:16px;margin-top:5px}
@@ -454,8 +452,7 @@ button.row{text-align:left}
 .tg-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:var(--s3);font-size:12px;color:var(--ink-2)}
 .tg-legend span{display:inline-flex;align-items:center;gap:5px}
 .tg-key{width:14px;height:9px;border-radius:3px;display:inline-block}
-.tg-key-work{background:linear-gradient(90deg,var(--tg-me) 50%,var(--tg-them) 50%)}
-.tg-key-plan{background:repeating-linear-gradient(135deg,var(--ink-3) 0 2px,#fff 2px 4px)}
+.tg-key-busy{background:linear-gradient(90deg,var(--tg-me) 50%,var(--tg-them) 50%)}
 .tg-key-sleep{background:repeating-linear-gradient(45deg,var(--tg-sleep) 0 1.5px,rgba(169,159,166,.2) 1.5px 4px)}
 .tg-key-band{background:var(--tg-free-wash);box-shadow:inset 0 0 0 1.5px rgba(47,185,133,.55)}
 
@@ -469,7 +466,6 @@ button.row{text-align:left}
   padding:var(--s3) var(--s4) var(--s3) var(--s3);border-radius:var(--r-l);background:rgba(255,255,255,.62);border:1px solid var(--edge);box-shadow:var(--shadow-s)}
 .tg-row:active{transform:scale(.985)}
 .tg-k-full{background:linear-gradient(90deg,rgba(47,185,133,.14),rgba(255,255,255,.7) 65%)}
-.tg-k-maybe{background:rgba(255,255,255,.44);box-shadow:none}
 .tg-row-date{display:flex;flex-direction:column;align-items:center;gap:1px}
 .tg-row-date small{font-size:12px;font-weight:600;color:var(--ink-2)}
 .tg-row-date b{font-family:var(--round);font-size:22px;font-weight:700;line-height:1.1}
@@ -477,11 +473,8 @@ button.row{text-align:left}
 .tg-row-top{display:flex;align-items:center;justify-content:space-between;gap:var(--s2)}
 .tg-row-top b{font-family:var(--round);font-weight:700;font-size:16.5px}
 .tg-k-full .tg-row-top b{color:#18825c}
-.tg-k-maybe .tg-row-top b{color:var(--ink-2)}
-.tg-k-maybe .tg-len{color:var(--ink-2);background:rgba(120,50,85,.07)}
 .tg-row-time{font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
 .tg-row-time i{font-style:normal;color:var(--ink-3)}
-.tg-row-skip{font-size:13.5px;color:var(--ink-2)}
 .tg-row .tg-tl{margin-top:8px}
 
 .tg-foot{margin-top:var(--s6);padding:0 var(--s1);font-size:13.5px;color:var(--ink-2)}
@@ -501,8 +494,7 @@ button.row{text-align:left}
 .tg-li::before{content:"";position:absolute;left:10px;top:15px;width:8px;height:8px;border-radius:50%}
 .tg-col-me .tg-li{--c:var(--tg-me)}
 .tg-col-them .tg-li{--c:var(--tg-them)}
-.tg-li-work::before{background:var(--c)}
-.tg-li-plan::before{background:repeating-linear-gradient(135deg,var(--c) 0 2px,#fff 2px 4px);box-shadow:inset 0 0 0 1px var(--c)}
+.tg-li-work::before,.tg-li-plan::before{background:var(--c)}
 .tg-li-note::before{box-shadow:inset 0 0 0 1.5px var(--ink-3)}
 .tg-li-sleep::before{background:var(--tg-sleep)}
 .tg-li b{font-weight:600;overflow-wrap:anywhere}
@@ -553,7 +545,7 @@ button.row{text-align:left}
 
 <script>
 'use strict';
-/* ═════════ Nova 6 ═════════
+/* ═════════ Nova 7 ═════════
    Local-first: everything draws from localStorage. All writes go through save(),
    which is the single place background sync will hook into later. */
 
@@ -1451,22 +1443,23 @@ function jumpTo(y, m) {
 }
 
 /*TOGETHER-CORE-START*/
-/* Together: when are both people free? Pure functions, no screen code.
+/* Together (core v2): when are both people free? Pure functions, no screen code.
    Glance and Nova use this exact block, so both apps always agree.
    Times are local (both phones are in the same time zone).
 
    Item: {s, e (ms), allDay, kind:'work'|'plan'|'note', title, who:'me'|'them'}
-     work = can't move · plan = could be skipped · note = never busy
+     Anything already on a calendar is fixed: work and plan both block their time.
+     note = a marker (payday), never busy. work also triggers the night-shift sleep rule.
    TG.plan({items, from, days, now, through:{me,them}, opt:{h0,h1,minH,sleep}})
      h0/h1   hang hours (9 and 23 = 9am to 11pm)
      minH    shortest time that counts as a hang, in hours
      sleep   after an overnight shift ends in the morning, busy until this hour (0 = off)
      through last date ('YYYY-MM-DD') each person's schedule is filled in, or null
    Each day comes back as one of:
-     full    neither works during hang hours ("day off together")
+     full    nothing on either calendar during hang hours ("day off together")
      free    a stretch of at least minH with nothing in the way
-     maybe   free only if someone skips a flexible plan (skip lists them)
      none    nothing long enough
+   (v2: "maybe" days are gone. counts.maybe stays 0 and D.skip/D.plans stay empty so older screens still work.)
      unknown past someone's filled-in schedule */
 var TG = (function () {
   var MIN = 6e4, HOUR = 36e5;
@@ -1532,43 +1525,29 @@ var TG = (function () {
       }
       if (W1 - W0 < minMs) continue;
 
-      var hard = [], soft = [];
+      var busy = [];
       items.forEach(function (x) {
         var s = x.allDay ? sod(x.s) : x.s, e = x.allDay ? sod(x.e) : x.e;
-        if (x.allDay && x.kind !== 'work') return;        // all-day plans are reminders, not busy time
         if (e > day && s < dEnd) {
-          var blk = [Math.max(s, day), Math.min(e, dEnd), x];
-          (x.kind === 'work' ? hard : soft).push(blk);
+          busy.push([Math.max(s, day), Math.min(e, dEnd)]);
           if (e > full0 && s < full1) D.busy[x.who].push({ a: Math.max(s, full0), b: Math.min(e, full1), kind: x.kind, title: x.title });
         }
-        // An overnight shift that ended this morning: asleep until the sleep hour
+        // An overnight work shift that ended this morning: asleep until the sleep hour
         if (sleep && x.kind === 'work' && !x.allDay && s < day && e > day && e - s >= 6 * HOUR && new Date(e).getHours() < 12) {
           var wake = at(day, sleep);
           if (wake > e) {
-            hard.push([e, wake, x]);
+            busy.push([e, wake]);
             if (wake > full0) D.busy[x.who].push({ a: Math.max(e, full0), b: Math.min(wake, full1), kind: 'sleep', title: 'Sleeping after ' + x.title });
           }
         }
       });
 
-      var hardFree = minus(W0, W1, hard).filter(function (g) { return g[1] - g[0] >= minMs; });
-      if (!hardFree.length) continue;
-
-      var inWin = function (b) { return b[1] > W0 && b[0] < W1; };
-      if (full1 - full0 >= 8 * HOUR && W0 === full0 && !hard.some(inWin)) {
+      var open = minus(W0, W1, busy).filter(function (g) { return g[1] - g[0] >= minMs; });
+      if (!open.length) continue;
+      if (full1 - full0 >= 8 * HOUR && W0 === full0 && open.length === 1 && open[0][0] === W0 && open[0][1] === W1) {
         D.kind = 'full'; D.segs = [[W0, W1]];
-        D.plans = soft.filter(inWin).map(function (b) { return b[2]; });
       } else {
-        var softFree = [];
-        hardFree.forEach(function (g) {
-          minus(g[0], g[1], soft).forEach(function (f) { if (f[1] - f[0] >= minMs) softFree.push(f); });
-        });
-        if (softFree.length) { D.kind = 'free'; D.segs = softFree; }
-        else {
-          var g = longest(hardFree);
-          D.kind = 'maybe'; D.segs = [g];
-          D.skip = soft.filter(function (b) { return b[1] > g[0] && b[0] < g[1]; }).map(function (b) { return b[2]; });
-        }
+        D.kind = 'free'; D.segs = open;
       }
       var best = D.kind === 'full' ? D.segs[0] : longest(D.segs);
       D.a = best[0]; D.b = best[1]; D.len = best[1] - best[0];
@@ -1749,16 +1728,7 @@ function tgDay(key, long) {
 }
 const tgShortDate = key => { const d = pd(key); return `${DOW[d.getDay()]}, ${MON[d.getMonth()]} ${d.getDate()}`; };
 function tgLabel(D) {
-  if (D.kind === 'full') return 'Day off together';
-  if (D.kind === 'free') return 'Free ' + D.label.toLowerCase();
-  return D.label + ', maybe';
-}
-function tgSkipText(D, joe) {
-  const mine = D.skip.filter(x => x.who === 'me').map(x => x.title), his = D.skip.filter(x => x.who === 'them').map(x => x.title);
-  const parts = [];
-  if (mine.length) parts.push('you skip ' + mine.join(' and '));
-  if (his.length) parts.push(joe + ' skips ' + his.join(' and '));
-  return parts.length ? 'If ' + parts.join(' and ') : '';
+  return D.kind === 'full' ? 'Day off together' : 'Free ' + D.label.toLowerCase();
 }
 function tgAgo(ms) {
   const m = Math.round((Date.now() - ms) / 60e3);
@@ -1777,8 +1747,8 @@ function tgTimeline(D, big, joe) {
   const W1 = o.h1 >= 24 ? new Date(d0.getFullYear(), d0.getMonth(), d0.getDate() + 1).getTime() : new Date(d0.getFullYear(), d0.getMonth(), d0.getDate(), o.h1).getTime();
   const span = W1 - W0;
   const pos = (a, b) => { const l = Math.max(0, (a - W0) / span * 100), r = Math.min(100, (b - W0) / span * 100); return r > l ? `left:${l.toFixed(2)}%;width:${(r - l).toFixed(2)}%` : null; };
-  const lane = who => (D.busy[who] || []).map(x => { const p = pos(x.a, x.b); return p ? `<i class="tg-blk tg-blk-${x.kind}" style="${p}" title="${esc(x.title)}"></i>` : ''; }).join('');
-  const bands = (D.segs || []).map(g => { const p = pos(g[0], g[1]); return p ? `<i class="tg-band${D.kind === 'maybe' ? ' tg-band-maybe' : ''}" style="${p}"></i>` : ''; }).join('');
+  const lane = who => (D.busy[who] || []).map(x => { const p = pos(x.a, x.b); return p ? `<i class="tg-blk tg-blk-${x.kind === 'sleep' ? 'sleep' : 'busy'}" style="${p}" title="${esc(x.title)}"></i>` : ''; }).join('');
+  const bands = (D.segs || []).map(g => { const p = pos(g[0], g[1]); return p ? `<i class="tg-band" style="${p}"></i>` : ''; }).join('');
   const past = D.win[0] > W0 ? `<i class="tg-past" style="${pos(W0, D.win[0]) || 'width:0'}"></i>` : '';
   let ticks = '';
   if (big) {
@@ -1796,7 +1766,7 @@ function tgTimeline(D, big, joe) {
     </div>
   </div>`;
 }
-const TG_LEGEND = `<div class="tg-legend"><span><i class="tg-key tg-key-work"></i>Work</span><span><i class="tg-key tg-key-plan"></i>Plans</span><span><i class="tg-key tg-key-sleep"></i>Sleeping</span><span><i class="tg-key tg-key-band"></i>Both free</span></div>`;
+const TG_LEGEND = `<div class="tg-legend"><span><i class="tg-key tg-key-busy"></i>Busy</span><span><i class="tg-key tg-key-sleep"></i>Sleeping</span><span><i class="tg-key tg-key-band"></i>Both free</span></div>`;
 
 const TG_STATES = {
   nobackup: ['Turn on backup first', 'Together swaps schedules with Joe through your backup, so backup needs to be on.'],
@@ -1851,11 +1821,10 @@ function togetherHTML() {
   const chips = [];
   if (res.counts.full) chips.push(`${res.counts.full} ${res.counts.full === 1 ? 'day' : 'days'} off together`);
   if (stretches) chips.push(`${stretches} free ${stretches === 1 ? 'stretch' : 'stretches'}`);
-  if (res.counts.maybe) chips.push(`${res.counts.maybe} ${res.counts.maybe === 1 ? 'maybe' : 'maybes'}`);
   if (chips.length) h += `<div class="tg-chips">${chips.map(c => `<span class="tg-chip">${c}</span>`).join('')}</div>`;
 
   // rows grouped by week
-  const shown = res.days.filter(D => D.kind === 'full' || D.kind === 'free' || D.kind === 'maybe');
+  const shown = res.days.filter(D => D.kind === 'full' || D.kind === 'free');
   const thisWeek = weekStartOf(todayStr());
   let curWeek = null;
   for (const D of shown) {
@@ -1869,13 +1838,11 @@ function togetherHTML() {
       h += `<section class="tg-week"><h3>${name}</h3><div class="tg-rows">`;
     }
     const d = pd(D.key), more = D.kind === 'free' && D.segs.length > 1 ? ` <i>+${D.segs.length - 1} more</i>` : '';
-    const sub = D.kind === 'maybe' ? tgSkipText(D, joe) : '';
     h += `<button class="tg-row tg-k-${D.kind}" data-tg-day="${D.key}">
       <span class="tg-row-date"><small>${D.key === todayStr() ? 'Today' : DOW[d.getDay()]}</small><b>${d.getDate()}</b></span>
       <span class="tg-row-main">
         <span class="tg-row-top"><b>${tgLabel(D)}</b><span class="tg-len">${tgLen(D.len)}</span></span>
         <span class="tg-row-time">${tgRange2(D.a, D.b)}${more}</span>
-        ${sub ? `<span class="tg-row-skip">${esc(sub)}</span>` : ''}
         ${tgTimeline(D, false, joe)}
       </span>
     </button>`;
@@ -1917,13 +1884,12 @@ function openTgDay(key) {
     return li ? `<ul>${li}</ul>` : `<p class="tg-col-none">Nothing on</p>`;
   };
   const free = D.kind === 'none' || D.kind === 'unknown' ? '' : `
-    <div class="sub">${D.kind === 'maybe' ? 'Free if plans move' : 'Free together'}</div>
+    <div class="sub">Free together</div>
     <div class="group">${D.segs.map(g => `<div class="row"><span class="lbl">${tgRange2(g[0], g[1])}</span><span class="row-val">${tgLen(g[1] - g[0])}</span></div>`).join('')}</div>
-    ${D.kind === 'maybe' ? `<p class="hint">${esc(tgSkipText(D, P.joe))}.</p>` : ''}
-    ${D.kind === 'full' && D.plans.length ? `<p class="hint">Plans that day: ${D.plans.map(x => esc(x.title)).join(', ')}.</p>` : ''}`;
+`;
   openSheet(`
     <div class="sheet-head"><h2>${DOW_LONG[d.getDay()]}, ${MON_LONG[d.getMonth()]} ${d.getDate()}</h2><button class="link" data-act="close">Done</button></div>
-    <p class="intro">${D.kind === 'full' || D.kind === 'free' || D.kind === 'maybe' ? `${tgLabel(D)}, ${tgLen(D.len)}` : 'No shared free time this day'}</p>
+    <p class="intro">${D.kind === 'full' || D.kind === 'free' ? `${tgLabel(D)}, ${tgLen(D.len)}` : 'No shared free time this day'}</p>
     <div class="group tg-day-tl">${tgTimeline(D, true, P.joe)}${TG_LEGEND}</div>
     ${free}
     <div class="tg-cols">
@@ -1956,7 +1922,7 @@ function openTgSettings() {
         <select data-tgset="h1" aria-label="Hang hours end">${opts([18, 19, 20, 21, 22, 23, 24], o.h1, hr)}</select></span></div>
       <div class="row"><label for="tg-sleep">Up after a night shift</label><select id="tg-sleep" data-tgset="sleep">${opts([0, 11, 12, 13, 14, 15, 16], o.sleep, v => v ? hr(v) : 'Off')}</select></div>
     </div>
-    <p class="hint">After a shift that ends in the morning, Together counts that person as asleep until this time.</p>
+    <p class="hint">Anything on either calendar blocks that time. Day notes, like pay day, don\u2019t. After an overnight shift, whoever worked it counts as asleep until the time above.</p>
     ${untimed.length ? `<div class="sub">Shifts with no set time</div>
     <div class="group">${untimed.map(t => `<div class="row"><span class="lbl">${esc(t.name)}</span><div class="seg sm">
       <button data-act="tg-type" data-id="${t.id}" data-v="work" aria-pressed="${tgMode(t) === 'work'}">Work all day</button>
