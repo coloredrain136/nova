@@ -396,7 +396,7 @@ button.row{text-align:left}
   --tg-free-wash:rgba(47,185,133,.20);
   --tg-sleep:#a99fa6;
 }
-.head.tg-mode .title-btn svg,.head.tg-mode .arrows,.head.tg-mode .head-acts{visibility:hidden}
+.head.tg-mode .title-btn svg,.head.tg-mode .arrows,.head.tg-mode .today-btn,.head.tg-mode [data-act="share"]{visibility:hidden}
 .head.tg-mode .title-btn{pointer-events:none}
 .head .seg button{padding:7px 14px;min-width:70px}
 
@@ -586,8 +586,8 @@ button.row{text-align:left}
 
 <header class="head">
   <div class="head-top">
-    <div class="head-left"><button class="icon-btn gear-btn" data-act="settings" aria-label="Settings"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></button><button class="title-btn" data-act="jump" aria-label="Jump to a month"><h1 class="title" id="title"></h1><svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div>
-    <div class="head-acts"><button class="today-btn" id="todayBtn" data-act="today" hidden>Today</button><button class="icon-btn" data-act="share" aria-label="Share a picture of this"><svg class="i" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M7.5 7.5L12 3l4.5 4.5"/><path d="M5 12v6.5A2.5 2.5 0 007.5 21h9a2.5 2.5 0 002.5-2.5V12"/></svg></button></div>
+    <div class="head-left"><button class="title-btn" data-act="jump" aria-label="Jump to a month"><h1 class="title" id="title"></h1><svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div>
+    <div class="head-acts"><button class="today-btn" id="todayBtn" data-act="today" hidden>Today</button><button class="icon-btn" data-act="share" aria-label="Share a picture of this"><svg class="i" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M7.5 7.5L12 3l4.5 4.5"/><path d="M5 12v6.5A2.5 2.5 0 007.5 21h9a2.5 2.5 0 002.5-2.5V12"/></svg></button><button class="icon-btn gear-btn" data-act="settings" aria-label="Settings"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></button></div>
   </div>
   <div class="head-row">
     <div class="seg" role="group" aria-label="View">
